@@ -57,7 +57,8 @@
   }
   #splash.hide{opacity:0;visibility:hidden;}
   .splash-logo{text-align:center;animation:splashPop .8s var(--spring) both;}
-  .splash-logo svg{display:block;margin:0 auto;}
+  .splash-logo .wm-main{font-size:2.6rem;}
+  .splash-logo .wm-sub{font-size:1rem;letter-spacing:.55em;margin-top:6px;}
   .splash-bar{width:0;height:2px;background:var(--sky);border-radius:2px;margin:18px auto 0;animation:splashBar 1.4s var(--ease) forwards;}
   @keyframes splashPop{0%{opacity:0;transform:translateY(12px) scale(.96);}100%{opacity:1;transform:none;}}
   @keyframes splashBar{0%{width:0;}100%{width:120px;}}
@@ -82,8 +83,10 @@
     display:flex;align-items:center;justify-content:space-between;gap:16px;
   }
   .brand{display:flex;align-items:center;line-height:1.05;text-decoration:none;color:var(--ink);}
-  .brand .logo{display:block;height:38px;width:auto;transition:transform .25s var(--spring);}
-  .brand:hover .logo{transform:scale(1.03);}
+  .wm{display:inline-flex;flex-direction:column;line-height:1;transition:transform .25s var(--spring);}
+  .wm-main{font-family:'Rubik', Arial, sans-serif;font-weight:900;font-size:1.42rem;letter-spacing:-.03em;color:#1D1D1F;}
+  .wm-sub{font-family:'Rubik', Arial, sans-serif;font-weight:500;font-size:.62rem;letter-spacing:.42em;color:#3AA7F0;margin-top:3px;}
+  .brand:hover .wm{transform:scale(1.03);}
   nav.links{display:flex;gap:30px;font-size:.86rem;font-weight:500;}
   nav.links a{text-decoration:none;color:var(--ink);opacity:.6;transition:opacity .2s var(--ease);}
   nav.links a:hover{opacity:1;}
@@ -511,10 +514,10 @@
 
 <div id="splash">
   <div class="splash-logo">
-    <svg width="200" height="66" viewBox="0 0 200 66" xmlns="http://www.w3.org/2000/svg" dir="ltr" role="img" aria-label="Softec Vision">
-      <text x="2" y="32" font-family="Rubik, Arial, sans-serif" font-weight="900" font-size="28" letter-spacing="-1.2" fill="#1D1D1F">SOFTEC</text>
-      <text x="4" y="56" font-family="Rubik, Arial, sans-serif" font-weight="500" font-size="16.5" letter-spacing="6.5" fill="#3AA7F0">V I S I O N</text>
-    </svg>
+    <div class="wm" dir="ltr">
+      <span class="wm-main">SOFTEC</span>
+      <span class="wm-sub">V I S I O N</span>
+    </div>
     <div class="splash-bar"></div>
   </div>
 </div>
@@ -523,10 +526,10 @@
 <header class="nav" id="siteNav">
   <div class="nav-inner">
     <a class="brand" href="#hero" aria-label="Softec Vision">
-      <svg class="logo" width="140" height="46" viewBox="0 0 200 66" xmlns="http://www.w3.org/2000/svg" dir="ltr" role="img" aria-label="Softec Vision">
-        <text x="2" y="32" font-family="Rubik, Arial, sans-serif" font-weight="900" font-size="28" letter-spacing="-1.2" fill="#1D1D1F">SOFTEC</text>
-        <text x="4" y="56" font-family="Rubik, Arial, sans-serif" font-weight="500" font-size="16.5" letter-spacing="6.5" fill="#3AA7F0">V I S I O N</text>
-      </svg>
+      <span class="wm" dir="ltr">
+        <span class="wm-main">SOFTEC</span>
+        <span class="wm-sub">V I S I O N</span>
+      </span>
     </a>
     <nav class="links">
       <a href="#hero">בית</a>
