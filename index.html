@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Softec Vision — עמדות מרצה ובקרה</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231D1D1F'/%3E%3Ctext x='50' y='68' font-family='Arial,sans-serif' font-size='52' font-weight='bold' fill='%233AA7F0' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%231D1D1F'/%3E%3Ctext x='50' y='60' font-family='Arial,sans-serif' font-size='46' font-weight='900' letter-spacing='-2' fill='white' text-anchor='middle'%3ES%3C/text%3E%3Crect x='30' y='70' width='40' height='4' rx='2' fill='%233AA7F0'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -68,8 +68,9 @@
     display:flex;align-items:center;justify-content:space-between;gap:16px;
   }
   .brand{display:flex;flex-direction:column;line-height:1.05;}
-  .brand .name{font-weight:800;font-size:1.02rem;letter-spacing:-.01em;}
-  .brand .sub{font-size:.58rem;font-weight:600;letter-spacing:.16em;color:var(--steel);margin-top:4px;text-transform:uppercase;}
+  .brand{display:flex;align-items:center;line-height:1.05;text-decoration:none;color:var(--ink);}
+  .brand .logo{display:block;height:40px;width:auto;transition:transform .25s var(--spring);}
+  .brand:hover .logo{transform:scale(1.03);}
   nav.links{display:flex;gap:30px;font-size:.86rem;font-weight:500;}
   nav.links a{text-decoration:none;color:var(--ink);opacity:.6;transition:opacity .2s var(--ease);}
   nav.links a:hover{opacity:1;}
@@ -411,10 +412,12 @@
 
 <header class="nav" id="siteNav">
   <div class="nav-inner">
-    <div class="brand">
-      <span class="name">Softec Vision</span>
-      <span class="sub">Presenter &amp; Control Furniture</span>
-    </div>
+    <a class="brand" href="#hero" aria-label="Softec Vision">
+      <svg class="logo" width="132" height="44" viewBox="0 0 200 66" xmlns="http://www.w3.org/2000/svg" dir="ltr">
+        <text x="2" y="32" font-family="Rubik, sans-serif" font-weight="900" font-size="28" letter-spacing="-1.2" fill="currentColor">SOFTEC</text>
+        <text x="4" y="56" font-family="Rubik, sans-serif" font-weight="500" font-size="16.5" letter-spacing="6.5" fill="var(--sky)">V I S I O N</text>
+      </svg>
+    </a>
     <nav class="links">
       <a href="#hero">בית</a>
       <a href="#products">קטלוג</a>
