@@ -62,6 +62,31 @@ test('translation falls back to Hebrew', () => {
   assert.equal(app.getText('test.hebrewOnly', 'en'), 'בדיקה');
 });
 
+test('inquiry URLs preserve bilingual product names, model codes and special characters', () => {
+  const { app } = loadCore();
+  const product = { code:'A&B / 2', name:{ he:'עמדה & מסך', en:'Desk & Display' } };
+  for (const [lang, expected] of [
+    ['en', 'Hello, I would like details about Desk & Display (A&B / 2).'],
+    ['he', 'שלום, אשמח לקבל פרטים על עמדה & מסך (A&B / 2).']
+  ]) {
+    const url = new URL(app.buildInquiryUrl(product, lang));
+    assert.equal(url.origin, 'https://wa.me');
+    assert.equal(url.searchParams.get('text'), expected);
+    assert.equal([...url.searchParams].length, 1);
+  }
+});
+
+test('general inquiry URLs request a quote without inventing product context', () => {
+  const { app } = loadCore();
+  for (const lang of ['he', 'en']) {
+    let result;
+    assert.doesNotThrow(() => { result = app.buildInquiryUrl(null, lang); });
+    const message = new URL(result).searchParams.get('text');
+    assert.match(message, lang === 'en' ? /quote/ : /הצעת מחיר/);
+    assert.doesNotMatch(message, /undefined|null|\(\)/);
+  }
+});
+
 test('charging carts is visible only in English category navigation', () => {
   const { app } = loadCore();
   assert.equal(app.getVisibleCategories('he').some(c => c.key === 'charging-carts'), false);

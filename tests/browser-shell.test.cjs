@@ -200,3 +200,138 @@ test('catalog charging-cart and invalid URL state normalize on language switch a
     assert.equal(await page.locator('#cardGrid .card').count(), 5);
   } finally { await page.close(); }
 });
+
+test('product dialog traps keyboard focus, restores its invoker and hides unavailable media', async () => {
+  for (const language of ['en', 'he']) {
+    const page = await createPage(language);
+    try {
+      const trigger = page.locator('.zoom-btn').first();
+      await trigger.focus();
+      await page.keyboard.press('Enter');
+      assert.equal(await page.locator('#lbClose').evaluate(el => el === document.activeElement), true);
+      await page.keyboard.press('Shift+Tab');
+      assert.equal(await page.locator('#lbWa').evaluate(el => el === document.activeElement), true);
+      await page.keyboard.press('Tab');
+      assert.equal(await page.locator('#lbClose').evaluate(el => el === document.activeElement), true);
+      assert.equal(await page.locator('#lbPrev').isVisible(), false);
+      assert.equal(await page.locator('#lbNext').isVisible(), false);
+      assert.equal(await page.locator('#lbThumbs').isVisible(), false);
+      assert.equal(await page.locator('#lb3dToggle').isVisible(), false);
+      assert.match(new URL(await page.locator('#lbWa').getAttribute('href')).searchParams.get('text'), /LS-1000LPT/);
+      await page.locator('#lbCompare').click();
+      assert.equal(await page.locator('#lbCompare').getAttribute('aria-pressed'), 'true');
+      assert.ok(await page.locator('#lbStatus').textContent());
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#lightbox').isVisible(), false);
+      assert.equal(await trigger.evaluate(el => el === document.activeElement), true);
+      await page.keyboard.press('Enter');
+      await page.locator('#lightbox').click({ position:{ x:2, y:2 } });
+      assert.equal(await trigger.evaluate(el => el === document.activeElement), true);
+    } finally { await page.close(); }
+  }
+});
+
+test('desktop dialog close control stays at the logical viewport edge in both directions', async () => {
+  for (const lang of ['en','he']) {
+    const page = await createPage(lang);
+    try {
+      await page.setViewportSize({ width:1440,height:1000 });
+      await page.locator('.zoom-btn').first().click();
+      const box = await page.locator('#lbClose').boundingBox();
+      assert.ok(lang === 'he' ? box.x < 40 : box.x + box.width > 1400, `${lang}: misplaced close control at ${box.x}`);
+    } finally { await page.close(); }
+  }
+});
+
+test('comparison enforces selection limits, announces changes and mirrors accessible table columns', async () => {
+  for (const language of ['en', 'he']) {
+    const page = await createPage(language);
+    try {
+      const check = index => page.locator(`[data-cmp="${index}"]`);
+      await check(0).check();
+      assert.equal(await page.locator('#cmpGo').isDisabled(), true);
+      assert.match(await page.locator('#catalogStatus').textContent(), /LS-1000LPT/);
+      await check(1).check();
+      await check(2).check();
+      await check(3).click();
+      assert.equal(await check(3).isChecked(), false);
+      assert.match(await page.locator('#catalogStatus').textContent(), language === 'en' ? /up to three/ : /שלושה/);
+      await check(2).uncheck();
+      assert.match(await page.locator('#catalogStatus').textContent(), /IX-1/);
+      await page.locator('#cmpGo').click();
+      assert.equal(await page.locator('#cmpClose').evaluate(el => el === document.activeElement), true);
+      assert.equal(await page.locator('#cmpModal').getAttribute('aria-modal'), 'true');
+      const headers = await page.locator('#cmpTable thead th[scope="col"]').evaluateAll(elements => elements.map(el => ({ code:el.textContent, x:el.getBoundingClientRect().x })));
+      assert.match(headers[1].code, /LS-1000LPT/);
+      assert.ok(language === 'he' ? headers[1].x > headers[2].x : headers[1].x < headers[2].x);
+      assert.ok(await page.locator('#cmpTable tbody th[scope="row"]').count());
+      await page.keyboard.press('Tab');
+      assert.equal(await page.evaluate(() => document.activeElement.id), 'cmpTableScroll');
+      await page.keyboard.press('Tab');
+      assert.equal(await page.locator('#cmpClose').evaluate(el => el === document.activeElement), true);
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#cmpModal').isVisible(), false);
+      assert.equal(await page.locator('#cmpGo').evaluate(el => el === document.activeElement), true);
+      await page.locator('#cmpClear').click();
+      assert.equal(await page.locator('#cmpTray').isVisible(), false);
+      assert.ok(await page.locator('#catalogStatus').textContent());
+    } finally { await page.close(); }
+  }
+});
+
+async function createMediaFixturePage(language, setup) {
+  const page = await browser.newPage({ viewport:{ width:390, height:844 } });
+  await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
+  await page.route('https://cdnjs.cloudflare.com/**', route => route.fulfill({ contentType:'application/javascript', body:'' }));
+  await page.route(`${origin}/?**`, route => route.fulfill({
+    contentType:'text/html; charset=utf-8',
+    body:fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8').replace('/* APP_CORE_END */', `${setup}\n/* APP_CORE_END */`)
+  }));
+  await page.goto(`${origin}/?lang=${language}`);
+  return page;
+}
+
+test('removing a filtered-out comparison product returns focus to the active family', async () => {
+  const page = await createPage('en');
+  try {
+    for (const action of ['chip', 'clear']) {
+      await page.locator('#catBar [data-category="all"]').click();
+      await page.locator('[data-cmp="0"]').check();
+      await page.locator('#catBar [data-category="info-display"]').click();
+      await page.locator(action === 'chip' ? '#cmpTrayItems button' : '#cmpClear').click();
+      assert.equal(await page.locator('#catBar [aria-pressed="true"]').evaluate(element => element === document.activeElement), true);
+      assert.equal(await page.locator('#cmpTray').isVisible(), false);
+    }
+  } finally { await page.close(); }
+});
+
+test('dialog gallery substitutes primary imagery for broken optional thumbnails and omits empty specifications', async () => {
+  const page = await createMediaFixturePage('en', "products[0].gallery = [products[0].img, 'data:image/png;base64,broken']; products[0].specs = { he:{}, en:{} };");
+  try {
+    await page.locator('.zoom-btn').first().click();
+    assert.equal(await page.locator('#lbSpecs').isVisible(), false);
+    const thumbnails = page.locator('#lbThumbs img');
+    await thumbnails.evaluateAll(images => Promise.all(images.map(image => image.decode().catch(() => {}))));
+    assert.equal(await thumbnails.nth(1).evaluate(image => image.naturalWidth > 0), true);
+    await page.locator('#lbNext').click();
+    await page.locator('#lbImg').evaluate(image => image.decode());
+    assert.equal(await page.locator('#lbImg').evaluate(image => image.naturalWidth > 0), true);
+    assert.match(await page.locator('#lbImg').getAttribute('alt'), /Product Image 2/);
+    assert.equal(await page.locator('.lb-thumb').nth(1).getAttribute('aria-pressed'), 'true');
+    await page.keyboard.press('ArrowLeft');
+    assert.match(await page.locator('#lbImg').getAttribute('alt'), /Product Image 1/);
+  } finally { await page.close(); }
+});
+
+test('dialog 3D action recovers with localized feedback when its renderer is unavailable', async () => {
+  for (const lang of ['en', 'he']) {
+    const page = await createMediaFixturePage(lang, "products[0].model3d = 'https://example.invalid/model.glb';");
+    try {
+      await page.locator('.zoom-btn').first().click();
+      await page.locator('#lb3dToggle').click();
+      assert.equal(await page.locator('#lbImg').isVisible(), true);
+      assert.match(await page.locator('#lbStatus').textContent(), lang === 'en' ? /not available/ : /אינה זמינה/);
+      assert.equal(await page.locator('#lb3dToggle').getAttribute('aria-pressed'), 'false');
+    } finally { await page.close(); }
+  }
+});
