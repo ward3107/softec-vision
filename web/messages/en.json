@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "title": "Softec Vision | Lecturer, Control and Display Stations",
+    "description": "Design and manufacture of custom lecturer stations, control desks and display solutions."
+  },
+  "nav": {
+    "brand": "Softec Vision",
+    "primary": "Main navigation",
+    "products": "Products",
+    "custom": "Custom Solutions",
+    "about": "About",
+    "process": "Process",
+    "contact": "Contact",
+    "quote": "Request a Quote",
+    "skip": "Skip to content",
+    "switchTo": "מעבר לעברית"
+  },
+  "hero": {
+    "eyebrow": "Design · Engineering · Manufacturing",
+    "title": "Technology furniture engineered around your space",
+    "body": "We design and manufacture lecturer, control and display stations with integrated AV and complete cable management.",
+    "quote": "Request a quote",
+    "explore": "Explore products",
+    "model": "Compact lecturer station"
+  },
+  "capabilities": {
+    "custom": "Custom Manufacturing",
+    "av": "Integrated AV",
+    "accessible": "Accessible Solutions"
+  },
+  "footer": {
+    "rights": "© Softec Vision Ltd",
+    "privacy": "Privacy Policy",
+    "accessibility": "Accessibility Statement",
+    "terms": "Terms of Use"
+  }
+}

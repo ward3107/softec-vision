@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Architectural Precision tokens (mirrors the Tailwind theme). */
+:root {
+  --paper: #F7F8F8;
+  --pure: #FFFFFF;
+  --graphite: #151719;
+  --machine: #697077;
+  --softec: #1683C7;
+  --blueprint: #0C5E91;
+  --line: color-mix(in srgb, var(--machine) 24%, transparent);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--paper);
+    color: var(--graphite);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 3px solid var(--blueprint);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Skip link: visible on focus only. */
+.skip-link {
+  position: fixed;
+  inset-block-start: 12px;
+  inset-inline-start: 20px;
+  z-index: 100;
+  padding: 12px 20px;
+  background: var(--graphite);
+  color: var(--pure);
+  border-radius: 6px;
+  transform: translateY(-160%);
+}
+.skip-link:focus {
+  transform: none;
+}
