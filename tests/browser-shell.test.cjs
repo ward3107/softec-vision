@@ -47,7 +47,10 @@ test('menu accessible names track initial language, disclosure, language changes
       await menu.click();
       assert.equal(await menu.getAttribute('aria-label'), names[initial].open, `${initial}: open name`);
       await page.locator('#languageToggle').click();
-      assert.equal(await menu.getAttribute('aria-label'), names[other].open, `${other}: open name after language switch`);
+      assert.equal(await menu.getAttribute('aria-label'), names[other].closed, `${other}: language switch closes menu`);
+      assert.equal(await menu.getAttribute('aria-expanded'), 'false');
+      await menu.click();
+      assert.equal(await menu.getAttribute('aria-label'), names[other].open, `${other}: reopened name after language switch`);
       await page.keyboard.press('Escape');
       assert.equal(await menu.getAttribute('aria-label'), names[other].closed, `${other}: closed name after Escape`);
       assert.equal(await menu.getAttribute('aria-expanded'), 'false');
@@ -89,4 +92,40 @@ test('320px header fits both directions with a visible scrollbar and 44px menu/l
       }
     } finally { await page.close(); }
   }
+});
+
+test('English renders generated catalog, dialog, comparison and language URL state', async () => {
+  const page = await createPage('en');
+  const consoleErrors = [];
+  page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+  page.on('pageerror', error => consoleErrors.push(error.message));
+  try {
+    assert.deepEqual(await page.locator('html').evaluate(element => ({ lang:element.lang, dir:element.dir })), { lang:'en', dir:'ltr' });
+    assert.equal(await page.title(), 'Softec Vision | Lecturer, Control and Display Stations');
+    assert.equal(await page.locator('#catalogTitle').textContent(), 'Product Families');
+    assert.ok(await page.locator('#catBar').getByText('Computer Charging Carts', { exact:true }).isVisible());
+    assert.equal(await page.locator('.card .name').first().textContent(), 'Compact Lecturer Station');
+
+    await page.locator('.zoom-btn').first().click();
+    assert.equal(await page.locator('#lbName').textContent(), 'Compact Lecturer Station');
+    assert.match(await page.locator('#lbSpecs').textContent(), /Technical SpecificationsDisplays/);
+    assert.equal(await page.locator('#lbWa span').textContent(), 'Ask About This Product on WhatsApp');
+    await page.locator('#lbClose').click();
+
+    await page.locator('[data-cmp="0"]').evaluate(element => element.click());
+    await page.locator('[data-cmp="1"]').evaluate(element => element.click());
+    await page.locator('#cmpGo').click();
+    assert.match(await page.locator('#cmpTable').textContent(), /Compact Lecturer Station/);
+    assert.doesNotMatch(await page.locator('#cmpTable').textContent(), /[\u0590-\u05ff]/);
+    await page.locator('#cmpClose').click();
+
+    await page.locator('#catBar').getByText('Computer Charging Carts', { exact:true }).click();
+    assert.match(await page.locator('#catEmpty').textContent(), /No models are currently listed/);
+    await page.locator('#languageToggle').click();
+    assert.equal(await page.locator('html').getAttribute('dir'), 'rtl');
+    assert.match(page.url(), /[?&]lang=he(?:&|#|$)/);
+    assert.equal(await page.locator('#catBar').getByText('עגלות טעינה למחשבים', { exact:true }).count(), 0);
+    assert.equal(await page.locator('#catalogStatus').textContent(), 'השפה הוחלפה לעברית.');
+    assert.deepEqual(consoleErrors, []);
+  } finally { await page.close(); }
 });
