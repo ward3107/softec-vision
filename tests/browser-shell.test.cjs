@@ -335,3 +335,52 @@ test('dialog 3D action recovers with localized feedback when its renderer is una
     } finally { await page.close(); }
   }
 });
+
+test('comparison tray keyboard focus contrasts at least 3 to 1 for every action in both languages', async () => {
+  function luminance(color) {
+    const channels = color.match(/[\d.]+/g).slice(0, 3).map(Number).map(value => {
+      const channel = value / 255;
+      return channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4;
+    });
+    return channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722;
+  }
+  for (const lang of ['en', 'he']) {
+    const page = await createPage(lang);
+    try {
+      await page.locator('[data-cmp="0"]').check();
+      await page.locator('[data-cmp="1"]').check();
+      await page.keyboard.press('Tab');
+      for (const selector of ['#cmpTrayItems button', '#cmpClear', '#cmpGo']) {
+        const control = page.locator(selector).first();
+        await control.focus();
+        const focus = await control.evaluate(element => ({
+          active:element === document.activeElement,
+          visible:element.matches(':focus-visible'),
+          outline:getComputedStyle(element).outlineColor,
+          width:parseFloat(getComputedStyle(element).outlineWidth),
+          background:getComputedStyle(document.getElementById('cmpTray')).backgroundColor
+        }));
+        assert.ok(focus.active && focus.visible && focus.width > 0, `${lang} ${selector}: missing keyboard focus indicator`);
+        const a = luminance(focus.outline), b = luminance(focus.background);
+        const ratio = (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+        assert.ok(ratio >= 3, `${lang} ${selector}: focus contrast ${ratio.toFixed(2)}:1 is below 3:1`);
+      }
+    } finally { await page.close(); }
+  }
+});
+
+test('WCAG text-spacing overrides do not cause horizontal overflow at narrow widths', async () => {
+  // SC 1.4.12: content must survive user text-spacing overrides without clipping/overflow.
+  const spacing = '* { line-height:1.5 !important; letter-spacing:0.12em !important; word-spacing:0.16em !important; } p { margin-bottom:2em !important; }';
+  for (const language of ['en', 'he']) {
+    for (const width of [320, 390]) {
+      const page = await createPage(language);
+      try {
+        await page.setViewportSize({ width, height: 780 });
+        await page.addStyleTag({ content: spacing });
+        const noOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 0.5);
+        assert.ok(noOverflow, `${language} ${width}px overflows under text-spacing overrides`);
+      } finally { await page.close(); }
+    }
+  }
+});

@@ -9,6 +9,36 @@
 <meta property="og:title" content="Softec Vision — עמדות מרצה ובקרה">
 <meta property="og:description" content="תכנון וייצור עמדות מרצה, פודיומים, עמדות בקרה ותצוגה אינטראקטיבית בפח מתכת — לפי מידה.">
 <meta property="og:type" content="website">
+<!-- ==========================================================================
+     Consent Mode v2 defaults. Runs before any tag manager or analytics so that
+     no analytics/advertising storage can be set until the visitor opts in.
+     Every signal defaults to "denied"; Global Privacy Control is honored up
+     front. No GA4/GTM identifier is loaded here — analytics only loads later,
+     and only after valid consent (see the CONSENT config in the main script).
+     ========================================================================== -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    wait_for_update: 500
+  });
+  try {
+    if (navigator.globalPrivacyControl === true) {
+      window.__gpc = true;
+      // Honor GPC as a do-not-sell/share signal before any advertising tag can fire.
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+    }
+  } catch (e) {}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%231D1D1F'/%3E%3Ctext x='50' y='60' font-family='Arial,sans-serif' font-size='46' font-weight='900' letter-spacing='-2' fill='white' text-anchor='middle'%3ES%3C/text%3E%3Crect x='30' y='70' width='40' height='4' rx='2' fill='%233AA7F0'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -77,7 +107,7 @@
   .seo-only,.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
 
   /* ---------- floating widgets ---------- */
-  .fab-stack{position:fixed;bottom:22px;left:22px;z-index:80;display:flex;flex-direction:column;gap:12px;align-items:center;}
+  .fab-stack{position:fixed;bottom:22px;inset-inline-start:22px;z-index:80;display:flex;flex-direction:column;gap:12px;align-items:center;}
   .fab{
     width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;
     display:flex;align-items:center;justify-content:center;color:#fff;
@@ -93,10 +123,11 @@
 
   /* ---------- accessibility panel ---------- */
   .a11y-panel{
-    position:fixed;bottom:22px;left:88px;z-index:81;width:280px;max-width:calc(100vw - 110px);
+    position:fixed;bottom:22px;inset-inline-start:88px;z-index:81;width:280px;max-width:calc(100vw - 110px);
+    max-height:calc(100dvh - 120px);overflow-y:auto;overscroll-behavior:contain;
     background:#fff;border-radius:20px;padding:20px;
     box-shadow:0 24px 60px -18px rgba(0,0,0,.4);border:1px solid var(--line);
-    opacity:0;pointer-events:none;transform:translateY(14px) scale(.96);transform-origin:bottom left;
+    opacity:0;pointer-events:none;transform:translateY(14px) scale(.96);transform-origin:bottom center;
     transition:opacity .3s var(--ease), transform .38s var(--spring);
   }
   .a11y-panel.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
@@ -106,18 +137,19 @@
   .a11y-row > span{font-size:.82rem;font-weight:500;}
   .a11y-btn{
     border:1px solid var(--line);background:var(--gray6);border-radius:10px;
-    width:34px;height:34px;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--ink);
+    width:40px;height:40px;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--ink);
     display:flex;align-items:center;justify-content:center;transition:background .2s, transform .15s var(--spring);
   }
   .a11y-btn:hover{background:var(--sky-tint);}
   .a11y-btn:active{transform:scale(.9);}
   .a11y-btn.wide{width:auto;padding:0 14px;grid-column:2 / -1;}
-  .a11y-toggle{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:.82rem;font-weight:500;cursor:pointer;}
+  .a11y-toggle{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;min-height:44px;padding:9px 0;border:0;border-top:1px solid var(--line);background:none;color:inherit;font-family:inherit;font-size:.82rem;font-weight:500;text-align:start;cursor:pointer;}
   .a11y-toggle .sw{width:40px;height:24px;border-radius:999px;background:var(--line);position:relative;transition:background .25s;flex:none;}
-  .a11y-toggle .sw::after{content:'';position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .25s var(--spring);}
-  .a11y-toggle.on .sw{background:var(--sky);}
-  .a11y-toggle.on .sw::after{transform:translateX(-16px);}
-  .a11y-reset{margin-top:12px;width:100%;background:none;border:none;color:var(--sky-deep);font-size:.78rem;font-weight:600;cursor:pointer;padding:6px;}
+  .a11y-toggle .sw::after{content:'';position:absolute;top:2px;inset-inline-start:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:inset-inline-start .25s var(--spring);}
+  .a11y-toggle[aria-checked="true"] .sw{background:var(--sky);}
+  .a11y-toggle[aria-checked="true"] .sw::after{inset-inline-start:18px;}
+  .a11y-reset{margin-top:12px;width:100%;min-height:44px;background:none;border:none;color:var(--sky-deep);font-size:.78rem;font-weight:600;cursor:pointer;padding:6px;}
+  .a11y-statement{display:block;margin-top:6px;text-align:center;font-size:.78rem;font-weight:600;color:var(--blueprint);text-decoration:underline;text-underline-offset:3px;padding:8px 6px;min-height:44px;}
 
   /* accessibility body states */
   body.a11y-contrast{filter:contrast(1.35);}
@@ -127,7 +159,8 @@
 
   /* ---------- cookie banner ---------- */
   .cookie{
-    position:fixed;bottom:22px;right:22px;z-index:90;max-width:400px;width:calc(100% - 44px);
+    position:fixed;bottom:22px;inset-inline-end:22px;z-index:95;max-width:400px;width:calc(100% - 44px);
+    max-height:calc(100dvh - 44px);overflow-y:auto;overscroll-behavior:contain;
     background:#fff;border-radius:20px;padding:22px 24px;
     box-shadow:0 24px 60px -18px rgba(0,0,0,.42);border:1px solid var(--line);
     transform:translateY(140%);transition:transform .5s var(--spring);
@@ -136,13 +169,27 @@
   .cookie h4{margin:0 0 6px;font-size:.98rem;font-weight:700;}
   .cookie p{margin:0 0 16px;font-size:.82rem;color:var(--steel);line-height:1.6;}
   .cookie p a{color:var(--sky-deep);font-weight:600;}
-  .cookie .row{display:flex;gap:10px;}
-  .cookie .row button{flex:1;border-radius:980px;padding:11px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:transform .2s var(--spring), filter .2s, background .2s;}
-  .cookie .row button:active{transform:scale(.96);}
-  .c-accept{background:var(--sky);color:#fff;}
-  .c-accept:hover{background:var(--sky-deep);}
-  .c-decline{background:var(--gray6);color:var(--ink);}
-  .c-decline:hover{background:var(--gray5);}
+  .cookie .row{display:flex;flex-wrap:wrap;gap:10px;}
+  .cookie .row button{flex:1 1 auto;min-height:44px;border-radius:var(--radius);padding:11px 14px;font-size:.86rem;font-weight:700;cursor:pointer;border:1px solid transparent;transition:transform .2s var(--spring), filter .2s, background .2s;}
+  .cookie .row button:active{transform:scale(.98);}
+  /* Accept and Reject share identical prominence: reject is as easy as accept. */
+  .c-accept{background:var(--blueprint);color:#fff;}
+  .c-accept:hover{background:var(--graphite);}
+  .c-decline{background:var(--white);color:var(--graphite);border-color:var(--machine);}
+  .c-decline:hover{background:var(--paper);}
+  .c-customize{flex:1 1 100%;background:none;color:var(--blueprint);border-color:var(--line);font-weight:600;}
+  .c-customize:hover{background:var(--paper);}
+  .cookie-legal{color:var(--sky-deep);font-weight:700;text-decoration:underline;text-underline-offset:3px;}
+  .cookie-prefs{margin:4px 0 14px;border-block-start:1px solid var(--line);}
+  .cookie-pref{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-block-end:1px solid var(--line);}
+  .cookie-pref-text{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .cookie-pref-text strong{font-size:.88rem;color:var(--graphite);}
+  .cookie-pref-text span{font-size:.76rem;color:var(--steel);line-height:1.5;}
+  .cookie-pref input[type=checkbox]{inline-size:22px;block-size:22px;flex:none;accent-color:var(--blueprint);cursor:pointer;margin:0;}
+  .cookie-locked{font-size:.74rem;font-weight:700;color:var(--machine);flex:none;}
+  .cookie-gpc{margin:12px 0 0;font-size:.78rem;font-weight:600;color:var(--warn-ink,#6B4B12);background:#FBF3E4;border:1px solid #E4B252;border-radius:var(--radius);padding:10px 12px;line-height:1.5;}
+  .footer-links{display:flex;flex-wrap:wrap;align-items:center;gap:6px 20px;}
+  .footer-links a,.footer-links button{color:inherit;font-size:.9375rem;}
 
   /* ---------- modal (privacy) ---------- */
   .modal{
@@ -416,6 +463,7 @@
   .lb-wa:hover{background:var(--graphite);transform:none;}
   .lb-3d-toggle{min-height:44px;border-radius:10px;max-width:140px;white-space:normal;}
   .cmp-tray{border-radius:14px;gap:12px;padding:12px;box-shadow:0 12px 40px rgba(21,23,25,.2);}
+  .cmp-tray :focus-visible{outline-color:var(--white);}
   .cmp-chip{padding:0 0 0 10px;border-radius:8px;}
   .cmp-chip button,.cmp-clear{min-width:44px;min-height:44px;opacity:1;color:var(--white);}
   .cmp-go{min-height:44px;border-radius:8px;background:var(--blueprint);}
@@ -441,6 +489,7 @@
   .custom-section{background:var(--graphite);color:var(--white);}
   .custom-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(32px,6vw,96px);}
   .custom-copy{grid-column:span 6;}
+  .custom-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-block:0 14px;}
   .custom-copy h2{max-width:19ch;}
   .custom-copy p{font-size:1.1875rem;line-height:1.7;max-width:47ch;color:var(--paper);margin-block:0 30px;}
   .custom-section .btn-primary{background:var(--white);color:var(--graphite);}
@@ -491,8 +540,10 @@
     section{scroll-margin-top:88px;}
     .nav-inner{min-height:76px;padding-block:12px;gap:12px;}
     .brand img{width:102px;height:34px;}
-    .nav-actions{gap:6px;}
-    .nav-cta{padding:10px 12px;font-size:.9375rem;min-height:44px;}
+    /* Let the actions cluster and its CTA shrink under pressure (e.g. text-spacing
+       overrides) so the header wraps gracefully instead of overflowing the page. */
+    .nav-actions{gap:6px;min-width:0;flex-shrink:1;}
+    .nav-cta{padding:10px 12px;font-size:.9375rem;min-height:44px;min-width:0;}
     .language-toggle,.menu-toggle{min-width:44px;height:44px;}
     .hero{padding-block:24px;}
     .hero-inner{display:flex;flex-direction:column;align-items:stretch;gap:16px;min-height:0;}
@@ -508,7 +559,7 @@
     .custom-copy,.custom-stages{grid-column:auto;}
     .custom-copy h2{max-width:22ch;}
     .about-grid{grid-template-columns:1fr;}
-    .process-list{grid-template-columns:1fr 1fr;}
+    .process-list{grid-template-columns:repeat(2,minmax(0,1fr));}
     .contact-card .inner{flex-direction:column;align-items:start;gap:28px;}
     .contact-card{padding-block:0;}
     .site-footer{gap:16px;}
@@ -614,14 +665,24 @@
 <section class="custom-section" id="custom" aria-labelledby="customTitle">
   <div class="wrap custom-grid">
     <div class="custom-copy">
+      <p class="custom-eyebrow" data-i18n="custom.eyebrow">פתרונות בהתאמה אישית</p>
       <h2 id="customTitle" data-i18n="custom.title">מהצורך בשטח ועד לעמדה מוכנה</h2>
-      <p data-i18n="custom.body">כל פרויקט מתחיל במידות, בציוד ובאופן השימוש וממשיך להנדסה, ייצור ואינטגרציה.</p>
+      <p data-i18n="custom.body">כל פרויקט מתחיל בצורך של חלל, זרימת עבודה או תפעול, ממשיך לתרגום להנדסה וארגונומיה ומסתיים בסביבת עבודה משולבת ועמידה.</p>
       <a class="btn-primary" href="#contact" data-i18n="custom.action">תיאום ייעוץ</a>
     </div>
     <ol class="custom-stages">
-      <li><h3 data-i18n="custom.stepBrief">הגדרת דרישות</h3><p data-i18n="custom.briefBody">מידות החלל, הציוד ואופן השימוש.</p></li>
-      <li><h3 data-i18n="custom.stepEngineering">תכנון הנדסי</h3><p data-i18n="custom.engineeringBody">שרטוטים, פריסת רכיבים ובחירת גימור.</p></li>
-      <li><h3 data-i18n="custom.stepProduction">ייצור ואינטגרציה</h3><p data-i18n="custom.productionBody">עבודת מתכת, שילוב המערכות ובדיקות תפקוד.</p></li>
+      <li>
+        <h3 data-i18n="custom.stepNeed">הצורך</h3>
+        <p data-i18n="custom.needBody">מתחילים מחלל, מזרימת עבודה או מצורך תפעולי — עם המידות, הציוד ואופן השימוש בפועל.</p>
+      </li>
+      <li>
+        <h3 data-i18n="custom.stepEngineering">הנדסה</h3>
+        <p data-i18n="custom.engineeringBody">מתרגמים את הצורך לדרישות טכניות וארגונומיות, ומתכננים ומייצרים את העמדה סביב הפרויקט.</p>
+      </li>
+      <li>
+        <h3 data-i18n="custom.stepResult">התוצאה</h3>
+        <p data-i18n="custom.resultBody">סביבת עבודה משולבת, עמידה ונגישה, שמותקנת באתר ומוכנה לשימוש יומיומי.</p>
+      </li>
     </ol>
   </div>
 </section>
@@ -676,7 +737,12 @@
 <footer class="site-footer">
   <a class="brand" href="#hero"><img src="logo-dark.svg" width="128" height="43" alt="Softec Vision"></a>
   <span>© Softec Vision Ltd</span>
-  <button class="footer-privacy" id="openPrivacy" type="button" data-i18n="footer.privacy">מדיניות פרטיות</button>
+  <nav class="footer-links" data-i18n-aria="footer.legal" aria-label="מסמכים משפטיים">
+    <a href="legal/privacy.html" data-i18n="footer.privacy">מדיניות פרטיות</a>
+    <a href="legal/accessibility.html" data-i18n="footer.accessibility">הצהרת נגישות</a>
+    <a href="legal/terms.html" data-i18n="footer.terms">תנאי שימוש</a>
+    <button class="footer-privacy" id="cookieSettings" type="button" data-i18n="footer.cookieSettings">הגדרות עוגיות</button>
+  </nav>
 </footer>
 
 <script>
@@ -792,14 +858,14 @@ const TRANSLATIONS = {
   'dialog.removeComparison': { he:'הסרה מהשוואה', en:'Remove from Comparison' },
   'custom.eyebrow': { he:'פתרונות בהתאמה אישית', en:'Custom Solutions' },
   'custom.title': { he:'מהצורך בשטח ועד לעמדה מוכנה', en:'From Site Requirement to Finished Station' },
-  'custom.body': { he:'כל פרויקט מתחיל במידות, בציוד ובאופן השימוש וממשיך להנדסה, ייצור ואינטגרציה.', en:'Every project starts with dimensions, equipment and use, then moves through engineering, manufacturing and integration.' },
-  'custom.stepBrief': { he:'הגדרת דרישות', en:'Requirements' },
-  'custom.stepEngineering': { he:'תכנון הנדסי', en:'Engineering' },
-  'custom.stepProduction': { he:'ייצור ואינטגרציה', en:'Manufacturing and Integration' },
+  'custom.body': { he:'כל פרויקט מתחיל בצורך של חלל, זרימת עבודה או תפעול, ממשיך לתרגום להנדסה וארגונומיה ומסתיים בסביבת עבודה משולבת ועמידה.', en:'Every project starts from a space, workflow or operational need, moves through engineering and ergonomics, and ends in an integrated, durable working environment.' },
+  'custom.stepNeed': { he:'הצורך', en:'Need' },
+  'custom.stepEngineering': { he:'הנדסה', en:'Engineering' },
+  'custom.stepResult': { he:'התוצאה', en:'Result' },
   'custom.action': { he:'תיאום ייעוץ', en:'Book a Consultation' },
-  'custom.briefBody': { he:'מידות החלל, הציוד ואופן השימוש.', en:'Room dimensions, equipment and how the station will be used.' },
-  'custom.engineeringBody': { he:'שרטוטים, פריסת רכיבים ובחירת גימור.', en:'Technical drawings, component layout and finish selection.' },
-  'custom.productionBody': { he:'עבודת מתכת, שילוב המערכות ובדיקות תפקוד.', en:'Metal fabrication, system integration and functional testing.' },
+  'custom.needBody': { he:'מתחילים מחלל, מזרימת עבודה או מצורך תפעולי — עם המידות, הציוד ואופן השימוש בפועל.', en:'It begins with a room, a workflow or an operational need — with the dimensions, equipment and how the station will actually be used.' },
+  'custom.engineeringBody': { he:'מתרגמים את הצורך לדרישות טכניות וארגונומיות, ומתכננים ומייצרים את העמדה סביב הפרויקט.', en:'We translate the need into technical and ergonomic requirements, then engineer and manufacture the station around the project.' },
+  'custom.resultBody': { he:'סביבת עבודה משולבת, עמידה ונגישה, שמותקנת באתר ומוכנה לשימוש יומיומי.', en:'An integrated, durable and accessible working environment, installed on site and ready for daily use.' },
   'about.eyebrow': { he:'אודות', en:'About' },
   'about.title': { he:'Softec Vision Ltd', en:'Softec Vision Ltd' },
   'about.body': { he:'אנחנו מתכננים ומייצרים ריהוט טכנולוגי כמערכת שלמה, עם גימור מדויק וניהול כבלים סמוי.', en:'We design and manufacture technology furniture as a complete system, with precise finishing and concealed cable management.' },
@@ -828,6 +894,10 @@ const TRANSLATIONS = {
   'inquiry.generalMessage': { he:'שלום, אשמח לקבל הצעת מחיר לפרויקט עם Softec Vision.', en:'Hello, I would like a quote for a project with Softec Vision.' },
   'controls.backToTop': { he:'חזרה למעלה', en:'Back to top' },
   'footer.privacy': { he:'מדיניות פרטיות', en:'Privacy Policy' },
+  'footer.accessibility': { he:'הצהרת נגישות', en:'Accessibility Statement' },
+  'footer.terms': { he:'תנאי שימוש', en:'Terms of Use' },
+  'footer.cookieSettings': { he:'הגדרות עוגיות', en:'Cookie settings' },
+  'footer.legal': { he:'מסמכים משפטיים', en:'Legal documents' },
   'footer.draft': { he:'קטלוג טיוטה — לצרכי עיצוב בלבד', en:'Draft catalog — for design purposes only' },
   'accessibility.open': { he:'נגישות', en:'Accessibility' },
   'accessibility.title': { he:'הגדרות נגישות', en:'Accessibility settings' },
@@ -839,24 +909,23 @@ const TRANSLATIONS = {
   'accessibility.readable': { he:'גופן קריא', en:'Readable font' },
   'accessibility.motion': { he:'עצירת אנימציות', en:'Reduce motion' },
   'accessibility.reset': { he:'איפוס הגדרות', en:'Reset settings' },
+  'accessibility.statement': { he:'הצהרת נגישות', en:'Accessibility statement' },
   'cookies.title': { he:'אנחנו משתמשים בעוגיות 🍪', en:'We use cookies 🍪' },
-  'cookies.body': { he:'האתר משתמש בעוגיות כדי לשפר את חוויית הגלישה ולנתח שימוש. למידע נוסף —', en:'This site uses cookies to improve the browsing experience and analyze usage. Learn more —' },
-  'cookies.accept': { he:'אישור', en:'Accept' },
-  'cookies.decline': { he:'רק הכרחיות', en:'Essential only' },
-  'privacy.title': { he:'מדיניות פרטיות', en:'Privacy Policy' },
-  'privacy.close': { he:'סגירת מדיניות הפרטיות', en:'Close Privacy Policy' },
-  'privacy.updated': { he:'עודכן לאחרונה: ספטמבר 2026 · מסמך לדוגמה', en:'Last updated: September 2026 · Sample document' },
-  'privacy.intro': { he:'מדיניות זו מסבירה כיצד Softec Vision Ltd אוספת ומשתמשת במידע של מבקרים באתר זה. זהו נוסח לדוגמה שיש להתאים לייעוץ משפטי לפני פרסום בפועל.', en:'This policy explains how Softec Vision Ltd collects and uses information from visitors to this site. It is sample text that must be reviewed by legal counsel before publication.' },
-  'privacy.collectionTitle': { he:'איזה מידע אנחנו אוספים', en:'Information we collect' },
-  'privacy.collectionBody': { he:'כאשר אתם פונים אלינו דרך WhatsApp או טופס יצירת קשר, אנו מקבלים את הפרטים שאתם בוחרים לשתף. בנוסף נאספים נתוני שימוש אנונימיים דרך עוגיות.', en:'When you contact us through WhatsApp or a contact form, we receive the details you choose to share. Anonymous usage data may also be collected through cookies.' },
-  'privacy.useTitle': { he:'שימוש במידע', en:'How we use information' },
-  'privacy.useBody': { he:'המידע משמש למענה לפניות, מתן הצעות מחיר ושיפור האתר. איננו מוכרים את המידע לצדדים שלישיים.', en:'We use information to respond to inquiries, provide quotations and improve the site. We do not sell information to third parties.' },
-  'privacy.cookiesTitle': { he:'עוגיות (Cookies)', en:'Cookies' },
-  'privacy.cookiesBody': { he:'האתר משתמש בעוגיות הכרחיות לתפעול, ובעוגיות אנליטיקה בכפוף להסכמתכם.', en:'The site uses essential cookies for operation and analytics cookies with your consent.' },
-  'privacy.rightsTitle': { he:'זכויותיכם', en:'Your rights' },
-  'privacy.rightsBody': { he:'בהתאם לחוק הגנת הפרטיות, יש לכם זכות לעיין במידע שנאסף עליכם, לבקש את תיקונו או מחיקתו. לפניות בנושא:', en:'Subject to applicable privacy law, you may request access to, correction of or deletion of your information. For inquiries:' },
-  'privacy.contactTitle': { he:'יצירת קשר', en:'Contact' },
-  'privacy.contactBody': { he:'לשאלות בנוגע למדיניות זו, ניתן לפנות אלינו דרך פרטי הקשר באתר.', en:'For questions about this policy, contact us using the details provided on the site.' },
+  'cookies.body': { he:'האתר שומר עוגיות/אחסון הכרחיים בלבד עד לקבלת הסכמה. אחסון אנליטיקה יופעל רק לאחר אישור.', en:'This site stores only essential cookies/storage until you consent. Analytics storage runs only after you accept.' },
+  'cookies.regionLabel': { he:'הסכמת עוגיות', en:'Cookie consent' },
+  'cookies.accept': { he:'אישור הכל', en:'Accept all' },
+  'cookies.reject': { he:'דחיית הכל', en:'Reject all' },
+  'cookies.customize': { he:'התאמה אישית', en:'Customize' },
+  'cookies.save': { he:'שמירת הבחירה', en:'Save choices' },
+  'cookies.necessary': { he:'הכרחיות', en:'Necessary' },
+  'cookies.necessaryDesc': { he:'נדרשות לתפעול האתר, לשמירת השפה, הנגישות וההסכמה. תמיד פעילות.', en:'Required to run the site and remember your language, accessibility and consent choices. Always active.' },
+  'cookies.analytics': { he:'אנליטיקה', en:'Analytics' },
+  'cookies.analyticsDesc': { he:'מדידת שימוש אנונימית לשיפור האתר (Google Analytics, בעתיד).', en:'Anonymous usage measurement to improve the site (Google Analytics, planned).' },
+  'cookies.marketing': { he:'שיווק', en:'Marketing' },
+  'cookies.marketingDesc': { he:'אחסון פרסומי או שיתוף למטרות שיווק. אינו בשימוש כרגע.', en:'Advertising storage or sharing for marketing. Not currently in use.' },
+  'cookies.always': { he:'תמיד פעיל', en:'Always on' },
+  'cookies.gpcNotice': { he:'זוהה אות Global Privacy Control (GPC): בקשות מכירה/שיתוף לפרסום יישארו מושבתות.', en:'A Global Privacy Control (GPC) signal was detected: sell/share for advertising stays disabled.' },
+  'cookies.saved': { he:'העדפות העוגיות נשמרו.', en:'Your cookie preferences were saved.' },
   'errors.productUnavailable': { he:'לא ניתן לטעון את פרטי המוצר.', en:'Product details could not be loaded.' },
   'errors.invalidCatalogState': { he:'בחירת הקטלוג לא הייתה תקינה ואופסה.', en:'The catalog selection was invalid and has been reset.' },
   'errors.storageUnavailable': { he:'העדפת השפה תישמר להפעלה הנוכחית בלבד.', en:'Your language preference will be kept for this session only.' },
@@ -1572,15 +1641,43 @@ fabTop.addEventListener('click', () => window.scrollTo({top:0, behavior:window.m
 
 /* ===== accessibility ===== */
 const a11yPanel = document.getElementById('a11yPanel');
-document.getElementById('fabA11y').addEventListener('click', (e) => {
+const fabA11y = document.getElementById('fabA11y');
+let a11yOpen = false;
+function a11yFocusable(){
+  return [...a11yPanel.querySelectorAll('a[href],button,input,select,[tabindex]')]
+    .filter(node => !node.disabled && node.tabIndex >= 0 && node.getClientRects().length);
+}
+function openA11y(){
+  a11yPanel.classList.add('open');
+  a11yOpen = true;
+  fabA11y.setAttribute('aria-expanded', 'true');
+  const focusable = a11yFocusable();
+  if (focusable[0]) focusable[0].focus({ preventScroll:true });
+}
+function closeA11y(returnFocus){
+  a11yPanel.classList.remove('open');
+  a11yOpen = false;
+  fabA11y.setAttribute('aria-expanded', 'false');
+  if (returnFocus) fabA11y.focus({ preventScroll:true });
+}
+fabA11y.addEventListener('click', (e) => {
   e.stopPropagation();
-  a11yPanel.classList.toggle('open');
+  a11yOpen ? closeA11y(false) : openA11y();
 });
 document.addEventListener('click', (e) => {
-  if (a11yPanel.classList.contains('open') && !a11yPanel.contains(e.target) && e.target.id !== 'fabA11y' && !e.target.closest('#fabA11y')) {
-    a11yPanel.classList.remove('open');
-  }
+  if (a11yOpen && !a11yPanel.contains(e.target) && !e.target.closest('#fabA11y')) closeA11y(false);
 });
+// Escape closes the panel and returns focus; Tab is trapped only while it is open.
+a11yPanel.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape'){ e.preventDefault(); closeA11y(true); return; }
+  if (e.key !== 'Tab') return;
+  const focusable = a11yFocusable();
+  if (!focusable.length) return;
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && a11yOpen) closeA11y(true); });
 let fontStep = parseInt(safeStorageGet('a11y-font', '0'), 10);
 function applyFont(){ document.documentElement.style.fontSize = (100 + fontStep*8) + '%'; safeStorageSet('a11y-font', fontStep); }
 applyFont();
@@ -1593,41 +1690,199 @@ a11yPanel.querySelectorAll('[data-font]').forEach(btn => {
     applyFont();
   });
 });
+function setToggleState(row, on){
+  document.body.classList.toggle(row.dataset.toggle, on);
+  row.classList.toggle('on', on);
+  row.setAttribute('aria-checked', String(on));
+}
 a11yPanel.querySelectorAll('[data-toggle]').forEach(row => {
   const cls = row.dataset.toggle;
-  if (safeStorageGet(cls) === '1'){ document.body.classList.add(cls); row.classList.add('on'); }
+  if (safeStorageGet(cls) === '1') setToggleState(row, true);
   row.addEventListener('click', () => {
-    const on = document.body.classList.toggle(cls);
-    row.classList.toggle('on', on);
+    const on = !document.body.classList.contains(cls);
+    setToggleState(row, on);
     safeStorageSet(cls, on ? '1' : '0');
   });
 });
 document.getElementById('a11yReset').addEventListener('click', () => {
-  ['a11y-contrast','a11y-links','a11y-readable','a11y-nomotion'].forEach(c => {
-    document.body.classList.remove(c); safeStorageSet(c,'0');
-  });
-  a11yPanel.querySelectorAll('.a11y-toggle').forEach(r => r.classList.remove('on'));
+  a11yPanel.querySelectorAll('.a11y-toggle').forEach(row => { setToggleState(row, false); safeStorageSet(row.dataset.toggle, '0'); });
   fontStep = 0; applyFont();
 });
 
-/* ===== cookie banner ===== */
-const cookieBanner = document.getElementById('cookieBanner');
-if (!safeStorageGet('cookie-consent')){
-  setTimeout(() => cookieBanner.classList.add('show'), 1200);
-}
-function setConsent(v){ safeStorageSet('cookie-consent', v); cookieBanner.classList.remove('show'); }
-document.getElementById('cookieAccept').addEventListener('click', () => setConsent('all'));
-document.getElementById('cookieDecline').addEventListener('click', () => setConsent('essential'));
+/* ============================================================================
+   Consent management (Consent Mode v2 + GPC)
+   ----------------------------------------------------------------------------
+   CONFIGURATION — edit these values to enable analytics. No fake identifiers
+   are shipped: while both are null nothing loads and no analytics request is
+   made, and the site stays fully functional.
+     GTM_ID   — Google Tag Manager container, e.g. 'GTM-XXXXXXX' (else null).
+     GA4_ID   — GA4 Measurement ID, e.g. 'G-XXXXXXXXXX' (else null). Used only
+                when GTM_ID is null.
+     version  — bump to re-prompt everyone after a material policy change.
+     ttlDays  — consent expires after this many days (12 months = 365).
+   Consent defaults to DENIED for every Consent Mode v2 signal (see the head
+   script). Analytics loads only after an explicit opt-in in this controller.
+   ============================================================================ */
+const CONSENT = {
+  GTM_ID: null,
+  GA4_ID: null,
+  version: '2026-09-22',
+  ttlDays: 365,
+  storageKey: 'softec-consent',
+  legacyKey: 'cookie-consent'
+};
 
-/* ===== privacy modal ===== */
-const privacyModal = document.getElementById('privacyModal');
-function openPrivacy(){ privacyModal.classList.add('open'); document.body.style.overflow='hidden'; }
-function closePrivacy(){ privacyModal.classList.remove('open'); document.body.style.overflow=''; }
-document.getElementById('openPrivacy').addEventListener('click', openPrivacy);
-document.getElementById('cookiePrivacy').addEventListener('click', openPrivacy);
-document.getElementById('privacyClose').addEventListener('click', closePrivacy);
-privacyModal.addEventListener('click', (e) => { if (e.target === privacyModal) closePrivacy(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && privacyModal.classList.contains('open')) closePrivacy(); });
+const cookieBanner = document.getElementById('cookieBanner');
+const cookiePrefs = document.getElementById('cookiePrefs');
+const prefAnalytics = document.getElementById('prefAnalytics');
+const prefMarketing = document.getElementById('prefMarketing');
+const cookieMainActions = document.getElementById('cookieMainActions');
+const cookieSaveRow = document.getElementById('cookieSaveRow');
+const cookieGpc = document.getElementById('cookieGpc');
+let analyticsLoaded = false;
+let consentInvoker = null;
+
+function gpcActive(){
+  try { return navigator.globalPrivacyControl === true; } catch (_) { return false; }
+}
+function pushConsentUpdate(state){
+  try { (window.gtag || function(){})('consent', 'update', state); } catch (_) {}
+}
+
+// Load analytics only when configured AND analytics consent is granted.
+function maybeLoadAnalytics(){
+  if (analyticsLoaded) return;
+  if (CONSENT.GTM_ID){
+    analyticsLoaded = true;
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(CONSENT.GTM_ID);
+    document.head.appendChild(s);
+    return;
+  }
+  if (CONSENT.GA4_ID){
+    analyticsLoaded = true;
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(CONSENT.GA4_ID);
+    document.head.appendChild(s);
+    window.gtag('js', new Date());
+    window.gtag('config', CONSENT.GA4_ID, { anonymize_ip: true });
+  }
+  // Neither configured: intentionally do nothing (no network request).
+}
+
+function applyConsent(record){
+  const gpc = gpcActive();
+  const analyticsGranted = record.analytics === 'granted';
+  // GPC (a do-not-sell/share signal) keeps advertising storage denied regardless of choice.
+  const marketingGranted = record.marketing === 'granted' && !gpc;
+  pushConsentUpdate({
+    analytics_storage: analyticsGranted ? 'granted' : 'denied',
+    ad_storage: marketingGranted ? 'granted' : 'denied',
+    ad_user_data: marketingGranted ? 'granted' : 'denied',
+    ad_personalization: marketingGranted ? 'granted' : 'denied'
+  });
+  if (analyticsGranted) maybeLoadAnalytics();
+}
+
+function readConsent(){
+  try {
+    const raw = localStorage.getItem(CONSENT.storageKey);
+    if (raw){
+      const record = JSON.parse(raw);
+      if (record && record.version === CONSENT.version && typeof record.ts === 'number' &&
+          (Date.now() - record.ts) < CONSENT.ttlDays * 86400000){
+        return record;
+      }
+    }
+  } catch (_) {}
+  // Back-compat: a prior simple 'cookie-consent' value still counts as a decision.
+  const legacy = safeStorageGet(CONSENT.legacyKey);
+  if (legacy === 'all' || legacy === 'analytics') return { analytics:'granted', marketing:'denied', method:'legacy' };
+  if (legacy === 'essential' || legacy === 'rejected') return { analytics:'denied', marketing:'denied', method:'legacy' };
+  return null;
+}
+
+function writeConsent(record){
+  record.version = CONSENT.version;
+  record.ts = Date.now();
+  record.gpc = gpcActive();
+  safeStorageSet(CONSENT.storageKey, JSON.stringify(record));
+  // Mirror to the legacy key so older checks keep working.
+  safeStorageSet(CONSENT.legacyKey, record.analytics === 'granted' ? 'all' : 'essential');
+  applyConsent(record);
+}
+
+function showPrefs(show){
+  cookiePrefs.hidden = !show;
+  cookieMainActions.hidden = show;
+  cookieSaveRow.hidden = !show;
+  cookieGpc.hidden = !gpcActive();
+  if (show && gpcActive()){
+    prefMarketing.checked = false;
+    prefMarketing.disabled = true;
+  }
+}
+
+function openBanner(withPrefs, invoker){
+  consentInvoker = invoker || null;
+  const record = readConsent();
+  prefAnalytics.checked = !!(record && record.analytics === 'granted');
+  prefMarketing.checked = !!(record && record.marketing === 'granted') && !gpcActive();
+  prefMarketing.disabled = gpcActive();
+  cookieBanner.hidden = false;
+  showPrefs(!!withPrefs);
+  // Slide in on the next frame so the transition runs from the hidden position.
+  requestAnimationFrame(() => cookieBanner.classList.add('show'));
+  if (invoker){
+    const target = withPrefs ? prefAnalytics : document.getElementById('cookieAccept');
+    if (target) target.focus({ preventScroll:true });
+  }
+}
+
+function closeBanner(){
+  cookieBanner.classList.remove('show');
+  cookieBanner.hidden = true;
+  showPrefs(false);
+  if (consentInvoker && consentInvoker.isConnected) consentInvoker.focus({ preventScroll:true });
+  consentInvoker = null;
+}
+
+function announceConsent(){
+  document.getElementById('catalogStatus').textContent = getText('cookies.saved');
+}
+
+function decide(analytics, marketing, method){
+  writeConsent({
+    analytics: analytics ? 'granted' : 'denied',
+    marketing: (marketing && !gpcActive()) ? 'granted' : 'denied',
+    method: method
+  });
+  closeBanner();
+  announceConsent();
+}
+
+document.getElementById('cookieAccept').addEventListener('click', () => decide(true, true, 'accept'));
+document.getElementById('cookieReject').addEventListener('click', () => decide(false, false, 'reject'));
+document.getElementById('cookieRejectAll').addEventListener('click', () => decide(false, false, 'reject'));
+document.getElementById('cookieCustomize').addEventListener('click', () => showPrefs(true));
+document.getElementById('cookieSave').addEventListener('click', () => decide(prefAnalytics.checked, prefMarketing.checked, 'custom'));
+document.getElementById('cookieSettings').addEventListener('click', (event) => openBanner(true, event.currentTarget));
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !cookieBanner.hidden && consentInvoker) { event.preventDefault(); closeBanner(); }
+});
+
+// Initial state: apply any stored decision; otherwise establish denied defaults and prompt.
+(function initConsent(){
+  const record = readConsent();
+  if (record){
+    applyConsent(record);
+    cookieBanner.hidden = true;
+  } else {
+    setTimeout(() => { if (!readConsent()) openBanner(false, null); }, 1200);
+  }
+})();
 
 /* ===== bilingual shell and mobile navigation ===== */
 const languageToggle = document.getElementById('languageToggle');
@@ -1656,6 +1911,11 @@ function updateLanguageControl() {
   const generalInquiryUrl = buildInquiryUrl(null);
   document.getElementById('contactInquiry').href = generalInquiryUrl;
   document.getElementById('fabWa').href = generalInquiryUrl;
+  // Carry the current language onto the standalone legal pages.
+  document.querySelectorAll('a[href^="legal/"]').forEach(link => {
+    const base = link.getAttribute('href').split('?')[0];
+    link.setAttribute('href', `${base}?lang=${currentLang}`);
+  });
 }
 
 function switchLanguage(event) {
@@ -1749,7 +2009,7 @@ renderPage();
   <button class="fab fab-top" id="fabTop" data-i18n-aria="controls.backToTop" aria-label="חזרה למעלה">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
-  <button class="fab fab-a11y" id="fabA11y" data-i18n-aria="accessibility.open" aria-label="נגישות">
+  <button class="fab fab-a11y" id="fabA11y" type="button" aria-expanded="false" aria-controls="a11yPanel" data-i18n-aria="accessibility.open" aria-label="נגישות">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="4" r="2"/><path d="M12 7c-2.5 0-6 .7-6 .7v2s2.4-.5 4-.6v3.4l-1.7 5.2 1.9.6L12 14l1.8 4.3 1.9-.6L14 12.5V9.1c1.6.1 4 .6 4 .6v-2S14.5 7 12 7z"/></svg>
   </button>
   <a class="fab fab-wa" id="fabWa" href="https://wa.me/972544742520?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%94%D7%A2%D7%9E%D7%93%D7%95%D7%AA" target="_blank" rel="noopener" data-i18n-aria="inquiry.whatsapp" aria-label="וואטסאפ">
@@ -1758,49 +2018,52 @@ renderPage();
 </div>
 
 <!-- ===== accessibility panel ===== -->
-<div class="a11y-panel" id="a11yPanel" role="dialog" data-i18n-aria="accessibility.title" aria-label="הגדרות נגישות">
-  <h4 data-i18n="accessibility.heading">נגישות</h4>
+<div class="a11y-panel" id="a11yPanel" role="dialog" aria-modal="true" aria-labelledby="a11yHeading" data-i18n-aria="accessibility.title" aria-label="הגדרות נגישות">
+  <h4 id="a11yHeading" data-i18n="accessibility.heading">נגישות</h4>
   <p class="sub" data-i18n="accessibility.body">התאמת התצוגה לצרכים שלך</p>
   <div class="a11y-row">
-    <span data-i18n="accessibility.textSize">גודל טקסט</span>
-    <button class="a11y-btn" data-font="-">A−</button>
-    <button class="a11y-btn" data-font="0">A</button>
-    <button class="a11y-btn" data-font="+">A+</button>
+    <span id="a11yTextSize" data-i18n="accessibility.textSize">גודל טקסט</span>
+    <button class="a11y-btn" type="button" data-font="-" aria-label="הקטנת טקסט">A−</button>
+    <button class="a11y-btn" type="button" data-font="0" aria-label="גודל טקסט רגיל">A</button>
+    <button class="a11y-btn" type="button" data-font="+" aria-label="הגדלת טקסט">A+</button>
   </div>
-  <div class="a11y-toggle" data-toggle="a11y-contrast"><span data-i18n="accessibility.contrast">ניגודיות גבוהה</span><span class="sw"></span></div>
-  <div class="a11y-toggle" data-toggle="a11y-links"><span data-i18n="accessibility.links">הדגשת קישורים</span><span class="sw"></span></div>
-  <div class="a11y-toggle" data-toggle="a11y-readable"><span data-i18n="accessibility.readable">גופן קריא</span><span class="sw"></span></div>
-  <div class="a11y-toggle" data-toggle="a11y-nomotion"><span data-i18n="accessibility.motion">עצירת אנימציות</span><span class="sw"></span></div>
-  <button class="a11y-reset" id="a11yReset" data-i18n="accessibility.reset">איפוס הגדרות</button>
+  <button class="a11y-toggle" type="button" role="switch" aria-checked="false" data-toggle="a11y-contrast"><span data-i18n="accessibility.contrast">ניגודיות גבוהה</span><span class="sw" aria-hidden="true"></span></button>
+  <button class="a11y-toggle" type="button" role="switch" aria-checked="false" data-toggle="a11y-links"><span data-i18n="accessibility.links">הדגשת קישורים</span><span class="sw" aria-hidden="true"></span></button>
+  <button class="a11y-toggle" type="button" role="switch" aria-checked="false" data-toggle="a11y-readable"><span data-i18n="accessibility.readable">גופן קריא</span><span class="sw" aria-hidden="true"></span></button>
+  <button class="a11y-toggle" type="button" role="switch" aria-checked="false" data-toggle="a11y-nomotion"><span data-i18n="accessibility.motion">עצירת אנימציות</span><span class="sw" aria-hidden="true"></span></button>
+  <button class="a11y-reset" id="a11yReset" type="button" data-i18n="accessibility.reset">איפוס הגדרות</button>
+  <a class="a11y-statement" href="legal/accessibility.html" data-i18n="accessibility.statement">הצהרת נגישות</a>
 </div>
 
-<!-- ===== cookie banner ===== -->
-<div class="cookie" id="cookieBanner">
-  <h4 data-i18n="cookies.title">אנחנו משתמשים בעוגיות 🍪</h4>
-  <p><span data-i18n="cookies.body">האתר משתמש בעוגיות כדי לשפר את חוויית הגלישה ולנתח שימוש.</span> <a id="cookiePrivacy" data-i18n="footer.privacy">מדיניות הפרטיות</a>.</p>
-  <div class="row">
-    <button class="c-accept" id="cookieAccept" data-i18n="cookies.accept">אישור</button>
-    <button class="c-decline" id="cookieDecline" data-i18n="cookies.decline">רק הכרחיות</button>
-  </div>
-</div>
+<!-- ===== cookie consent banner ===== -->
+<div class="cookie" id="cookieBanner" role="region" data-i18n-aria="cookies.regionLabel" aria-label="הסכמת עוגיות" hidden>
+  <h4 id="cookieTitle" data-i18n="cookies.title">אנחנו משתמשים בעוגיות 🍪</h4>
+  <p><span data-i18n="cookies.body">האתר שומר עוגיות/אחסון הכרחיים בלבד עד לקבלת הסכמה. אחסון אנליטיקה יופעל רק לאחר אישור.</span> <a href="legal/privacy.html" class="cookie-legal" data-i18n="footer.privacy">מדיניות פרטיות</a></p>
 
-<!-- ===== privacy modal ===== -->
-<div class="modal" id="privacyModal" role="dialog" data-i18n-aria="privacy.title" aria-label="מדיניות פרטיות">
-  <div class="modal-card">
-    <button class="close-x" id="privacyClose" data-i18n-aria="privacy.close" aria-label="סגירת מדיניות הפרטיות">✕</button>
-    <h2 data-i18n="privacy.title">מדיניות פרטיות</h2>
-    <p class="updated" data-i18n="privacy.updated">עודכן לאחרונה: ספטמבר 2026 · מסמך לדוגמה</p>
-    <p data-i18n="privacy.intro">מדיניות זו מסבירה כיצד Softec Vision Ltd אוספת ומשתמשת במידע של מבקרים באתר זה. זהו נוסח לדוגמה שיש להתאים לייעוץ משפטי לפני פרסום בפועל.</p>
-    <h3 data-i18n="privacy.collectionTitle">איזה מידע אנחנו אוספים</h3>
-    <p data-i18n="privacy.collectionBody">כאשר אתם פונים אלינו דרך וואטסאפ או טופס יצירת קשר, אנו מקבלים את הפרטים שאתם בוחרים לשתף. בנוסף נאספים נתוני שימוש אנונימיים דרך עוגיות.</p>
-    <h3 data-i18n="privacy.useTitle">שימוש במידע</h3>
-    <p data-i18n="privacy.useBody">המידע משמש למענה לפניות, מתן הצעות מחיר ושיפור האתר. איננו מוכרים את המידע לצדדים שלישיים.</p>
-    <h3 data-i18n="privacy.cookiesTitle">עוגיות (Cookies)</h3>
-    <p data-i18n="privacy.cookiesBody">האתר משתמש בעוגיות הכרחיות לתפעול, ובעוגיות אנליטיקה בכפוף להסכמתכם.</p>
-    <h3 data-i18n="privacy.rightsTitle">זכויותיכם</h3>
-    <p><span data-i18n="privacy.rightsBody">בהתאם לחוק הגנת הפרטיות, יש לכם זכות לעיין במידע שנאסף עליכם, לבקש את תיקונו או מחיקתו. לפניות בנושא:</span> <strong>053-4260632</strong>.</p>
-    <h3 data-i18n="privacy.contactTitle">יצירת קשר</h3>
-    <p data-i18n="privacy.contactBody">לשאלות בנוגע למדיניות זו, ניתן לפנות אלינו דרך פרטי הקשר באתר.</p>
+  <div class="cookie-prefs" id="cookiePrefs" hidden>
+    <div class="cookie-pref">
+      <div class="cookie-pref-text"><strong data-i18n="cookies.necessary">הכרחיות</strong><span data-i18n="cookies.necessaryDesc">נדרשות לתפעול האתר, לשמירת השפה, הנגישות וההסכמה. תמיד פעילות.</span></div>
+      <span class="cookie-locked" data-i18n="cookies.always">תמיד פעיל</span>
+    </div>
+    <label class="cookie-pref">
+      <div class="cookie-pref-text"><strong data-i18n="cookies.analytics">אנליטיקה</strong><span data-i18n="cookies.analyticsDesc">מדידת שימוש אנונימית לשיפור האתר (Google Analytics, בעתיד).</span></div>
+      <input type="checkbox" id="prefAnalytics">
+    </label>
+    <label class="cookie-pref">
+      <div class="cookie-pref-text"><strong data-i18n="cookies.marketing">שיווק</strong><span data-i18n="cookies.marketingDesc">אחסון פרסומי או שיתוף למטרות שיווק. אינו בשימוש כרגע.</span></div>
+      <input type="checkbox" id="prefMarketing">
+    </label>
+    <p class="cookie-gpc" id="cookieGpc" data-i18n="cookies.gpcNotice" hidden>זוהה אות Global Privacy Control (GPC): בקשות מכירה/שיתוף לפרסום יישארו מושבתות.</p>
+  </div>
+
+  <div class="row" id="cookieMainActions">
+    <button class="c-accept" id="cookieAccept" type="button" data-i18n="cookies.accept">אישור הכל</button>
+    <button class="c-decline" id="cookieReject" type="button" data-i18n="cookies.reject">דחיית הכל</button>
+    <button class="c-customize" id="cookieCustomize" type="button" data-i18n="cookies.customize">התאמה אישית</button>
+  </div>
+  <div class="row" id="cookieSaveRow" hidden>
+    <button class="c-accept" id="cookieSave" type="button" data-i18n="cookies.save">שמירת הבחירה</button>
+    <button class="c-decline" id="cookieRejectAll" type="button" data-i18n="cookies.reject">דחיית הכל</button>
   </div>
 </div>
 
