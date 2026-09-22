@@ -107,7 +107,7 @@
   .seo-only,.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
 
   /* ---------- floating widgets ---------- */
-  .fab-stack{position:fixed;bottom:22px;left:22px;z-index:80;display:flex;flex-direction:column;gap:12px;align-items:center;}
+  .fab-stack{position:fixed;bottom:22px;inset-inline-start:22px;z-index:80;display:flex;flex-direction:column;gap:12px;align-items:center;}
   .fab{
     width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;
     display:flex;align-items:center;justify-content:center;color:#fff;
@@ -123,10 +123,11 @@
 
   /* ---------- accessibility panel ---------- */
   .a11y-panel{
-    position:fixed;bottom:22px;left:88px;z-index:81;width:280px;max-width:calc(100vw - 110px);
+    position:fixed;bottom:22px;inset-inline-start:88px;z-index:81;width:280px;max-width:calc(100vw - 110px);
+    max-height:calc(100dvh - 120px);overflow-y:auto;overscroll-behavior:contain;
     background:#fff;border-radius:20px;padding:20px;
     box-shadow:0 24px 60px -18px rgba(0,0,0,.4);border:1px solid var(--line);
-    opacity:0;pointer-events:none;transform:translateY(14px) scale(.96);transform-origin:bottom left;
+    opacity:0;pointer-events:none;transform:translateY(14px) scale(.96);transform-origin:bottom center;
     transition:opacity .3s var(--ease), transform .38s var(--spring);
   }
   .a11y-panel.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
@@ -136,18 +137,19 @@
   .a11y-row > span{font-size:.82rem;font-weight:500;}
   .a11y-btn{
     border:1px solid var(--line);background:var(--gray6);border-radius:10px;
-    width:34px;height:34px;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--ink);
+    width:40px;height:40px;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--ink);
     display:flex;align-items:center;justify-content:center;transition:background .2s, transform .15s var(--spring);
   }
   .a11y-btn:hover{background:var(--sky-tint);}
   .a11y-btn:active{transform:scale(.9);}
   .a11y-btn.wide{width:auto;padding:0 14px;grid-column:2 / -1;}
-  .a11y-toggle{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:.82rem;font-weight:500;cursor:pointer;}
+  .a11y-toggle{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;min-height:44px;padding:9px 0;border:0;border-top:1px solid var(--line);background:none;color:inherit;font-family:inherit;font-size:.82rem;font-weight:500;text-align:start;cursor:pointer;}
   .a11y-toggle .sw{width:40px;height:24px;border-radius:999px;background:var(--line);position:relative;transition:background .25s;flex:none;}
-  .a11y-toggle .sw::after{content:'';position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .25s var(--spring);}
-  .a11y-toggle.on .sw{background:var(--sky);}
-  .a11y-toggle.on .sw::after{transform:translateX(-16px);}
-  .a11y-reset{margin-top:12px;width:100%;background:none;border:none;color:var(--sky-deep);font-size:.78rem;font-weight:600;cursor:pointer;padding:6px;}
+  .a11y-toggle .sw::after{content:'';position:absolute;top:2px;inset-inline-start:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:inset-inline-start .25s var(--spring);}
+  .a11y-toggle[aria-checked="true"] .sw{background:var(--sky);}
+  .a11y-toggle[aria-checked="true"] .sw::after{inset-inline-start:18px;}
+  .a11y-reset{margin-top:12px;width:100%;min-height:44px;background:none;border:none;color:var(--sky-deep);font-size:.78rem;font-weight:600;cursor:pointer;padding:6px;}
+  .a11y-statement{display:block;margin-top:6px;text-align:center;font-size:.78rem;font-weight:600;color:var(--blueprint);text-decoration:underline;text-underline-offset:3px;padding:8px 6px;min-height:44px;}
 
   /* accessibility body states */
   body.a11y-contrast{filter:contrast(1.35);}
@@ -157,7 +159,8 @@
 
   /* ---------- cookie banner ---------- */
   .cookie{
-    position:fixed;bottom:22px;right:22px;z-index:90;max-width:400px;width:calc(100% - 44px);
+    position:fixed;bottom:22px;inset-inline-end:22px;z-index:95;max-width:400px;width:calc(100% - 44px);
+    max-height:calc(100dvh - 44px);overflow-y:auto;overscroll-behavior:contain;
     background:#fff;border-radius:20px;padding:22px 24px;
     box-shadow:0 24px 60px -18px rgba(0,0,0,.42);border:1px solid var(--line);
     transform:translateY(140%);transition:transform .5s var(--spring);
@@ -904,6 +907,7 @@ const TRANSLATIONS = {
   'accessibility.readable': { he:'גופן קריא', en:'Readable font' },
   'accessibility.motion': { he:'עצירת אנימציות', en:'Reduce motion' },
   'accessibility.reset': { he:'איפוס הגדרות', en:'Reset settings' },
+  'accessibility.statement': { he:'הצהרת נגישות', en:'Accessibility statement' },
   'cookies.title': { he:'אנחנו משתמשים בעוגיות 🍪', en:'We use cookies 🍪' },
   'cookies.body': { he:'האתר שומר עוגיות/אחסון הכרחיים בלבד עד לקבלת הסכמה. אחסון אנליטיקה יופעל רק לאחר אישור.', en:'This site stores only essential cookies/storage until you consent. Analytics storage runs only after you accept.' },
   'cookies.regionLabel': { he:'הסכמת עוגיות', en:'Cookie consent' },
@@ -1635,15 +1639,43 @@ fabTop.addEventListener('click', () => window.scrollTo({top:0, behavior:window.m
 
 /* ===== accessibility ===== */
 const a11yPanel = document.getElementById('a11yPanel');
-document.getElementById('fabA11y').addEventListener('click', (e) => {
+const fabA11y = document.getElementById('fabA11y');
+let a11yOpen = false;
+function a11yFocusable(){
+  return [...a11yPanel.querySelectorAll('a[href],button,input,select,[tabindex]')]
+    .filter(node => !node.disabled && node.tabIndex >= 0 && node.getClientRects().length);
+}
+function openA11y(){
+  a11yPanel.classList.add('open');
+  a11yOpen = true;
+  fabA11y.setAttribute('aria-expanded', 'true');
+  const focusable = a11yFocusable();
+  if (focusable[0]) focusable[0].focus({ preventScroll:true });
+}
+function closeA11y(returnFocus){
+  a11yPanel.classList.remove('open');
+  a11yOpen = false;
+  fabA11y.setAttribute('aria-expanded', 'false');
+  if (returnFocus) fabA11y.focus({ preventScroll:true });
+}
+fabA11y.addEventListener('click', (e) => {
   e.stopPropagation();
-  a11yPanel.classList.toggle('open');
+  a11yOpen ? closeA11y(false) : openA11y();
 });
 document.addEventListener('click', (e) => {
-  if (a11yPanel.classList.contains('open') && !a11yPanel.contains(e.target) && e.target.id !== 'fabA11y' && !e.target.closest('#fabA11y')) {
-    a11yPanel.classList.remove('open');
-  }
+  if (a11yOpen && !a11yPanel.contains(e.target) && !e.target.closest('#fabA11y')) closeA11y(false);
 });
+// Escape closes the panel and returns focus; Tab is trapped only while it is open.
+a11yPanel.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape'){ e.preventDefault(); closeA11y(true); return; }
+  if (e.key !== 'Tab') return;
+  const focusable = a11yFocusable();
+  if (!focusable.length) return;
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && a11yOpen) closeA11y(true); });
 let fontStep = parseInt(safeStorageGet('a11y-font', '0'), 10);
 function applyFont(){ document.documentElement.style.fontSize = (100 + fontStep*8) + '%'; safeStorageSet('a11y-font', fontStep); }
 applyFont();
@@ -1656,20 +1688,22 @@ a11yPanel.querySelectorAll('[data-font]').forEach(btn => {
     applyFont();
   });
 });
+function setToggleState(row, on){
+  document.body.classList.toggle(row.dataset.toggle, on);
+  row.classList.toggle('on', on);
+  row.setAttribute('aria-checked', String(on));
+}
 a11yPanel.querySelectorAll('[data-toggle]').forEach(row => {
   const cls = row.dataset.toggle;
-  if (safeStorageGet(cls) === '1'){ document.body.classList.add(cls); row.classList.add('on'); }
+  if (safeStorageGet(cls) === '1') setToggleState(row, true);
   row.addEventListener('click', () => {
-    const on = document.body.classList.toggle(cls);
-    row.classList.toggle('on', on);
+    const on = !document.body.classList.contains(cls);
+    setToggleState(row, on);
     safeStorageSet(cls, on ? '1' : '0');
   });
 });
 document.getElementById('a11yReset').addEventListener('click', () => {
-  ['a11y-contrast','a11y-links','a11y-readable','a11y-nomotion'].forEach(c => {
-    document.body.classList.remove(c); safeStorageSet(c,'0');
-  });
-  a11yPanel.querySelectorAll('.a11y-toggle').forEach(r => r.classList.remove('on'));
+  a11yPanel.querySelectorAll('.a11y-toggle').forEach(row => { setToggleState(row, false); safeStorageSet(row.dataset.toggle, '0'); });
   fontStep = 0; applyFont();
 });
 
@@ -1973,7 +2007,7 @@ renderPage();
   <button class="fab fab-top" id="fabTop" data-i18n-aria="controls.backToTop" aria-label="חזרה למעלה">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
-  <button class="fab fab-a11y" id="fabA11y" data-i18n-aria="accessibility.open" aria-label="נגישות">
+  <button class="fab fab-a11y" id="fabA11y" type="button" aria-expanded="false" aria-controls="a11yPanel" data-i18n-aria="accessibility.open" aria-label="נגישות">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="4" r="2"/><path d="M12 7c-2.5 0-6 .7-6 .7v2s2.4-.5 4-.6v3.4l-1.7 5.2 1.9.6L12 14l1.8 4.3 1.9-.6L14 12.5V9.1c1.6.1 4 .6 4 .6v-2S14.5 7 12 7z"/></svg>
   </button>
   <a class="fab fab-wa" id="fabWa" href="https://wa.me/972544742520?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%94%D7%A2%D7%9E%D7%93%D7%95%D7%AA" target="_blank" rel="noopener" data-i18n-aria="inquiry.whatsapp" aria-label="וואטסאפ">
@@ -1982,20 +2016,21 @@ renderPage();
 </div>
 
 <!-- ===== accessibility panel ===== -->
-<div class="a11y-panel" id="a11yPanel" role="dialog" data-i18n-aria="accessibility.title" aria-label="הגדרות נגישות">
-  <h4 data-i18n="accessibility.heading">נגישות</h4>
+<div class="a11y-panel" id="a11yPanel" role="dialog" aria-modal="true" aria-labelledby="a11yHeading" data-i18n-aria="accessibility.title" aria-label="הגדרות נגישות">
+  <h4 id="a11yHeading" data-i18n="accessibility.heading">נגישות</h4>
   <p class="sub" data-i18n="accessibility.body">התאמת התצוגה לצרכים שלך</p>
   <div class="a11y-row">
-    <span data-i18n="accessibility.textSize">גודל טקסט</span>
-    <button class="a11y-btn" data-font="-">A−</button>
-    <button class="a11y-btn" data-font="0">A</button>
-    <button class="a11y-btn" data-font="+">A+</button>
+    <span id="a11yTextSize" data-i18n="accessibility.textSize">גודל טקסט</span>
+    <button class="a11y-btn" type="button" data-font="-" aria-label="הקטנת טקסט">A−</button>
+    <button class="a11y-btn" type="button" data-font="0" aria-label="גודל טקסט רגיל">A</button>
+    <button class="a11y-btn" type="button" data-font="+" aria-label="הגדלת טקסט">A+</button>
   </div>
-  <div class="a11y-toggle" data-toggle="a11y-contrast"><span data-i18n="accessibility.contrast">ניגודיות גבוהה</span><span class="sw"></span></div>
-  <div class="a11y-toggle" data-toggle="a11y-links"><span data-i18n="accessibility.links">הדגשת קישורים</span><span class="sw"></span></div>
-  <div class="a11y-toggle" data-toggle="a11y-readable"><span data-i18n="accessibility.readable">גופן קריא</span><span class="sw"></span></div>
-  <div class="a11y-toggle" data-toggle="a11y-nomotion"><span data-i18n="accessibility.motion">עצירת אנימציות</span><span class="sw"></span></div>
-  <button class="a11y-reset" id="a11yReset" data-i18n="accessibility.reset">איפוס הגדרות</button>
+  <button class="a11y-toggle" type="button" role="switch" aria-checked="false" data-toggle="a11y-contrast"><span data-i18n="accessibility.contrast">ניגודיות גבוהה</span><span class="sw" aria-hidden="true"></span></button>
+  <button class="a11y-toggle" type="button" role="switch" aria-checked="false" data-toggle="a11y-links"><span data-i18n="accessibility.links">הדגשת קישורים</span><span class="sw" aria-hidden="true"></span></button>
+  <button class="a11y-toggle" type="button" role="switch" aria-checked="false" data-toggle="a11y-readable"><span data-i18n="accessibility.readable">גופן קריא</span><span class="sw" aria-hidden="true"></span></button>
+  <button class="a11y-toggle" type="button" role="switch" aria-checked="false" data-toggle="a11y-nomotion"><span data-i18n="accessibility.motion">עצירת אנימציות</span><span class="sw" aria-hidden="true"></span></button>
+  <button class="a11y-reset" id="a11yReset" type="button" data-i18n="accessibility.reset">איפוס הגדרות</button>
+  <a class="a11y-statement" href="legal/accessibility.html" data-i18n="accessibility.statement">הצהרת נגישות</a>
 </div>
 
 <!-- ===== cookie consent banner ===== -->
