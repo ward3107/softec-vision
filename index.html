@@ -512,8 +512,8 @@
   @media (max-width:380px){
     .nav-inner{padding-inline:12px;gap:6px;}
     .brand img{width:88px;}
-    .nav-cta{font-size:.8125rem;padding-inline:8px;}
-    .nav-actions{gap:4px;}
+    .nav-cta{flex:1;min-width:0;font-size:.8125rem;padding-inline:6px;text-align:center;}
+    .nav-actions{flex:1;min-width:0;margin-inline-start:0;gap:4px;}
     .hero-actions{flex-direction:column;}
   }
   @media (prefers-reduced-motion:reduce){
@@ -541,7 +541,7 @@
     <div class="nav-actions">
       <button class="language-toggle" id="languageToggle" type="button" lang="en" aria-label="Switch to English">EN</button>
       <a class="nav-cta" href="#contact" data-i18n="nav.quote">בקשת הצעת מחיר</a>
-      <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" data-i18n-aria="nav.openMenu" aria-label="פתיחת תפריט"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" data-i18n-aria="nav.menu" aria-label="פתיחת תפריט"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg></button>
     </div>
   </div>
   <nav id="mobileMenu" class="mobile-menu" hidden data-i18n-aria="nav.primary" aria-label="ניווט ראשי">
@@ -1376,7 +1376,7 @@ const mobileMenu = document.getElementById('mobileMenu');
 function setMenuOpen(open, returnFocus = false) {
   mobileMenu.hidden = !open;
   menuToggle.setAttribute('aria-expanded', String(open));
-  menuToggle.setAttribute('aria-label', getText(open ? 'nav.closeMenu' : 'nav.openMenu'));
+  menuToggle.setAttribute('aria-label', getText(open ? 'nav.closeMenu' : 'nav.menu'));
   if (returnFocus) menuToggle.focus();
 }
 
@@ -1400,7 +1400,7 @@ function renderShell() {
   document.querySelector('meta[name="description"]').content = getText('meta.description');
   document.querySelector('meta[property="og:title"]').content = getText('meta.title');
   document.querySelector('meta[property="og:description"]').content = getText('meta.description');
-  menuToggle.setAttribute('aria-label', getText(mobileMenu.hidden ? 'nav.openMenu' : 'nav.closeMenu'));
+  menuToggle.setAttribute('aria-label', getText(mobileMenu.hidden ? 'nav.menu' : 'nav.closeMenu'));
 }
 
 // Later catalog/dialog controllers can extend this orchestrator without changing Task 1.
