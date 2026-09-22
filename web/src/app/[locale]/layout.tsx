@@ -22,7 +22,7 @@ const BOOT_SCRIPT = `(function(){try{
   var d=document.documentElement;d.classList.add('js');
   var f=parseInt(localStorage.getItem('a11y-font')||'0',10);
   if(f){d.style.fontSize=(100+f*8)+'%';}
-  ['contrast','links','readable','nomotion'].forEach(function(k){
+  ['contrast','grayscale','invert','links','headings','readable','linespacing','letterspacing','bigcursor','hideimages','nomotion'].forEach(function(k){
     if(localStorage.getItem('a11y-'+k)==='1'){document.body.classList.add('a11y-'+k);}
   });
 }catch(e){}})();`;
@@ -77,11 +77,14 @@ export default async function LocaleLayout({
             <a href="#main" className="skip-link">
               {t('skip')}
             </a>
-            <Header />
-            <main id="main" tabIndex={-1}>
-              {children}
-            </main>
-            <Footer />
+            {/* Colour-filter aids apply here; the dock and reading overlays sit outside. */}
+            <div id="a11y-content">
+              <Header />
+              <main id="main" tabIndex={-1}>
+                {children}
+              </main>
+              <Footer />
+            </div>
             <CompareTray />
             <FloatingDock waNumber={WA_NUMBER} />
             <RevealController />
