@@ -41,6 +41,56 @@
   }
 }
 
+/* Legal documents */
+.legal-review {
+  background: #fbf3e4;
+  border-block-end: 1px solid #e4b252;
+  color: #6b4b12;
+}
+.legal-review p {
+  max-width: 1024px;
+  margin-inline: auto;
+  padding: 14px clamp(20px, 4.5vw, 72px);
+  font-weight: 600;
+  line-height: 1.6;
+}
+.legal-prose h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 36px 0 10px;
+  scroll-margin-top: 96px;
+}
+.legal-prose p {
+  margin: 0 0 14px;
+  color: #3f4448;
+  line-height: 1.75;
+}
+.legal-prose ul {
+  margin: 0 0 16px;
+  padding-inline-start: 24px;
+  list-style: disc;
+}
+.legal-prose li {
+  margin-block-end: 8px;
+}
+.legal-prose a {
+  color: var(--blueprint);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.legal-prose .note,
+.legal-prose .contact-block {
+  background: var(--pure);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 16px 0;
+}
+.legal-prose .note {
+  border-inline-start: 3px solid var(--softec);
+}
+
 /* Skip link: visible on focus only. */
 .skip-link {
   position: fixed;

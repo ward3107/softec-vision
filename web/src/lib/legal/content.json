@@ -1,0 +1,494 @@
+{
+  "privacy": {
+    "h1": {
+      "he": "מדיניות פרטיות",
+      "en": "Privacy Policy"
+    },
+    "lastUpdated": {
+      "he": "22 בספטמבר 2026",
+      "en": "22 September 2026"
+    },
+    "lastUpdatedLabel": {
+      "he": "עודכן לאחרונה:",
+      "en": "Last updated:"
+    },
+    "reviewBanner": {
+      "he": "⚠ מסמך זה הופק מתבנית ואינו מהווה ייעוץ משפטי. יש להעבירו לבדיקת עורך/ת דין מוסמך/ת לפני פרסום.",
+      "en": "⚠ This document was produced from a template and is not legal advice. It must be reviewed by qualified legal counsel before publication."
+    },
+    "lead": {
+      "he": "מדיניות זו מסבירה כיצד אנו אוספים, משתמשים ומגנים על מידע של מבקרים באתר. המדיניות עוצבה כדי לתמוך בדרישות פרטיות בישראל, באיחוד האירופי/EEA, בבריטניה, בארה״ב (רמה פדרלית וקליפורניה) ובקנדה.",
+      "en": "This policy explains how we collect, use and protect information from visitors to this website. It is designed to support privacy requirements in Israel, the EU/EEA, the United Kingdom, the United States (federal layer and California) and Canada."
+    },
+    "contents": {
+      "he": "תוכן העניינים",
+      "en": "Contents"
+    },
+    "reviewLabel": null,
+    "reviewDate": null,
+    "sections": [
+      {
+        "id": "overview",
+        "title": {
+          "he": "סקירה",
+          "en": "Overview"
+        },
+        "body": {
+          "he": "<p>אתר Softec Vision הוא אתר מידע ותצוגה לריהוט טכנולוגי בהתאמה אישית. הוא אינו כולל חנות מקוונת, תשלומים או חשבונות משתמש. עיקר האינטראקציה הוא עיון בקטלוג ופנייה אלינו לצורך הצעת מחיר או ייעוץ.</p><p>המדיניות תוכננה <strong>לתמוך</strong> בעקרונות פרטיות מקובלים במספר תחומי שיפוט. במקרה של סתירה בין דרישות, אנו מיישמים את הכלל המחמיר יותר.</p>",
+          "en": "<p>The Softec Vision website is an informational catalog for custom technology furniture. It has no online store, payments or user accounts. The main interaction is browsing the catalog and contacting us for a quote or consultation.</p><p>This policy is designed to <strong>support</strong> common privacy principles across several jurisdictions. Where requirements conflict, we apply the stricter rule.</p>"
+        }
+      },
+      {
+        "id": "who-we-are",
+        "title": {
+          "he": "מי אנחנו",
+          "en": "Who we are"
+        },
+        "body": {
+          "he": "<p>בעל השליטה במידע (Data Controller) הוא <strong>Softec Vision Ltd</strong>. ניתן ליצור קשר בפרטים המופיעים בסעיף יצירת קשר.</p><p class=\"note\">הערה ליישום: כתובת עסק פיזית לא סופקה עדיין. יש לוודא עם ייעוץ משפטי אם השמטת הכתובת עומדת בדרישות זיהוי בעל השליטה, הודעה לצרכן ודרישות גילוי אחרות החלות בתחומי השיפוט הרלוונטיים, ולהשלים את הכתובת לפני פרסום.</p>",
+          "en": "<p>The data controller is <strong>Softec Vision Ltd</strong>. You can reach us using the details in the Contact section.</p><p class=\"note\">Implementation note: a physical business address has not yet been supplied. Legal counsel must determine whether omitting the address satisfies controller-identity, consumer-notice and other applicable disclosure requirements in the relevant jurisdictions, and the address should be completed before publication.</p>"
+        }
+      },
+      {
+        "id": "information-we-collect",
+        "title": {
+          "he": "איזה מידע נאסף",
+          "en": "Information we collect"
+        },
+        "body": {
+          "he": "<p>אנו אוספים מידע מוגבל:</p><ul><li><strong>מידע שאתם מוסרים ביוזמתכם</strong> — כאשר אתם פונים אלינו דרך WhatsApp, טלפון או טופס יצירת קשר, אנו מקבלים את הפרטים שבחרתם לשתף (למשל שם, פרטי התקשרות ותיאור הצורך).</li><li><strong>העדפות מקומיות</strong> — העדפת שפה, הגדרות נגישות ובחירת ההסכמה שלכם נשמרות בדפדפן שלכם (localStorage) לצורך תפעול האתר.</li><li><strong>נתוני שימוש (בכפוף להסכמה)</strong> — אם וכאשר תופעל אנליטיקה, ייאספו נתונים אגרגטיביים על השימוש באתר, רק לאחר הסכמה תקפה באזורים שבהם נדרשת הסכמה.</li></ul>",
+          "en": "<p>We collect limited information:</p><ul><li><strong>Information you provide</strong> — when you contact us through WhatsApp, telephone or a contact form, we receive the details you choose to share (for example name, contact details and a description of your need).</li><li><strong>Local preferences</strong> — your language preference, accessibility settings and consent choice are stored in your browser (localStorage) to operate the site.</li><li><strong>Usage data (subject to consent)</strong> — if and when analytics is enabled, aggregate usage data is collected, only after valid consent in regions where consent is required.</li></ul>"
+        }
+      },
+      {
+        "id": "how-we-use",
+        "title": {
+          "he": "שימוש במידע",
+          "en": "How we use information"
+        },
+        "body": {
+          "he": "<p>אנו משתמשים במידע כדי:</p><ul><li>להשיב לפניות ולספק הצעות מחיר וייעוץ;</li><li>לתכנן ולייצר פתרונות בהתאמה אישית לפי הצורך שתיארתם;</li><li>לתפעל ולשפר את האתר;</li><li>למלא חובות חוקיות רלוונטיות.</li></ul><p>איננו מוכרים מידע אישי ואיננו משתפים אותו לצורכי פרסום ממוקד. איננו מקבלים החלטות אוטומטיות בעלות השפעה משפטית.</p>",
+          "en": "<p>We use information to:</p><ul><li>respond to inquiries and provide quotes and consultation;</li><li>design and manufacture custom solutions for the need you describe;</li><li>operate and improve the website;</li><li>meet applicable legal obligations.</li></ul><p>We do not sell personal information and do not share it for targeted advertising. We do not carry out automated decision-making with legal effects.</p>"
+        }
+      },
+      {
+        "id": "legal-bases",
+        "title": {
+          "he": "בסיס חוקי לעיבוד",
+          "en": "Legal bases for processing"
+        },
+        "body": {
+          "he": "<p>למבקרים באיחוד האירופי/EEA ובבריטניה, אנו מסתמכים על הבסיסים הבאים תחת ה-GDPR/UK GDPR: <strong>הסכמה</strong> (לאחסון לא-הכרחי ואנליטיקה), <strong>אינטרס לגיטימי</strong> (הפעלת האתר ואבטחתו) ו<strong>נקיטת צעדים לקראת התקשרות</strong> (מענה לפנייתכם). בישראל אנו פועלים בהתאם לחוק הגנת הפרטיות. ניתן למשוך הסכמה בכל עת.</p>",
+          "en": "<p>For visitors in the EU/EEA and the United Kingdom, we rely on the following bases under the GDPR/UK GDPR: <strong>consent</strong> (for non-essential storage and analytics), <strong>legitimate interests</strong> (operating and securing the site) and <strong>steps prior to entering a contract</strong> (responding to your inquiry). In Israel we act in accordance with the Protection of Privacy Law. You can withdraw consent at any time.</p>"
+        }
+      },
+      {
+        "id": "cookies-and-consent",
+        "title": {
+          "he": "עוגיות והסכמה",
+          "en": "Cookies and consent"
+        },
+        "body": {
+          "he": "<p>לפני הסכמה אנו שומרים בדפדפן רק מה שנדרש לתפעול האתר: העדפת שפה, הגדרות נגישות ורשומת ההסכמה עצמה. אחסון שאינו הכרחי (כמו אנליטיקה) פועל <strong>רק לאחר הסכמה מפורשת (opt-in)</strong> באזורים שבהם נדרשת הסכמה — ישראל, האיחוד האירופי/EEA, בריטניה וקוויבק.</p><ul><li>כל אותות Google Consent Mode v2 מוגדרים כברירת מחדל ל־<strong>denied</strong>: analytics_storage, ad_storage, ad_user_data, ad_personalization.</li><li>אנו מזהים אות Global Privacy Control (GPC) של הדפדפן ומכבדים אותו כבקשת אי-מכירה/אי-שיתוף לפני הפעלת תגי פרסום כלשהם.</li><li>אפשרות \"דחייה\" זמינה באותה קלות כמו \"אישור\", ואין בחירות מסומנות מראש.</li><li>בחירות ההסכמה נשמרות ופגות אחרי 12 חודשים; לאחר מכן תוצג בקשה מחודשת.</li><li>ניתן לשנות או למשוך הסכמה בכל עת דרך \"הגדרות עוגיות\" בכותרת התחתונה.</li></ul>",
+          "en": "<p>Before consent we store in your browser only what is required to operate the site: your language preference, accessibility settings and the consent record itself. Non-essential storage (such as analytics) runs <strong>only after explicit opt-in</strong> in regions where consent is required — Israel, the EU/EEA, the United Kingdom and Québec.</p><ul><li>All Google Consent Mode v2 signals default to <strong>denied</strong>: analytics_storage, ad_storage, ad_user_data, ad_personalization.</li><li>We detect the browser Global Privacy Control (GPC) signal and honor it as a do-not-sell/share request before any advertising tag can fire.</li><li>Rejecting is as easy as accepting, and no choices are pre-selected.</li><li>Consent choices are recorded and expire after 12 months; you will then be asked again.</li><li>You can change or withdraw consent at any time through \"Cookie settings\" in the footer.</li></ul>"
+        }
+      },
+      {
+        "id": "analytics",
+        "title": {
+          "he": "אנליטיקה",
+          "en": "Analytics"
+        },
+        "body": {
+          "he": "<p>אנו מתכננים להשתמש ב-Google Analytics 4 בעתיד. נכון לעכשיו לא הוגדר מזהה GA4 או מיכל GTM, ולכן לא נטענת אנליטיקה ולא נשלחות בקשות אנליטיקה. כאשר תיושם אנליטיקה, היא תיטען רק לאחר הסכמה תקפה ובכפוף לאותות ה-Consent Mode וה-GPC שתוארו לעיל. איננו משתמשים ב-Google Ads או ב-Meta Pixel.</p>",
+          "en": "<p>We plan to use Google Analytics 4 in the future. No GA4 measurement ID or GTM container is currently configured, so no analytics loads and no analytics requests are sent. When analytics is implemented, it will load only after valid consent and subject to the Consent Mode and GPC signals described above. We do not use Google Ads or the Meta Pixel.</p>"
+        }
+      },
+      {
+        "id": "sharing-and-processors",
+        "title": {
+          "he": "שיתוף ומעבדי מידע",
+          "en": "Sharing and processors"
+        },
+        "body": {
+          "he": "<p>איננו מוכרים מידע אישי. אנו עשויים להיעזר בספקי שירות (מעבדי מידע) לצורך הפעלת האתר ולמענה לפניות, למשל אירוח ב-Vercel ואפשרות לספק טפסים/בסיס נתונים כגון Supabase המתארח באיחוד האירופי (גרמניה). ספקים אלה מעבדים מידע לפי הוראותינו בלבד. פנייה דרך WhatsApp כפופה גם למדיניות הפרטיות של אותו שירות.</p>",
+          "en": "<p>We do not sell personal information. We may use service providers (processors) to operate the site and respond to inquiries, for example hosting on Vercel and a possible form/database provider such as Supabase hosted in the EU (Germany). These providers process information only on our instructions. Contacting us via WhatsApp is also subject to that service’s own privacy policy.</p>"
+        }
+      },
+      {
+        "id": "international-transfers",
+        "title": {
+          "he": "העברות בין-לאומיות",
+          "en": "International transfers"
+        },
+        "body": {
+          "he": "<p>ספקי השירות שלנו עשויים לעבד מידע במדינות שונות. כאשר מידע של מבקרים מהאיחוד האירופי/EEA או מבריטניה מועבר מחוץ לאזורים אלה, אנו שואפים להסתמך על מנגנוני העברה מוכרים (כגון סעיפים חוזיים תקניים). יש לאשר את פרטי ההעברה מול הספקים ומול ייעוץ משפטי.</p>",
+          "en": "<p>Our service providers may process information in different countries. Where information about EU/EEA or UK visitors is transferred outside those areas, we aim to rely on recognized transfer mechanisms (such as Standard Contractual Clauses). Transfer details should be confirmed with providers and legal counsel.</p>"
+        }
+      },
+      {
+        "id": "data-retention",
+        "title": {
+          "he": "שמירת מידע",
+          "en": "Data retention"
+        },
+        "body": {
+          "he": "<p>אנו שומרים פניות ופרטי קשר כל עוד הם נדרשים כדי להשיב ולנהל את הקשר העסקי, ולאחר מכן מוחקים או מארכבים אותם בהתאם לחובות חוקיות. רשומת ההסכמה נשמרת עד 12 חודשים או עד לשינויה. העדפות מקומיות נשמרות בדפדפן שלכם עד שתמחקו אותן.</p>",
+          "en": "<p>We keep inquiries and contact details for as long as needed to respond and manage the business relationship, then delete or archive them in line with legal obligations. The consent record is kept for up to 12 months or until you change it. Local preferences remain in your browser until you clear them.</p>"
+        }
+      },
+      {
+        "id": "your-rights",
+        "title": {
+          "he": "הזכויות שלכם",
+          "en": "Your rights"
+        },
+        "body": {
+          "he": "<p>בכפוף לדין החל, ייתכן שיש לכם זכות לעיין במידע, לתקנו, למחקו, להגביל או להתנגד לעיבוד, לניוד מידע ולמשיכת הסכמה. באיחוד האירופי/בריטניה קיימת גם זכות להגיש תלונה לרשות פיקוח. בישראל קיימת זכות עיון ותיקון לפי חוק הגנת הפרטיות. למימוש זכויות ניתן לפנות אלינו בפרטים שבסעיף יצירת קשר.</p>",
+          "en": "<p>Subject to applicable law, you may have the right to access, correct, delete, restrict or object to processing, to data portability and to withdraw consent. In the EU/UK you also have the right to lodge a complaint with a supervisory authority. In Israel there is a right of access and correction under the Protection of Privacy Law. To exercise rights, contact us using the details in the Contact section.</p>"
+        }
+      },
+      {
+        "id": "us-state-privacy",
+        "title": {
+          "he": "ארה״ב וקליפורניה",
+          "en": "United States and California"
+        },
+        "body": {
+          "he": "<p>מדיניות זו כוללת רמה פדרלית של ארה״ב ואת דרישות קליפורניה בלבד. תושבי קליפורניה זכאים, בכפוף ל-CCPA/CPRA, למידע על קטגוריות המידע, לזכות עיון, מחיקה ותיקון, ולזכות לבצע <strong>Do Not Sell or Share</strong>. איננו מוכרים או משתפים מידע אישי לצורכי פרסום ממוקד. אנו מכבדים אות Global Privacy Control (GPC) של הדפדפן כבקשת אי-מכירה/אי-שיתוף לפני הפעלת תגי פרסום. הסכמה גלובלית (opt-in) המשמשת כברירת מחדל שמרנית אינה מבטלת חובות GPC ו-\"Do Not Sell or Share\".</p><p class=\"note\">איננו טוענים לתאימות ארצית בארה״ב; רק הרמה הפדרלית והחבילה של קליפורניה מיושמות. חוקי פרטיות של מדינות נוספות בארה״ב עשויים לחול ודורשים בדיקה נפרדת.</p>",
+          "en": "<p>This policy covers a United States federal layer and California requirements only. Subject to the CCPA/CPRA, California residents may request information about categories of data, and have rights to access, delete and correct, as well as the right to <strong>Do Not Sell or Share</strong>. We do not sell or share personal information for targeted advertising. We honor the browser Global Privacy Control (GPC) signal as a do-not-sell/share request before any advertising tag fires. A conservative global opt-in default does not remove GPC and \"Do Not Sell or Share\" obligations.</p><p class=\"note\">We do not claim nationwide US compliance; only the federal and California packs are implemented. Other US state privacy laws may apply and require separate review.</p>"
+        }
+      },
+      {
+        "id": "canada-privacy",
+        "title": {
+          "he": "קנדה וקוויבק",
+          "en": "Canada and Québec"
+        },
+        "body": {
+          "he": "<p>למבקרים בקנדה, אנו שואפים לפעול בהתאם ל-PIPEDA ולחוקי פרטיות פרובינציאליים, כולל קוויבק (Law 25), אונטריו, קולומביה הבריטית ואלברטה. אנו מבקשים הסכמה לאחסון לא-הכרחי, ומאפשרים עיון ותיקון.</p><p class=\"note\">קוויבק עשויה לחייב תוכן בשפה הצרפתית. מכיוון ששפות האתר המבוקשות הן אנגלית ועברית בלבד, יש להעביר נושא זה לבדיקת ייעוץ משפטי/מוצר.</p>",
+          "en": "<p>For visitors in Canada, we aim to act in accordance with PIPEDA and provincial privacy laws, including Québec (Law 25), Ontario, British Columbia and Alberta. We request consent for non-essential storage, and provide access and correction.</p><p class=\"note\">Québec may require French-language content. Because the requested site languages are English and Hebrew only, this must be flagged for legal/product review.</p>"
+        }
+      },
+      {
+        "id": "children",
+        "title": {
+          "he": "פרטיות ילדים",
+          "en": "Children’s privacy"
+        },
+        "body": {
+          "he": "<p>האתר מיועד ללקוחות עסקיים ואינו מכוון לילדים. איננו אוספים ביודעין מידע אישי מילדים.</p>",
+          "en": "<p>The site is intended for business customers and is not directed to children. We do not knowingly collect personal information from children.</p>"
+        }
+      },
+      {
+        "id": "security",
+        "title": {
+          "he": "אבטחת מידע",
+          "en": "Security"
+        },
+        "body": {
+          "he": "<p>אנו נוקטים אמצעים סבירים כדי להגן על מידע. עם זאת, אף העברה או אחסון אינם מאובטחים לחלוטין, ואיננו יכולים להבטיח אבטחה מוחלטת.</p>",
+          "en": "<p>We take reasonable measures to protect information. However, no transmission or storage is completely secure, and we cannot guarantee absolute security.</p>"
+        }
+      },
+      {
+        "id": "changes",
+        "title": {
+          "he": "שינויים במדיניות",
+          "en": "Changes to this policy"
+        },
+        "body": {
+          "he": "<p>נעדכן מדיניות זו מעת לעת. תאריך העדכון האחרון מופיע בראש העמוד. שינויים מהותיים יסומנו באופן בולט כאשר הדבר נדרש.</p>",
+          "en": "<p>We may update this policy from time to time. The last-updated date appears at the top of the page. Material changes will be highlighted where required.</p>"
+        }
+      },
+      {
+        "id": "contact",
+        "title": {
+          "he": "יצירת קשר",
+          "en": "Contact"
+        },
+        "body": {
+          "he": "<p>לשאלות בנוגע לפרטיות או למימוש זכויות:</p><div class=\"contact-block\"><p><strong>Softec Vision Ltd</strong><br>דוא״ל פרטיות: <a href=\"mailto:Alon@softec.co.il\">Alon@softec.co.il</a><br>טלפון: <a href=\"tel:+97236968777\">03-6968777</a><br>WhatsApp: <a href=\"https://wa.me/972544742520\">+972-54-474-2520</a><br>אתר: <a href=\"https://ward3107.github.io/softec-vision/\">ward3107.github.io/softec-vision</a></p></div>",
+          "en": "<p>For privacy questions or to exercise rights:</p><div class=\"contact-block\"><p><strong>Softec Vision Ltd</strong><br>Privacy email: <a href=\"mailto:Alon@softec.co.il\">Alon@softec.co.il</a><br>Telephone: <a href=\"tel:+97236968777\">03-6968777</a><br>WhatsApp: <a href=\"https://wa.me/972544742520\">+972-54-474-2520</a><br>Website: <a href=\"https://ward3107.github.io/softec-vision/\">ward3107.github.io/softec-vision</a></p></div>"
+        }
+      }
+    ]
+  },
+  "accessibility": {
+    "h1": {
+      "he": "הצהרת נגישות",
+      "en": "Accessibility Statement"
+    },
+    "lastUpdated": {
+      "he": "22 בספטמבר 2026",
+      "en": "22 September 2026"
+    },
+    "lastUpdatedLabel": {
+      "he": "עודכן לאחרונה:",
+      "en": "Last updated:"
+    },
+    "reviewBanner": {
+      "he": "⚠ מסמך זה הופק מתבנית ואינו מהווה ייעוץ משפטי. יש להעבירו לבדיקת עורך/ת דין מוסמך/ת לפני פרסום.",
+      "en": "⚠ This document was produced from a template and is not legal advice. It must be reviewed by qualified legal counsel before publication."
+    },
+    "lead": {
+      "he": "אנו מחויבים להנגיש את האתר לכלל המשתמשים. עמוד זה מתאר את הגישה שלנו, התקן שאליו אנו מיישמים, האמצעים שננקטו וכיצד לפנות אלינו בנושאי נגישות.",
+      "en": "We are committed to making this website accessible to all users. This page describes our approach, the standard we implement against, the measures taken and how to contact us about accessibility."
+    },
+    "contents": {
+      "he": "תוכן העניינים",
+      "en": "Contents"
+    },
+    "reviewLabel": {
+      "he": "מועד בדיקת הנגישות:",
+      "en": "Accessibility review date:"
+    },
+    "reviewDate": {
+      "he": "22 בספטמבר 2026",
+      "en": "22 September 2026"
+    },
+    "sections": [
+      {
+        "id": "commitment",
+        "title": {
+          "he": "המחויבות שלנו",
+          "en": "Our commitment"
+        },
+        "body": {
+          "he": "<p>אנו רואים בנגישות חלק מאיכות המוצר. מטרתנו היא שכל אדם יוכל לעיין בקטלוג, להבין את המוצרים וליצור עמנו קשר, ללא תלות ביכולות או בטכנולוגיה מסייעת.</p>",
+          "en": "<p>We treat accessibility as part of product quality. Our goal is that everyone can browse the catalog, understand the products and contact us, regardless of ability or assistive technology.</p>"
+        }
+      },
+      {
+        "id": "standard",
+        "title": {
+          "he": "התקן והיעד",
+          "en": "Standard and target"
+        },
+        "body": {
+          "he": "<p>האתר <strong>עוצב ונבנה כדי לתמוך</strong> ב-Web Content Accessibility Guidelines (WCAG) 2.2 ברמה AA כיעד יישום. אנו מיישמים כנגד קריטריונים אלה ומשפרים את האתר באופן מתמשך. הצהרה זו אינה טענה לתאימות מלאה, אלא תיאור של הגישה והאמצעים שננקטו.</p>",
+          "en": "<p>This website is <strong>designed and built to support</strong> the Web Content Accessibility Guidelines (WCAG) 2.2 at Level AA as the implementation target. We implement against these criteria and improve the site on an ongoing basis. This statement is not a claim of full compliance, but a description of our approach and the measures taken.</p>"
+        }
+      },
+      {
+        "id": "measures",
+        "title": {
+          "he": "אמצעי נגישות שיושמו",
+          "en": "Accessibility measures implemented"
+        },
+        "body": {
+          "he": "<p>בין האמצעים שיושמו באתר:</p><ul><li>מבנה HTML סמנטי עם אזורי ניווט (landmarks), סדר כותרות הגיוני ותוויות ברורות;</li><li>תמיכה מלאה בעברית (RTL) ובאנגלית (LTR) עם החלפת כיוון תקינה;</li><li>הפעלה מלאה במקלדת של תפריטים, סינון, גלריה, השוואה וחלונות דו-שיח;</li><li>מלכודת פוקוס בחלונות דו-שיח והחזרת הפוקוס לפריט שפתח אותם;</li><li>מחווני פוקוס נראים לעין בניגודיות מספקת;</li><li>הכרזות חיות (aria-live) על שינויי מצב;</li><li>יעדי מגע של 44 פיקסלים לפחות במקומות מעשיים;</li><li>כיבוד העדפת \"צמצום תנועה\" של מערכת ההפעלה;</li><li>טקסט חלופי מקומי לתמונות וטעינה עצלה מתחת לקו הקיפול.</li></ul>",
+          "en": "<p>Measures implemented on the site include:</p><ul><li>Semantic HTML with landmarks, a logical heading order and clear labels;</li><li>Full support for Hebrew (RTL) and English (LTR) with correct direction switching;</li><li>Full keyboard operation of menus, filtering, gallery, comparison and dialogs;</li><li>Focus trapping in dialogs and returning focus to the element that opened them;</li><li>Visible focus indicators with sufficient contrast;</li><li>Live announcements (aria-live) for state changes;</li><li>Touch targets of at least 44 pixels where practical;</li><li>Respect for the operating system “reduce motion” preference;</li><li>Localized alternative text for images and lazy loading below the fold.</li></ul>"
+        }
+      },
+      {
+        "id": "widget",
+        "title": {
+          "he": "כלי הנגישות באתר",
+          "en": "The accessibility tool on the site"
+        },
+        "body": {
+          "he": "<p>האתר כולל כלי נגישות המאפשר שינוי גודל טקסט, ניגודיות גבוהה, הדגשת קישורים, גופן קריא וצמצום תנועה. <strong>כלי זה אינו תחליף לנגישות</strong> ואינו הופך את האתר ל\"תואם\" באופן אוטומטי. אנו מתעדפים תיקון של האתר עצמו, והכלי הוא תוספת נוחות בלבד. הכלי עצמו נבנה להיות נגיש: ניתן להפעלה במקלדת, נסגר במקש Escape, ומחזיר את הפוקוס.</p>",
+          "en": "<p>The site includes an accessibility tool that lets you change text size, high contrast, link highlighting, a readable font and reduced motion. <strong>This tool is not a substitute for accessibility</strong> and does not automatically make the site “compliant.” We prioritize fixing the underlying website, and the tool is a convenience aid only. The tool itself is built to be accessible: it is keyboard operable, closes with the Escape key and returns focus.</p>"
+        }
+      },
+      {
+        "id": "limitations",
+        "title": {
+          "he": "מגבלות ידועות",
+          "en": "Known limitations"
+        },
+        "body": {
+          "he": "<p>למרות מאמצינו, ייתכנו רכיבים שאינם נגישים במלואם, למשל תצוגת תלת-ממד אופציונלית של מוצרים או תוכן מוטמע של צד שלישי. אנו פועלים לשיפור מתמשך. אם נתקלתם בקושי, נשמח לקבל משוב כדי לתקן.</p>",
+          "en": "<p>Despite our efforts, some components may not be fully accessible, for example an optional 3D product view or embedded third-party content. We work toward continuous improvement. If you encounter a barrier, we welcome feedback so we can fix it.</p>"
+        }
+      },
+      {
+        "id": "israel",
+        "title": {
+          "he": "התקן הישראלי",
+          "en": "Israeli standard"
+        },
+        "body": {
+          "he": "<p>בישראל, דרישות הנגישות מפנות בדרך כלל לתקן הישראלי ת\"י 5568 המבוסס על WCAG. אנו מיישמים כנגד WCAG 2.2 AA כפי שתואר לעיל.</p><p class=\"note\">הערה ליישום: יש לאמת מול ייעוץ משפטי את הדרישות הפורמליות החלות (לרבות תקנות שוויון זכויות לאנשים עם מוגבלות ותקן ת\"י 5568) ואת הפרטים שיש לכלול בהצהרה רשמית לפני פרסום.</p>",
+          "en": "<p>In Israel, accessibility requirements typically reference Israeli Standard IS 5568, which is based on WCAG. We implement against WCAG 2.2 AA as described above.</p><p class=\"note\">Implementation note: the formal applicable requirements (including the Equal Rights for Persons with Disabilities regulations and IS 5568) and the details required in a formal statement should be verified with legal counsel before publication.</p>"
+        }
+      },
+      {
+        "id": "feedback",
+        "title": {
+          "he": "משוב ויצירת קשר",
+          "en": "Feedback and contact"
+        },
+        "body": {
+          "he": "<p>אם נתקלתם בבעיית נגישות או שיש לכם הצעה לשיפור, נשמח שתפנו אלינו. אנו נשתדל להשיב תוך זמן סביר.</p><div class=\"contact-block\"><p><strong>רכז/ת נגישות:</strong> Waseem<br>דוא״ל נגישות: <a href=\"mailto:vasyaward@gmail.com\">vasyaward@gmail.com</a><br>טלפון: <a href=\"tel:+97236968777\">03-6968777</a><br>WhatsApp: <a href=\"https://wa.me/972544742520\">+972-54-474-2520</a></p></div>",
+          "en": "<p>If you encountered an accessibility problem or have a suggestion for improvement, please contact us. We will do our best to respond within a reasonable time.</p><div class=\"contact-block\"><p><strong>Accessibility coordinator:</strong> Waseem<br>Accessibility email: <a href=\"mailto:vasyaward@gmail.com\">vasyaward@gmail.com</a><br>Telephone: <a href=\"tel:+97236968777\">03-6968777</a><br>WhatsApp: <a href=\"https://wa.me/972544742520\">+972-54-474-2520</a></p></div>"
+        }
+      }
+    ]
+  },
+  "terms": {
+    "h1": {
+      "he": "תנאי שימוש",
+      "en": "Terms of Use"
+    },
+    "lastUpdated": {
+      "he": "22 בספטמבר 2026",
+      "en": "22 September 2026"
+    },
+    "lastUpdatedLabel": {
+      "he": "עודכן לאחרונה:",
+      "en": "Last updated:"
+    },
+    "reviewBanner": {
+      "he": "⚠ מסמך זה הופק מתבנית ואינו מהווה ייעוץ משפטי. יש להעבירו לבדיקת עורך/ת דין מוסמך/ת לפני פרסום.",
+      "en": "⚠ This document was produced from a template and is not legal advice. It must be reviewed by qualified legal counsel before publication."
+    },
+    "lead": {
+      "he": "תנאים אלה חלים על השימוש באתר Softec Vision. הם עוצבו כדי לתמוך בדרישות מקובלות, ואינם מהווים ייעוץ משפטי.",
+      "en": "These terms apply to your use of the Softec Vision website. They are designed to support common requirements and are not legal advice."
+    },
+    "contents": {
+      "he": "תוכן העניינים",
+      "en": "Contents"
+    },
+    "reviewLabel": null,
+    "reviewDate": null,
+    "sections": [
+      {
+        "id": "acceptance",
+        "title": {
+          "he": "קבלת התנאים",
+          "en": "Acceptance of terms"
+        },
+        "body": {
+          "he": "<p>השימוש באתר מהווה הסכמה לתנאים אלה ולמדיניות הפרטיות. אם אינכם מסכימים לתנאים, אנא הימנעו משימוש באתר.</p>",
+          "en": "<p>By using the website you agree to these terms and to the privacy policy. If you do not agree, please do not use the site.</p>"
+        }
+      },
+      {
+        "id": "about-the-site",
+        "title": {
+          "he": "על האתר",
+          "en": "About the site"
+        },
+        "body": {
+          "he": "<p>האתר הוא קטלוג מידע ותצוגה של ריהוט טכנולוגי ושירותי ייצור בהתאמה אישית. התוכן הוא לצורכי מידע כללי בלבד ואינו מהווה הצעה מחייבת. התקשרות נעשית מול Softec Vision Ltd באמצעות פנייה וקבלת הצעת מחיר.</p>",
+          "en": "<p>The site is an informational catalog of technology furniture and custom manufacturing services. The content is for general information only and does not constitute a binding offer. Engagement is with Softec Vision Ltd through an inquiry and a quotation.</p>"
+        }
+      },
+      {
+        "id": "intellectual-property",
+        "title": {
+          "he": "קניין רוחני",
+          "en": "Intellectual property"
+        },
+        "body": {
+          "he": "<p>התכנים באתר, לרבות טקסטים, תמונות מוצרים, סימנים מסחריים ועיצוב, הם רכושה של Softec Vision Ltd או בשימוש ברשות. אין להעתיק, לשכפל או להשתמש בהם ללא היתר בכתב, למעט שימוש אישי סביר לעיון.</p>",
+          "en": "<p>The content on the site, including text, product images, trademarks and design, is the property of Softec Vision Ltd or used with permission. You may not copy, reproduce or use it without written permission, except reasonable personal use for browsing.</p>"
+        }
+      },
+      {
+        "id": "acceptable-use",
+        "title": {
+          "he": "שימוש מותר",
+          "en": "Acceptable use"
+        },
+        "body": {
+          "he": "<p>אתם מסכימים שלא לעשות שימוש לרעה באתר, לרבות ניסיון לשבש את פעולתו, גישה בלתי מורשית, או שימוש הפוגע בזכויות אחרים או מפר את הדין.</p>",
+          "en": "<p>You agree not to misuse the site, including attempting to disrupt its operation, gaining unauthorized access, or any use that infringes the rights of others or violates the law.</p>"
+        }
+      },
+      {
+        "id": "product-information",
+        "title": {
+          "he": "מידע על מוצרים",
+          "en": "Product information"
+        },
+        "body": {
+          "he": "<p>אנו שואפים לתאר מוצרים בצורה מדויקת, אך ייתכנו אי-דיוקים ושינויים. מפרטים המסומנים כ\"[למילוי]\" טרם הושלמו. תמונות הן להמחשה. מידע באתר אינו מהווה התחייבות למחיר, לזמינות או למועד אספקה; פרטים מחייבים נקבעים בהצעת מחיר פרטנית.</p>",
+          "en": "<p>We aim to describe products accurately, but inaccuracies and changes may occur. Specifications marked “[To be completed]” are not yet finalized. Images are illustrative. Information on the site is not a commitment as to price, availability or delivery time; binding details are set in an individual quotation.</p>"
+        }
+      },
+      {
+        "id": "inquiries",
+        "title": {
+          "he": "פניות ותקשורת",
+          "en": "Inquiries and communication"
+        },
+        "body": {
+          "he": "<p>כאשר אתם פונים אלינו דרך WhatsApp, טלפון או טופס, אתם מסכימים שנשתמש בפרטים שמסרתם כדי להשיב לכם, בהתאם למדיניות הפרטיות. השימוש ב-WhatsApp כפוף גם לתנאים ולמדיניות של אותו שירות.</p>",
+          "en": "<p>When you contact us via WhatsApp, telephone or a form, you agree that we may use the details you provide to respond to you, in accordance with the privacy policy. Use of WhatsApp is also subject to that service’s own terms and policy.</p>"
+        }
+      },
+      {
+        "id": "third-party",
+        "title": {
+          "he": "קישורים וצד שלישי",
+          "en": "Third-party links and content"
+        },
+        "body": {
+          "he": "<p>האתר עשוי לכלול קישורים או רכיבים של צד שלישי (למשל WhatsApp, גופנים או ספריות תצוגה). איננו אחראים לתוכן, למדיניות או לזמינות של שירותי צד שלישי.</p>",
+          "en": "<p>The site may include third-party links or components (for example WhatsApp, fonts or display libraries). We are not responsible for the content, policies or availability of third-party services.</p>"
+        }
+      },
+      {
+        "id": "disclaimers",
+        "title": {
+          "he": "הגבלת אחריות",
+          "en": "Disclaimers"
+        },
+        "body": {
+          "he": "<p>האתר מסופק \"כפי שהוא\" (as is) ו\"ככל שזמין\". במידה המרבית המותרת בדין, איננו נותנים אחריות מכל סוג לגבי דיוק, זמינות או התאמה למטרה מסוימת.</p>",
+          "en": "<p>The site is provided “as is” and “as available.” To the maximum extent permitted by law, we make no warranties of any kind regarding accuracy, availability or fitness for a particular purpose.</p>"
+        }
+      },
+      {
+        "id": "liability",
+        "title": {
+          "he": "הגבלת חבות",
+          "en": "Limitation of liability"
+        },
+        "body": {
+          "he": "<p>במידה המרבית המותרת בדין, Softec Vision Ltd לא תישא באחריות לנזקים עקיפים, תוצאתיים או מיוחדים הנובעים מהשימוש באתר. אין באמור כדי לגרוע מזכויות שאינן ניתנות לוויתור לפי הדין החל.</p>",
+          "en": "<p>To the maximum extent permitted by law, Softec Vision Ltd will not be liable for indirect, consequential or special damages arising from use of the site. Nothing here limits rights that cannot be waived under applicable law.</p>"
+        }
+      },
+      {
+        "id": "governing-law",
+        "title": {
+          "he": "דין וסמכות שיפוט",
+          "en": "Governing law and jurisdiction"
+        },
+        "body": {
+          "he": "<p>תנאים אלה נועדו להתפרש בהתאם לדיני מדינת ישראל.</p><p class=\"note\">הערה ליישום: יש לאשר עם ייעוץ משפטי את הדין החל ואת סמכות השיפוט המתאימים, במיוחד לאור מבקרים מהאיחוד האירופי, בריטניה, ארה״ב וקנדה, ולעדכן סעיף זה בהתאם.</p>",
+          "en": "<p>These terms are intended to be interpreted in accordance with the laws of the State of Israel.</p><p class=\"note\">Implementation note: the applicable governing law and jurisdiction should be confirmed with legal counsel, especially given visitors from the EU, UK, US and Canada, and this section updated accordingly.</p>"
+        }
+      },
+      {
+        "id": "changes",
+        "title": {
+          "he": "שינויים בתנאים",
+          "en": "Changes to these terms"
+        },
+        "body": {
+          "he": "<p>אנו עשויים לעדכן תנאים אלה מעת לעת. תאריך העדכון האחרון מופיע בראש העמוד. המשך השימוש באתר לאחר עדכון מהווה הסכמה לתנאים המעודכנים.</p>",
+          "en": "<p>We may update these terms from time to time. The last-updated date appears at the top of the page. Continued use of the site after an update constitutes acceptance of the updated terms.</p>"
+        }
+      },
+      {
+        "id": "contact",
+        "title": {
+          "he": "יצירת קשר",
+          "en": "Contact"
+        },
+        "body": {
+          "he": "<div class=\"contact-block\"><p><strong>Softec Vision Ltd</strong><br>דוא״ל: <a href=\"mailto:Alon@softec.co.il\">Alon@softec.co.il</a><br>טלפון: <a href=\"tel:+97236968777\">03-6968777</a><br>WhatsApp: <a href=\"https://wa.me/972544742520\">+972-54-474-2520</a><br>אתר: <a href=\"https://ward3107.github.io/softec-vision/\">ward3107.github.io/softec-vision</a></p></div>",
+          "en": "<div class=\"contact-block\"><p><strong>Softec Vision Ltd</strong><br>Email: <a href=\"mailto:Alon@softec.co.il\">Alon@softec.co.il</a><br>Telephone: <a href=\"tel:+97236968777\">03-6968777</a><br>WhatsApp: <a href=\"https://wa.me/972544742520\">+972-54-474-2520</a><br>Website: <a href=\"https://ward3107.github.io/softec-vision/\">ward3107.github.io/softec-vision</a></p></div>"
+        }
+      }
+    ]
+  }
+}
