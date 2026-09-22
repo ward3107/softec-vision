@@ -6,6 +6,8 @@ import { Assistant } from 'next/font/google';
 import { routing, localeDir, type AppLocale } from '@/i18n/routing';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { CompareProvider } from '@/components/catalog/CompareProvider';
+import CompareTray from '@/components/catalog/CompareTray';
 import '../globals.css';
 
 const assistant = Assistant({
@@ -53,14 +55,17 @@ export default async function LocaleLayout({
     <html lang={locale} dir={dir} className={assistant.variable}>
       <body className="min-h-screen bg-paper font-sans text-graphite antialiased">
         <NextIntlClientProvider messages={messages}>
-          <a href="#main" className="skip-link">
-            {t('skip')}
-          </a>
-          <Header />
-          <main id="main" tabIndex={-1}>
-            {children}
-          </main>
-          <Footer />
+          <CompareProvider>
+            <a href="#main" className="skip-link">
+              {t('skip')}
+            </a>
+            <Header />
+            <main id="main" tabIndex={-1}>
+              {children}
+            </main>
+            <Footer />
+            <CompareTray />
+          </CompareProvider>
         </NextIntlClientProvider>
       </body>
     </html>
