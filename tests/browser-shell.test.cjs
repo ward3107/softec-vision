@@ -149,3 +149,54 @@ test('English renders generated catalog, dialog, comparison and language URL sta
     assert.deepEqual(consoleErrors, []);
   } finally { await page.close(); }
 });
+
+test('catalog family keyboard navigation, filtering and URL reload work in both directions', async () => {
+  for (const language of ['en', 'he']) {
+    const page = await createPage(language);
+    try {
+      const first = page.locator('#catBar button').first();
+      await first.focus();
+      assert.equal(await first.getAttribute('aria-pressed'), 'true');
+      assert.equal(await page.locator('#catBar button[tabindex="0"]').count(), 1);
+      await page.keyboard.press(language === 'en' ? 'ArrowRight' : 'ArrowLeft');
+      assert.equal(await page.locator('#catBar button').nth(1).evaluate(element => element === document.activeElement), true);
+      await page.keyboard.press('Enter');
+      assert.equal(await page.locator('#catBar button[aria-pressed="true"]').getAttribute('data-category'), 'podium');
+      assert.equal(await page.locator('#catBar button[aria-pressed="true"]').evaluate(element => element === document.activeElement), true);
+      assert.match(await page.locator('#catBar [data-category="podium"]').textContent(), /6/);
+      await page.locator('#subBar [data-subcategory="smart"]').click();
+      assert.equal(await page.locator('#subBar [aria-pressed="true"]').evaluate(element => element === document.activeElement), true);
+      assert.equal(await page.locator('#cardGrid .card').count(), 2);
+      assert.deepEqual(await page.locator('#cardGrid .code').allTextContents(), ['LS-1000LPT', 'V-19W']);
+      assert.match(page.url(), /cat=podium&sub=smart/);
+      await page.reload();
+      assert.equal(await page.locator('#cardGrid .card').count(), 2);
+      assert.equal(await page.locator('#subBar [aria-pressed="true"]').getAttribute('data-subcategory'), 'smart');
+      assert.ok(await page.locator('#cardGrid .spec-cue').first().textContent());
+      assert.equal(await page.locator('#cardGrid img').first().getAttribute('loading'), 'lazy');
+      assert.ok(await page.locator('#cardGrid .zoom-btn').first().textContent());
+      await page.locator('#subBar [data-subcategory="no-tech"]').click();
+      assert.equal(await page.locator('#cardGrid').isVisible(), false);
+      assert.equal(await page.locator('#catEmpty a').getAttribute('href'), '#contact');
+      assert.ok(await page.locator('#catEmpty').isVisible());
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true);
+    } finally { await page.close(); }
+  }
+});
+
+test('catalog charging-cart and invalid URL state normalize on language switch and reload', async () => {
+  const page = await createPage('en');
+  try {
+    await page.goto(`${origin}/?lang=en&cat=charging-carts&sub=invalid#catalog`);
+    assert.match(page.url(), /cat=charging-carts&sub=all/);
+    await page.locator('#languageToggle').click();
+    assert.match(page.url(), /lang=he&cat=all&sub=all/);
+    assert.doesNotMatch(page.url(), /charging-carts/);
+    await page.reload();
+    assert.equal(await page.locator('#catBar [aria-pressed="true"]').getAttribute('data-category'), 'all');
+    assert.equal(await page.locator('#cardGrid .card').count(), 8);
+    await page.goto(`${origin}/?lang=en&cat=podium&sub=operator`);
+    assert.match(page.url(), /cat=podium&sub=all/);
+    assert.equal(await page.locator('#cardGrid .card').count(), 5);
+  } finally { await page.close(); }
+});

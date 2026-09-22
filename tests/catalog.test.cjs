@@ -52,7 +52,7 @@ function loadCore({
     }
   };
   vm.createContext(sandbox);
-  vm.runInContext(`${match[1]};globalThis.__app={getText,getVisibleCategories,normalizeCatalogState,buildInquiryUrl,setLanguage,resolveInitialLanguage,renderTranslations,syncLanguageUrl,renderPage,safeStorageGet,safeStorageSet,CATEGORIES};`, sandbox);
+  vm.runInContext(`${match[1]};globalThis.__app={getText,getVisibleCategories,normalizeCatalogState,buildInquiryUrl,setLanguage,resolveInitialLanguage,renderTranslations,syncLanguageUrl,renderPage,safeStorageGet,safeStorageSet,CATEGORIES,products,filterProducts:typeof filterProducts === 'function' ? filterProducts : undefined,syncCatalogUrl:typeof syncCatalogUrl === 'function' ? syncCatalogUrl : undefined};`, sandbox);
   return { app:sandbox.__app, sandbox, description, historyCalls, renderCalls };
 }
 
@@ -140,4 +140,36 @@ test('language and page preferences tolerate unavailable storage', () => {
   assert.equal(app.safeStorageGet('softec-language', 'he'), 'he');
   assert.doesNotThrow(() => app.safeStorageSet('softec-language', 'en'));
   assert.doesNotThrow(() => app.setLanguage('en', { render:false }));
+});
+
+test('filter all returns every product visible in the selected language', () => {
+  const { app } = loadCore();
+  const chargingCart = { code:'CHARGE-FIXTURE', cat:'charging-carts' };
+  app.products.push(chargingCart);
+  assert.equal(app.filterProducts({ lang:'en', cat:'all' }).length, app.products.length);
+  assert.equal(app.filterProducts({ lang:'he', cat:'all' }).length, app.products.length - 1);
+  assert.equal(app.filterProducts({ lang:'he', cat:'all' }).includes(chargingCart), false);
+});
+
+test('filter podium/smart returns only matching products and retains their identity', () => {
+  const { app } = loadCore();
+  const result = app.filterProducts({ lang:'en', cat:'podium', sub:'smart' });
+  assert.deepEqual(Array.from(result, product => product.code), ['LS-1000LPT', 'V-19W']);
+  assert.equal(result[0], app.products[0]);
+});
+
+test('catalog state normalizes invalid subcategories and hidden Hebrew charging carts', () => {
+  const { app } = loadCore();
+  assert.deepEqual({ ...app.normalizeCatalogState({ lang:'en', cat:'podium', sub:'operator' }) }, { lang:'en', cat:'podium', sub:'all' });
+  assert.deepEqual({ ...app.normalizeCatalogState({ lang:'he', cat:'charging-carts', sub:'smart' }) }, { lang:'he', cat:'all', sub:'all' });
+  assert.deepEqual({ ...app.normalizeCatalogState({ lang:'fr', cat:'unknown', sub:'smart' }) }, { lang:'he', cat:'all', sub:'all' });
+  assert.equal(app.filterProducts({ lang:'en', cat:'podium', sub:'invalid' }).length, app.products.filter(product => product.cat === 'podium').length);
+});
+
+test('catalog state URL synchronization normalizes state and preserves unrelated parameters and hash', () => {
+  const { app, historyCalls } = loadCore({ search:'?campaign=av&lang=en&cat=charging-carts', pathname:'/catalog', hash:'#catalog' });
+  app.syncCatalogUrl({ lang:'he', cat:'charging-carts', sub:'smart' });
+  assert.equal(historyCalls[0][2], '/catalog?campaign=av&lang=he&cat=all&sub=all#catalog');
+  app.syncCatalogUrl({ lang:'en', cat:'podium', sub:'smart' });
+  assert.equal(historyCalls[1][2], '/catalog?campaign=av&lang=en&cat=podium&sub=smart#catalog');
 });

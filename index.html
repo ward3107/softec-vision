@@ -62,25 +62,10 @@
   }
   .label::before{content:'';width:6px;height:6px;background:var(--signal);border-radius:50%;flex:none;}
 
-  /* ---------- PRODUCT GRID / FLIP CARDS ---------- */
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
-  @media (max-width:1020px){ .grid{grid-template-columns:repeat(2,1fr);} }
-
-  /* ---------- category filter ---------- */
-  .catbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+  /* ---------- catalog foundations ---------- */
+  .grid{display:grid;}
   .subbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px;}
   .subbar[hidden]{display:none;}
-  .chip{
-    font-family:var(--font);font-size:.82rem;font-weight:600;color:var(--ink);
-    background:var(--white);border:1px solid var(--line);border-radius:980px;
-    padding:9px 18px;cursor:pointer;white-space:nowrap;line-height:1;
-    transition:transform .2s var(--spring), background .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease);
-  }
-  .chip:hover{background:var(--gray6);transform:translateY(-1px);}
-  .chip:active{transform:scale(.96);}
-  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
-  .subbar .chip{font-size:.76rem;padding:7px 15px;color:var(--steel);}
-  .subbar .chip.active{background:var(--sky);border-color:var(--sky);color:#fff;}
   .cat-empty{
     text-align:center;color:var(--steel);font-size:.95rem;line-height:1.8;
     padding:52px 22px;background:var(--gray6);border-radius:22px;margin:4px 0 0;font-weight:400;
@@ -90,50 +75,6 @@
   .cat-empty a{color:var(--sky-deep);font-weight:700;}
   /* visually hidden but crawlable (SEO) — not display:none, stays in the DOM */
   .seo-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
-
-  .card{perspective:1600px;aspect-ratio:3/4;cursor:pointer;}
-  .card-inner{
-    position:relative;width:100%;height:100%;
-    transition:transform .65s var(--spring);
-    transform-style:preserve-3d;
-    -webkit-transform-style:preserve-3d;
-  }
-  .card.flipped .card-inner{transform:rotateY(180deg);}
-  .card-face{
-    position:absolute;inset:0;
-    backface-visibility:hidden;-webkit-backface-visibility:hidden;
-    -webkit-transform:rotateY(0deg) translateZ(0);transform:rotateY(0deg) translateZ(0);
-    overflow:hidden;
-    border-radius:22px;background:var(--white);
-    box-shadow:0 1px 2px rgba(0,0,0,.04), 0 18px 34px -22px rgba(0,0,0,.22);
-    text-align:right;
-  }
-  .card-front{display:flex;flex-direction:column;}
-  .card-front .shot{flex:1;background:var(--gray6);overflow:hidden;position:relative;}
-  .card-front .shot img{
-    width:100%;height:100%;object-fit:cover;object-position:center 30%;
-    filter:grayscale(100%) contrast(1.08) brightness(1.03);
-    transition:transform .5s var(--ease);
-  }
-  .card:hover .shot img{transform:scale(1.05);}
-  .card-front .meta{padding:16px 18px 18px;text-align:right;}
-  .card-front .code{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);font-weight:600;display:block;margin-bottom:5px;}
-  .card-front .name{font-size:.94rem;font-weight:700;margin:0;}
-  .flip-hint{
-    position:absolute;top:12px;left:12px;width:28px;height:28px;border-radius:50%;
-    background:rgba(255,255,255,.85);backdrop-filter:blur(6px);
-    display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--ink);
-    box-shadow:0 4px 10px rgba(0,0,0,.12);
-  }
-  .card-back{
-    -webkit-transform:rotateY(180deg) translateZ(0);transform:rotateY(180deg) translateZ(0);
-    background:var(--ink);color:#fff;padding:22px;
-    display:flex;flex-direction:column;text-align:right;
-  }
-  .card-back .code{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--signal);font-weight:700;margin-bottom:12px;}
-  .card-back h3{font-size:1rem;font-weight:700;margin:0 0 10px;line-height:1.3;}
-  .card-back p{font-size:.76rem;color:#B9B9BE;line-height:1.55;margin:0;flex:1;font-weight:400;overflow:hidden;}
-  .card-back .tap-back{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--steel-light);margin-top:10px;}
 
   /* ---------- floating widgets ---------- */
   .fab-stack{position:fixed;bottom:22px;left:22px;z-index:80;display:flex;flex-direction:column;gap:12px;align-items:center;}
@@ -418,19 +359,38 @@
   .section-head p{font-size:1.125rem;max-width:60ch;margin:0;color:var(--machine);}
   #catalog{background:var(--white);}
   .catalog-status{font-size:.9375rem;color:var(--machine);margin-block:0 18px;}
-  .catbar{gap:0;margin-block-end:20px;border-block:1px solid var(--line);}
-  .catbar .chip{flex:1 1 180px;white-space:normal;text-align:start;min-height:70px;padding:18px 20px;border-radius:0;border:0;border-inline-end:1px solid var(--line);background:var(--white);font-size:1rem;line-height:1.35;}
-  .catbar .chip.active{background:var(--graphite);color:var(--white);}
-  .chip:hover,.chip:active{transform:none;}
-  .subbar .chip{min-height:44px;border-radius:var(--radius);font-size:.9375rem;padding:10px 16px;}
-  .subbar .chip.active{background:var(--blueprint);border-color:var(--blueprint);}
-  .card-face{border-radius:var(--radius);box-shadow:none;text-align:start;}
-  .card-front .meta,.card-back,.lb-info,.cmp-table th,.cmp-table td{text-align:start;}
-  .card-front .shot{background:var(--paper);}
-  .card-front .shot img{object-fit:contain;filter:none;}
-  .card:hover .shot img{transform:none;}
-  .card-front .code,.card-back .code{font-size:.875rem;letter-spacing:0;text-transform:none;}
-  .card-front .name{font-size:1.125rem;}
+  .catbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-block-end:40px;border-block-start:1px solid var(--line);}
+  .family-button{font:inherit;text-align:start;display:flex;flex-direction:column;align-items:start;gap:10px;min-width:0;min-height:166px;padding:24px;border:0;border-block-end:1px solid var(--line);border-inline-start:3px solid transparent;background:var(--white);color:var(--graphite);cursor:pointer;transition:background .2s;}
+  .family-button:hover{background:var(--paper);}
+  .family-button[aria-pressed="true"]{border-inline-start-color:var(--blueprint);background:var(--paper);}
+  .family-button[data-category="all"]{grid-column:1 / -1;flex-direction:row;align-items:center;justify-content:space-between;min-height:64px;padding-block:16px;gap:24px;}
+  .family-title{font-size:1.1875rem;font-weight:700;line-height:1.3;}
+  .family-description{font-size:1rem;color:var(--machine);line-height:1.5;max-width:44ch;}
+  .family-count{font-size:.875rem;color:var(--blueprint);margin-block-start:auto;}
+  .catalog-context{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-block-end:20px;}
+  .catalog-context h3{font-size:1.5rem;line-height:1.3;margin:0;}
+  .catalog-context .catalog-status{margin:0;flex:none;}
+  .subbar{gap:0 20px;margin-block-end:32px;}
+  .subcategory-button{font:inherit;font-size:1rem;line-height:1.4;text-align:start;min-height:44px;padding:10px 0;border:0;border-block-end:2px solid transparent;background:none;color:var(--machine);cursor:pointer;}
+  .subcategory-button:hover,.subcategory-button[aria-pressed="true"]{color:var(--blueprint);border-block-end-color:var(--blueprint);}
+  #cardGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 28px;}
+  #cardGrid[hidden]{display:none;}
+  #cardGrid .card{perspective:none;aspect-ratio:auto;cursor:default;min-width:0;display:flex;flex-direction:column;}
+  #cardGrid .shot{aspect-ratio:1.15;background:var(--paper);border-radius:var(--radius);overflow:hidden;}
+  #cardGrid .shot img{width:100%;height:100%;object-fit:contain;}
+  #cardGrid .meta{padding-block:18px;flex:1;}
+  #cardGrid .code{font-size:.9375rem;color:var(--machine);direction:ltr;unicode-bidi:isolate;display:inline-block;}
+  #cardGrid .name{font-size:1.375rem;font-weight:700;line-height:1.3;margin:6px 0 12px;}
+  #cardGrid .spec-cue{font-size:1rem;color:var(--machine);margin:0;line-height:1.5;}
+  #cardGrid .product-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;border-block-start:1px solid var(--line);padding-block-start:8px;}
+  #cardGrid .zoom-btn{position:static;width:auto;height:auto;min-height:44px;padding:8px 0;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none;color:var(--blueprint);font:inherit;font-weight:700;transform:none;}
+  #cardGrid .cmp-check{position:static;min-height:44px;padding:8px 0;display:flex;gap:8px;background:none;border-radius:0;box-shadow:none;backdrop-filter:none;font-size:.9375rem;color:var(--graphite);}
+  #cardGrid .cmp-check input{width:18px;height:18px;margin:0;accent-color:var(--blueprint);}
+  .cat-empty{text-align:start;padding:32px;border-radius:var(--radius);background:var(--paper);}
+  .cat-empty a{display:inline-flex;align-items:center;min-height:44px;}
+  .lb-info,.cmp-table th,.cmp-table td{text-align:start;}
+  @media (max-width:1020px){.catbar{grid-template-columns:repeat(2,minmax(0,1fr));}#cardGrid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  @media (max-width:560px){.catbar{grid-template-columns:1fr;}.family-button{min-height:0;padding:20px 16px;}.family-button[data-category="all"]{flex-direction:column;align-items:start;gap:6px;}.catalog-context{align-items:start;flex-direction:column;gap:8px;}#cardGrid{grid-template-columns:1fr;gap:36px;}.subbar{gap:0 16px;}}
   .custom-section{background:var(--graphite);color:var(--white);}
   .custom-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(32px,6vw,96px);}
   .custom-copy{grid-column:span 6;}
@@ -506,7 +466,6 @@
     .contact-card{padding-block:0;}
     .site-footer{gap:16px;}
     .site-footer .brand{width:100%;}
-    .catbar .chip{flex-basis:50%;min-height:64px;}
     .grid{gap:16px;}
   }
   @media (max-width:380px){
@@ -585,9 +544,12 @@
       <h2 id="catalogTitle" data-i18n="catalog.title">משפחות מוצרים</h2>
       <p data-i18n="catalog.body">בחרו משפחה כדי למצוא עמדה שמתאימה לסביבת העבודה שלכם.</p>
     </div>
-    <p class="catalog-status" id="catalogStatus" aria-live="polite" aria-atomic="true"></p>
-    <div class="catbar reveal" id="catBar" role="tablist" data-i18n-aria="catalog.categories" aria-label="קטגוריות מוצרים"></div>
-    <div class="subbar reveal" id="subBar" role="tablist" data-i18n-aria="catalog.subcategories" aria-label="תת-קטגוריות" hidden></div>
+    <div class="catbar" id="catBar" role="group" data-i18n-aria="catalog.categories" aria-label="קטגוריות מוצרים"></div>
+    <div class="catalog-context">
+      <h3 id="catalogSelection"></h3>
+      <p class="catalog-status" id="catalogStatus" aria-live="polite" aria-atomic="true"></p>
+    </div>
+    <div class="subbar" id="subBar" role="group" data-i18n-aria="catalog.subcategories" aria-label="תת-קטגוריות" hidden></div>
     <div class="grid" id="cardGrid"></div>
     <p class="cat-empty" id="catEmpty" hidden></p>
     <!-- SEO בלבד: עגלות טעינה למחשבים / Computer Charging Carts.
@@ -754,6 +716,8 @@ const TRANSLATIONS = {
   'catalog.emptyBody': { he:'אנחנו מתכננים ומייצרים לפי מידה.', en:'We design and manufacture to your requirements.' },
   'catalog.customAction': { he:'דברו איתנו להזמנה מותאמת', en:'Discuss a Custom Solution' },
   'catalog.statusCount': { he:'מוצרים מוצגים', en:'products shown' },
+  'catalog.allDescription': { he:'גלו את הדגמים בכל משפחות המוצרים.', en:'Explore models across every product family.' },
+  'catalog.subcategoryCount': { he:'תתי-קטגוריות', en:'subcategories' },
   'comparison.title': { he:'השוואת מוצרים', en:'Compare Products' },
   'comparison.instructions': { he:'בחרו 2–3 דגמים לצפייה במפרט זה לצד זה', en:'Select 2–3 models to compare specifications side by side.' },
   'comparison.selected': { he:'נבחרו להשוואה', en:'selected for comparison' },
@@ -970,6 +934,20 @@ function normalizeCatalogState(input = {}) {
   return { lang, cat, sub };
 }
 
+function filterProducts(state = {}) {
+  const { lang, cat, sub } = normalizeCatalogState(state);
+  const visibleKeys = new Set(getVisibleCategories(lang).map(category => category.key));
+  return products.filter(product => visibleKeys.has(product.cat) &&
+    (cat === 'all' || product.cat === cat) && (sub === 'all' || product.sub === sub));
+}
+
+function syncCatalogUrl(input) {
+  const state = normalizeCatalogState(input);
+  const params = new URLSearchParams(location.search);
+  for (const key of ['lang', 'cat', 'sub']) params.set(key, state[key]);
+  history.replaceState(null, '', `${location.pathname}?${params.toString()}${location.hash}`);
+}
+
 function localized(value, lang = currentLang) {
   if (value && typeof value === 'object' && !Array.isArray(value)) return value[lang] || value.he || '';
   return value || '';
@@ -1059,30 +1037,70 @@ const subBar = document.getElementById('subBar');
 const catEmpty = document.getElementById('catEmpty');
 let activeCat = 'all', activeSub = 'all';
 
-function makeChip(label, active, onClick){
+function makeCatalogButton(label, active, className, onClick){
   const b = document.createElement('button');
   b.type = 'button';
-  b.className = 'chip' + (active ? ' active' : '');
-  b.setAttribute('role', 'tab');
-  b.setAttribute('aria-selected', active ? 'true' : 'false');
+  b.className = className;
+  b.setAttribute('aria-pressed', String(active));
+  b.setAttribute('aria-controls', 'cardGrid');
+  b.tabIndex = active ? 0 : -1;
   b.textContent = label;
   b.addEventListener('click', onClick);
   return b;
 }
 
+function selectCategory(cat, sub = 'all') {
+  const focusedGroup = document.activeElement?.closest('#catBar, #subBar');
+  const state = normalizeCatalogState({ lang:currentLang, cat, sub });
+  activeCat = state.cat;
+  activeSub = state.sub;
+  syncCatalogUrl(state);
+  renderPage();
+  // Rendering replaces the controls; keep keyboard users on their selection.
+  if (focusedGroup) focusedGroup.querySelector('[aria-pressed="true"]')?.focus({ preventScroll:true });
+}
+
+function handleCatalogKeys(event) {
+  const buttons = [...event.currentTarget.querySelectorAll('button')];
+  const index = buttons.indexOf(event.target);
+  if (index < 0) return;
+  const rtl = currentLang === 'he';
+  let next;
+  if (event.key === 'Home') next = 0;
+  else if (event.key === 'End') next = buttons.length - 1;
+  else if (event.key === 'ArrowDown') next = index + 1;
+  else if (event.key === 'ArrowUp') next = index - 1;
+  else if (event.key === 'ArrowRight') next = index + (rtl ? -1 : 1);
+  else if (event.key === 'ArrowLeft') next = index + (rtl ? 1 : -1);
+  else return;
+  event.preventDefault();
+  next = (next + buttons.length) % buttons.length;
+  buttons.forEach((button, i) => { button.tabIndex = i === next ? 0 : -1; });
+  buttons[next].focus();
+}
+catBar.addEventListener('keydown', handleCatalogKeys);
+subBar.addEventListener('keydown', handleCatalogKeys);
+
 function renderCategoryIndex(){
   catBar.innerHTML = '';
-  catBar.appendChild(makeChip(getText('catalog.all'), activeCat === 'all', () => {
-    activeCat = 'all';
-    activeSub = 'all';
-    renderPage();
-  }));
-  getVisibleCategories(currentLang).forEach(c => {
-    catBar.appendChild(makeChip(localized(c.label), activeCat === c.key, () => {
-      activeCat = c.key;
-      activeSub = 'all';
-      renderPage();
-    }));
+  const entries = [{ key:'all', label:getText('catalog.all'), description:getText('catalog.allDescription') }, ...getVisibleCategories(currentLang)];
+  entries.forEach(category => {
+    const button = makeCatalogButton('', activeCat === category.key, 'family-button', () => selectCategory(category.key));
+    button.dataset.category = category.key;
+    const title = document.createElement('span');
+    title.className = 'family-title';
+    title.textContent = localized(category.label);
+    const description = document.createElement('span');
+    description.className = 'family-description';
+    description.textContent = localized(category.description);
+    button.append(title, description);
+    if (category.subs?.length) {
+      const count = document.createElement('span');
+      count.className = 'family-count';
+      count.textContent = `${category.subs.length} ${getText('catalog.subcategoryCount')}`;
+      button.appendChild(count);
+    }
+    catBar.appendChild(button);
   });
 }
 
@@ -1091,15 +1109,10 @@ function renderSubcategories(){
   subBar.innerHTML = '';
   if (cat && cat.subs && cat.subs.length){
     subBar.hidden = false;
-    subBar.appendChild(makeChip(getText('catalog.all'), activeSub === 'all', () => {
-      activeSub = 'all';
-      renderPage();
-    }));
-    cat.subs.forEach(s => {
-      subBar.appendChild(makeChip(localized(s.label), activeSub === s.key, () => {
-        activeSub = s.key;
-        renderPage();
-      }));
+    [{ key:'all', label:getText('catalog.all') }, ...cat.subs].forEach(sub => {
+      const button = makeCatalogButton(localized(sub.label), activeSub === sub.key, 'subcategory-button', () => selectCategory(activeCat, sub.key));
+      button.dataset.subcategory = sub.key;
+      subBar.appendChild(button);
     });
   } else {
     subBar.hidden = true;
@@ -1108,48 +1121,35 @@ function renderSubcategories(){
 
 function renderProducts(){
   grid.innerHTML = '';
-  const visibleProducts = products
-    .map((product, index) => ({ product, index }))
-    .filter(({ product }) => (activeCat === 'all' || product.cat === activeCat) && (activeSub === 'all' || product.sub === activeSub));
+  const visibleProducts = filterProducts({ lang:currentLang, cat:activeCat, sub:activeSub });
+  const category = getVisibleCategories(currentLang).find(item => item.key === activeCat);
+  const subcategory = category?.subs?.find(item => item.key === activeSub);
+  document.getElementById('catalogSelection').textContent = localized(subcategory?.label || category?.label) || getText('catalog.all');
 
-  visibleProducts.forEach(({ product:p, index:i }) => {
+  visibleProducts.forEach(p => {
+    const i = products.indexOf(p);
     const card = document.createElement('article');
-    card.className = 'card reveal';
+    card.className = 'card';
     card.dataset.cat = p.cat || '';
     card.dataset.sub = p.sub || '';
-    card.style.transitionDelay = (i % 4) * 0.06 + 's';
     const productName = localized(p.name);
+    const specs = localized(p.specs);
+    const cue = Object.values(specs || {})[0] || localized(p.desc).split('. ')[0];
     card.innerHTML = `
-      <div class="card-inner">
-        <div class="card-face card-front">
-          <div class="shot">
-            <img src="${p.img}" alt="${productName} — ${getText('catalog.productImage')}" loading="lazy">
-            <button class="zoom-btn" aria-label="${getText('catalog.details')}: ${productName}" data-zoom="${i}">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4M11 8v6M8 11h6"/></svg>
-            </button>
-            <label class="cmp-check" onclick="event.stopPropagation()">
-              <input type="checkbox" data-cmp="${i}" ${cmpSelected.has(i) ? 'checked' : ''}><span>${getText('catalog.compare')}</span>
-            </label>
-            <span class="flip-hint" aria-hidden="true">↻</span>
-          </div>
-          <div class="meta">
-            <span class="code">${p.code}</span>
-            <p class="name">${productName}</p>
-          </div>
-        </div>
-        <div class="card-face card-back">
-          <span class="code">${p.code}</span>
-          <h3>${productName}</h3>
-          <p>${localized(p.desc)}</p>
-          <a class="wa-btn" href="${waHref(p)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-            ${waIcon} ${getText('dialog.inquiry')}
-          </a>
-        </div>
+      <div class="shot">
+        <img src="${p.img}" alt="${productName} (${p.code}) — ${getText('catalog.productImage')}" loading="lazy">
+      </div>
+      <div class="meta">
+        <span class="code">${p.code}</span>
+        <h4 class="name">${productName}</h4>
+        <p class="spec-cue">${cue}</p>
+      </div>
+      <div class="product-actions">
+        <button type="button" class="zoom-btn" aria-label="${getText('catalog.details')}: ${productName}" data-zoom="${i}">${getText('catalog.details')}</button>
+        <label class="cmp-check">
+          <input type="checkbox" data-cmp="${i}" aria-label="${getText('catalog.compare')}: ${productName}" ${cmpSelected.has(i) ? 'checked' : ''}><span>${getText('catalog.compare')}</span>
+        </label>
       </div>`;
-    card.addEventListener('click', event => {
-      if (event.target.closest('.zoom-btn') || event.target.closest('.wa-btn') || event.target.closest('.cmp-check')) return;
-      card.classList.toggle('flipped');
-    });
     card.querySelector('.zoom-btn').addEventListener('click', event => {
       event.stopPropagation();
       openLightbox(p);
@@ -1524,7 +1524,7 @@ function switchLanguage(event) {
   activeCat = normalized.cat;
   activeSub = normalized.sub;
   setLanguage(nextLanguage, { render:false });
-  syncLanguageUrl(nextLanguage);
+  syncCatalogUrl(normalized);
   setMenuOpen(false, restoreMenuFocus);
   renderPage();
   document.getElementById('catalogStatus').textContent = getText(nextLanguage === 'en' ? 'language.changedToEnglish' : 'language.changedToHebrew');
@@ -1551,6 +1551,7 @@ const initialState = normalizeCatalogState({
 activeCat = initialState.cat;
 activeSub = initialState.sub;
 setLanguage(initialState.lang, { persist:false, render:false });
+syncCatalogUrl(initialState);
 renderPage();
 });
 </script>
