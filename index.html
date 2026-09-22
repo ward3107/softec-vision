@@ -540,8 +540,10 @@
     section{scroll-margin-top:88px;}
     .nav-inner{min-height:76px;padding-block:12px;gap:12px;}
     .brand img{width:102px;height:34px;}
-    .nav-actions{gap:6px;}
-    .nav-cta{padding:10px 12px;font-size:.9375rem;min-height:44px;}
+    /* Let the actions cluster and its CTA shrink under pressure (e.g. text-spacing
+       overrides) so the header wraps gracefully instead of overflowing the page. */
+    .nav-actions{gap:6px;min-width:0;flex-shrink:1;}
+    .nav-cta{padding:10px 12px;font-size:.9375rem;min-height:44px;min-width:0;}
     .language-toggle,.menu-toggle{min-width:44px;height:44px;}
     .hero{padding-block:24px;}
     .hero-inner{display:flex;flex-direction:column;align-items:stretch;gap:16px;min-height:0;}
@@ -557,7 +559,7 @@
     .custom-copy,.custom-stages{grid-column:auto;}
     .custom-copy h2{max-width:22ch;}
     .about-grid{grid-template-columns:1fr;}
-    .process-list{grid-template-columns:1fr 1fr;}
+    .process-list{grid-template-columns:repeat(2,minmax(0,1fr));}
     .contact-card .inner{flex-direction:column;align-items:start;gap:28px;}
     .contact-card{padding-block:0;}
     .site-footer{gap:16px;}

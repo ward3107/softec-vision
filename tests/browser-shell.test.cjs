@@ -368,3 +368,19 @@ test('comparison tray keyboard focus contrasts at least 3 to 1 for every action 
     } finally { await page.close(); }
   }
 });
+
+test('WCAG text-spacing overrides do not cause horizontal overflow at narrow widths', async () => {
+  // SC 1.4.12: content must survive user text-spacing overrides without clipping/overflow.
+  const spacing = '* { line-height:1.5 !important; letter-spacing:0.12em !important; word-spacing:0.16em !important; } p { margin-bottom:2em !important; }';
+  for (const language of ['en', 'he']) {
+    for (const width of [320, 390]) {
+      const page = await createPage(language);
+      try {
+        await page.setViewportSize({ width, height: 780 });
+        await page.addStyleTag({ content: spacing });
+        const noOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 0.5);
+        assert.ok(noOverflow, `${language} ${width}px overflows under text-spacing overrides`);
+      } finally { await page.close(); }
+    }
+  }
+});
