@@ -1,0 +1,27 @@
+'use client';
+
+import { useLocale, useTranslations } from 'next-intl';
+import { usePathname, Link } from '@/i18n/navigation';
+
+/**
+ * Switches between Hebrew and English while preserving the current path.
+ * next-intl's Link handles the locale prefix and updates <html lang/dir>.
+ */
+export default function LanguageSwitcher() {
+  const locale = useLocale();
+  const pathname = usePathname();
+  const t = useTranslations('nav');
+  const other = locale === 'he' ? 'en' : 'he';
+
+  return (
+    <Link
+      href={pathname}
+      locale={other}
+      lang={other}
+      aria-label={t('switchTo')}
+      className="inline-flex h-11 min-w-[44px] items-center justify-center rounded border border-line px-3 font-bold text-graphite hover:border-machine"
+    >
+      {locale === 'he' ? 'EN' : 'עב'}
+    </Link>
+  );
+}
