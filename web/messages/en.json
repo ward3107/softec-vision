@@ -105,6 +105,22 @@
     "detailsTitle": "Contact details",
     "formNote": "A full inquiry form with file attachments is coming in the next phase. In the meantime, reach us on WhatsApp, by phone or by email."
   },
+  "form": {
+    "title": "Request a Quote",
+    "intro": "Fill in the details and the inquiry continues in a WhatsApp chat with what you entered. Saved inquiries and file attachments are coming next.",
+    "name": "Name",
+    "company": "Company / organization",
+    "phone": "Phone",
+    "email": "Email",
+    "projectType": "Project type",
+    "product": "Product / model",
+    "productNone": "General / not specific",
+    "message": "Describe your requirement",
+    "optional": "optional",
+    "send": "Send via WhatsApp",
+    "required": "Required field",
+    "invalidEmail": "Invalid email address"
+  },
   "footer": {
     "rights": "© Softec Vision Ltd",
     "privacy": "Privacy Policy",
