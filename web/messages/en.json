@@ -121,6 +121,32 @@
     "required": "Required field",
     "invalidEmail": "Invalid email address"
   },
+  "a11y": {
+    "open": "Open accessibility menu",
+    "title": "Accessibility settings",
+    "heading": "Accessibility",
+    "body": "Adjust the display to your needs.",
+    "textSize": "Text size",
+    "decrease": "Decrease text size",
+    "normal": "Reset text size",
+    "increase": "Increase text size",
+    "contrast": "High contrast",
+    "links": "Highlight links",
+    "readable": "Readable font",
+    "nomotion": "Stop animations",
+    "reset": "Reset settings",
+    "statement": "Accessibility statement"
+  },
+  "dock": {
+    "whatsapp": "Contact us on WhatsApp",
+    "backToTop": "Back to top"
+  },
+  "share": {
+    "label": "Share",
+    "share": "Share this page",
+    "copy": "Copy link",
+    "copied": "Link copied"
+  },
   "footer": {
     "rights": "© Softec Vision Ltd",
     "privacy": "Privacy Policy",
