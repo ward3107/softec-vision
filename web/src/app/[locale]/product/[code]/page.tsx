@@ -15,6 +15,7 @@ import {
 import { PRODUCTS } from '@/lib/catalog/seed';
 import CompareButton from '@/components/catalog/CompareButton';
 import ProductCard from '@/components/catalog/ProductCard';
+import ShareButton from '@/components/widgets/ShareButton';
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) => PRODUCTS.map((p) => ({ locale, code: p.code })));
@@ -65,7 +66,7 @@ export default async function ProductPage({
       </nav>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2">
-        <div className="overflow-hidden rounded border border-line bg-pure">
+        <div className="reveal reveal-left overflow-hidden rounded border border-line bg-pure">
           <Image
             src={product.image}
             alt={`${name} (${product.code}) — ${tc('productImage')}`}
@@ -76,7 +77,7 @@ export default async function ProductPage({
           />
         </div>
 
-        <div>
+        <div className="reveal reveal-right">
           <span className="text-sm font-semibold text-machine" dir="ltr">
             {product.code}
           </span>
@@ -121,6 +122,7 @@ export default async function ProductPage({
               {t('quote')}
             </Link>
             <CompareButton code={product.code} />
+            <ShareButton title={`${name} (${product.code}) — Softec Vision`} text={localized(product.desc, l)} />
           </div>
         </div>
       </div>

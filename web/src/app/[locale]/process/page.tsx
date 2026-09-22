@@ -22,8 +22,9 @@ export default async function ProcessPage({
       <p className="mt-3 max-w-2xl text-lg text-machine">{t('body')}</p>
 
       <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        {steps.map((step) => (
-          <li key={step.n} className="border-t-2 border-line pt-5">
+        {steps.map((step, i) => (
+          <li key={step.n} className={`reveal reveal-up reveal-d${i + 1} border-t-2 border-line pt-5`}>
+
             <span className="text-base font-bold text-blueprint" aria-hidden="true">
               {step.n}
             </span>

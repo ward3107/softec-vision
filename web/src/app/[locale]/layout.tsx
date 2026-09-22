@@ -8,7 +8,24 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { CompareProvider } from '@/components/catalog/CompareProvider';
 import CompareTray from '@/components/catalog/CompareTray';
+import RevealController from '@/components/motion/RevealController';
+import FloatingDock from '@/components/widgets/FloatingDock';
+import { WA_NUMBER } from '@/lib/catalog/seed';
 import '../globals.css';
+
+/**
+ * Runs before first paint: flags that JS is live (so scroll-reveal can hide
+ * elements without risking a no-JS blank), and re-applies any saved
+ * accessibility preferences so there is no flash of the default display.
+ */
+const BOOT_SCRIPT = `(function(){try{
+  var d=document.documentElement;d.classList.add('js');
+  var f=parseInt(localStorage.getItem('a11y-font')||'0',10);
+  if(f){d.style.fontSize=(100+f*8)+'%';}
+  ['contrast','links','readable','nomotion'].forEach(function(k){
+    if(localStorage.getItem('a11y-'+k)==='1'){document.body.classList.add('a11y-'+k);}
+  });
+}catch(e){}})();`;
 
 const assistant = Assistant({
   subsets: ['latin', 'hebrew'],
@@ -52,8 +69,9 @@ export default async function LocaleLayout({
   const dir = localeDir[locale as AppLocale];
 
   return (
-    <html lang={locale} dir={dir} className={assistant.variable}>
-      <body className="min-h-screen bg-paper font-sans text-graphite antialiased">
+    <html lang={locale} dir={dir} className={assistant.variable} suppressHydrationWarning>
+      <body className="min-h-screen bg-paper font-sans text-graphite antialiased" suppressHydrationWarning>
+        <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
         <NextIntlClientProvider messages={messages}>
           <CompareProvider>
             <a href="#main" className="skip-link">
@@ -65,6 +83,8 @@ export default async function LocaleLayout({
             </main>
             <Footer />
             <CompareTray />
+            <FloatingDock waNumber={WA_NUMBER} />
+            <RevealController />
           </CompareProvider>
         </NextIntlClientProvider>
       </body>

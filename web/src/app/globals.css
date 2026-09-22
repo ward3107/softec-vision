@@ -41,6 +41,80 @@
   }
 }
 
+/* ------------------------------------------------------------------ *
+ * Scroll-reveal (storytelling motion).
+ * Progressive enhancement: elements are fully visible by default, and
+ * only hidden-then-revealed when JS is active AND motion is allowed.
+ * If JS fails, prefers-reduced-motion is set, or the a11y "stop
+ * animations" switch is on, content simply shows with no movement.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: opacity, transform;
+  }
+  .js .reveal-left {
+    transform: translate3d(-42px, 0, 0);
+  }
+  .js .reveal-right {
+    transform: translate3d(42px, 0, 0);
+  }
+  .js .reveal-up {
+    transform: translate3d(0, 32px, 0);
+  }
+  .js .reveal-none {
+    transform: none;
+  }
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  .js .reveal-d1 {
+    transition-delay: 0.08s;
+  }
+  .js .reveal-d2 {
+    transition-delay: 0.16s;
+  }
+  .js .reveal-d3 {
+    transition-delay: 0.24s;
+  }
+  .js .reveal-d4 {
+    transition-delay: 0.32s;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Accessibility widget body states (ported from the static site).
+ * ------------------------------------------------------------------ */
+body.a11y-contrast {
+  filter: contrast(1.35);
+}
+body.a11y-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+body.a11y-readable,
+body.a11y-readable * {
+  font-family: Arial, 'Assistant', sans-serif !important;
+  letter-spacing: 0.01em;
+}
+body.a11y-nomotion *,
+body.a11y-nomotion *::before,
+body.a11y-nomotion *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+/* Never trap content hidden when motion is switched off. */
+body.a11y-nomotion .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 /* Legal documents */
 .legal-review {
   background: #fbf3e4;

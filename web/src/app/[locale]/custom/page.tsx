@@ -18,7 +18,7 @@ export default async function CustomPage({
   return (
     <section className="bg-graphite text-paper">
       <div className="mx-auto grid max-w-shell gap-10 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,6vw,88px)] lg:grid-cols-2">
-        <div>
+        <div className="reveal reveal-left">
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
           <h1 className="max-w-[19ch] text-[clamp(2rem,3.5vw,3rem)] font-extrabold tracking-tight text-pure">
             {t('title')}
@@ -32,8 +32,8 @@ export default async function CustomPage({
           </Link>
         </div>
         <ol className="list-none">
-          {stages.map((stage) => (
-            <li key={stage.n} className="relative border-t border-machine py-5 ps-14">
+          {stages.map((stage, i) => (
+            <li key={stage.n} className={`reveal reveal-right reveal-d${i + 1} relative border-t border-machine py-5 ps-14`}>
               <span className="absolute start-0 top-5 text-pure">{stage.n}</span>
               <h2 className="mb-1 text-lg font-bold text-pure">{stage.t}</h2>
               <p className="text-paper">{stage.b}</p>

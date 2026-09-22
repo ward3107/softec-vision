@@ -14,12 +14,12 @@ export default async function AboutPage({
     <section className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)]">
       <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-24">
-        <div>
+        <div className="reveal reveal-left">
           <h1 className="text-[clamp(2rem,3.5vw,3rem)] font-extrabold tracking-tight">{t('title')}</h1>
           <p className="mt-4 text-lg text-machine">{t('body')}</p>
           <p className="mt-3 text-lg text-machine">{t('detail')}</p>
         </div>
-        <div>
+        <div className="reveal reveal-right">
           <h2 className="text-lg font-bold">{t('spaces')}</h2>
           <ul className="mt-4">
             {sectors.map((row) => (

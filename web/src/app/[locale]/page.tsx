@@ -32,7 +32,7 @@ export default async function HomePage({
       {/* Hero */}
       <section className="bg-paper">
         <div className="mx-auto grid max-w-shell items-center gap-8 px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,76px)] lg:grid-cols-2">
-          <div>
+          <div className="reveal reveal-left">
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
             <h1 className="text-[clamp(2.25rem,4.5vw,3.6rem)] font-extrabold leading-[1.08] tracking-tight">
               {t('title')}
@@ -48,7 +48,7 @@ export default async function HomePage({
             </div>
           </div>
 
-          <div className="rounded border border-line bg-pure p-4">
+          <div className="reveal reveal-right rounded border border-line bg-pure p-4">
             <div className="aspect-[4/3] overflow-hidden rounded bg-paper">
               <Image
                 src="/products/LS-1000LPT.jpg"
@@ -70,8 +70,8 @@ export default async function HomePage({
       {/* Capabilities */}
       <section aria-label="Capabilities" className="border-y border-line bg-pure">
         <div className="mx-auto grid max-w-shell gap-4 px-[clamp(20px,4.5vw,72px)] py-8 sm:grid-cols-3">
-          {[c('custom'), c('av'), c('accessible')].map((label) => (
-            <p key={label} className="border-s-2 border-softec ps-4 text-lg font-semibold">
+          {[c('custom'), c('av'), c('accessible')].map((label, i) => (
+            <p key={label} className={`reveal reveal-up reveal-d${i + 1} border-s-2 border-softec ps-4 text-lg font-semibold`}>
               {label}
             </p>
           ))}
@@ -81,7 +81,7 @@ export default async function HomePage({
       {/* Featured products */}
       <section aria-labelledby="featured-title" className="bg-paper">
         <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
-          <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="reveal reveal-left flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 id="featured-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
                 {tcat('title')}
@@ -92,7 +92,7 @@ export default async function HomePage({
               {t('explore')} →
             </Link>
           </div>
-          <div className="mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="reveal reveal-up mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((product) => (
               <ProductCard key={product.code} product={product} />
             ))}
@@ -103,7 +103,7 @@ export default async function HomePage({
       {/* Custom manufacturing story */}
       <section aria-labelledby="custom-title" className="bg-graphite text-paper">
         <div className="mx-auto grid max-w-shell gap-10 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,6vw,88px)] lg:grid-cols-2">
-          <div>
+          <div className="reveal reveal-left">
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-softec">{tcustom('eyebrow')}</p>
             <h2 id="custom-title" className="max-w-[19ch] text-[clamp(1.9rem,3.2vw,2.8rem)] font-extrabold tracking-tight text-pure">
               {tcustom('title')}
@@ -114,8 +114,8 @@ export default async function HomePage({
             </Link>
           </div>
           <ol className="list-none">
-            {stages.map((stage) => (
-              <li key={stage.n} className="relative border-t border-machine py-5 ps-14">
+            {stages.map((stage, i) => (
+              <li key={stage.n} className={`reveal reveal-right reveal-d${i + 1} relative border-t border-machine py-5 ps-14`}>
                 <span className="absolute start-0 top-5 text-pure">{stage.n}</span>
                 <h3 className="mb-1 text-lg font-bold text-pure">{stage.t}</h3>
                 <p className="text-paper">{stage.b}</p>
@@ -127,7 +127,7 @@ export default async function HomePage({
 
       {/* Contact CTA */}
       <section className="bg-paper">
-        <div className="mx-auto flex max-w-shell flex-wrap items-center justify-between gap-6 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,72px)]">
+        <div className="reveal reveal-up mx-auto flex max-w-shell flex-wrap items-center justify-between gap-6 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,72px)]">
           <div>
             <h2 className="max-w-[22ch] text-[clamp(1.7rem,3vw,2.4rem)] font-extrabold tracking-tight">
               {tcontact('title')}
