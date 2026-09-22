@@ -442,6 +442,7 @@
   .custom-section{background:var(--graphite);color:var(--white);}
   .custom-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(32px,6vw,96px);}
   .custom-copy{grid-column:span 6;}
+  .custom-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-block:0 14px;}
   .custom-copy h2{max-width:19ch;}
   .custom-copy p{font-size:1.1875rem;line-height:1.7;max-width:47ch;color:var(--paper);margin-block:0 30px;}
   .custom-section .btn-primary{background:var(--white);color:var(--graphite);}
@@ -615,14 +616,24 @@
 <section class="custom-section" id="custom" aria-labelledby="customTitle">
   <div class="wrap custom-grid">
     <div class="custom-copy">
+      <p class="custom-eyebrow" data-i18n="custom.eyebrow">פתרונות בהתאמה אישית</p>
       <h2 id="customTitle" data-i18n="custom.title">מהצורך בשטח ועד לעמדה מוכנה</h2>
-      <p data-i18n="custom.body">כל פרויקט מתחיל במידות, בציוד ובאופן השימוש וממשיך להנדסה, ייצור ואינטגרציה.</p>
+      <p data-i18n="custom.body">כל פרויקט מתחיל בצורך של חלל, זרימת עבודה או תפעול, ממשיך לתרגום להנדסה וארגונומיה ומסתיים בסביבת עבודה משולבת ועמידה.</p>
       <a class="btn-primary" href="#contact" data-i18n="custom.action">תיאום ייעוץ</a>
     </div>
     <ol class="custom-stages">
-      <li><h3 data-i18n="custom.stepBrief">הגדרת דרישות</h3><p data-i18n="custom.briefBody">מידות החלל, הציוד ואופן השימוש.</p></li>
-      <li><h3 data-i18n="custom.stepEngineering">תכנון הנדסי</h3><p data-i18n="custom.engineeringBody">שרטוטים, פריסת רכיבים ובחירת גימור.</p></li>
-      <li><h3 data-i18n="custom.stepProduction">ייצור ואינטגרציה</h3><p data-i18n="custom.productionBody">עבודת מתכת, שילוב המערכות ובדיקות תפקוד.</p></li>
+      <li>
+        <h3 data-i18n="custom.stepNeed">הצורך</h3>
+        <p data-i18n="custom.needBody">מתחילים מחלל, מזרימת עבודה או מצורך תפעולי — עם המידות, הציוד ואופן השימוש בפועל.</p>
+      </li>
+      <li>
+        <h3 data-i18n="custom.stepEngineering">הנדסה</h3>
+        <p data-i18n="custom.engineeringBody">מתרגמים את הצורך לדרישות טכניות וארגונומיות, ומתכננים ומייצרים את העמדה סביב הפרויקט.</p>
+      </li>
+      <li>
+        <h3 data-i18n="custom.stepResult">התוצאה</h3>
+        <p data-i18n="custom.resultBody">סביבת עבודה משולבת, עמידה ונגישה, שמותקנת באתר ומוכנה לשימוש יומיומי.</p>
+      </li>
     </ol>
   </div>
 </section>
@@ -793,14 +804,14 @@ const TRANSLATIONS = {
   'dialog.removeComparison': { he:'הסרה מהשוואה', en:'Remove from Comparison' },
   'custom.eyebrow': { he:'פתרונות בהתאמה אישית', en:'Custom Solutions' },
   'custom.title': { he:'מהצורך בשטח ועד לעמדה מוכנה', en:'From Site Requirement to Finished Station' },
-  'custom.body': { he:'כל פרויקט מתחיל במידות, בציוד ובאופן השימוש וממשיך להנדסה, ייצור ואינטגרציה.', en:'Every project starts with dimensions, equipment and use, then moves through engineering, manufacturing and integration.' },
-  'custom.stepBrief': { he:'הגדרת דרישות', en:'Requirements' },
-  'custom.stepEngineering': { he:'תכנון הנדסי', en:'Engineering' },
-  'custom.stepProduction': { he:'ייצור ואינטגרציה', en:'Manufacturing and Integration' },
+  'custom.body': { he:'כל פרויקט מתחיל בצורך של חלל, זרימת עבודה או תפעול, ממשיך לתרגום להנדסה וארגונומיה ומסתיים בסביבת עבודה משולבת ועמידה.', en:'Every project starts from a space, workflow or operational need, moves through engineering and ergonomics, and ends in an integrated, durable working environment.' },
+  'custom.stepNeed': { he:'הצורך', en:'Need' },
+  'custom.stepEngineering': { he:'הנדסה', en:'Engineering' },
+  'custom.stepResult': { he:'התוצאה', en:'Result' },
   'custom.action': { he:'תיאום ייעוץ', en:'Book a Consultation' },
-  'custom.briefBody': { he:'מידות החלל, הציוד ואופן השימוש.', en:'Room dimensions, equipment and how the station will be used.' },
-  'custom.engineeringBody': { he:'שרטוטים, פריסת רכיבים ובחירת גימור.', en:'Technical drawings, component layout and finish selection.' },
-  'custom.productionBody': { he:'עבודת מתכת, שילוב המערכות ובדיקות תפקוד.', en:'Metal fabrication, system integration and functional testing.' },
+  'custom.needBody': { he:'מתחילים מחלל, מזרימת עבודה או מצורך תפעולי — עם המידות, הציוד ואופן השימוש בפועל.', en:'It begins with a room, a workflow or an operational need — with the dimensions, equipment and how the station will actually be used.' },
+  'custom.engineeringBody': { he:'מתרגמים את הצורך לדרישות טכניות וארגונומיות, ומתכננים ומייצרים את העמדה סביב הפרויקט.', en:'We translate the need into technical and ergonomic requirements, then engineer and manufacture the station around the project.' },
+  'custom.resultBody': { he:'סביבת עבודה משולבת, עמידה ונגישה, שמותקנת באתר ומוכנה לשימוש יומיומי.', en:'An integrated, durable and accessible working environment, installed on site and ready for daily use.' },
   'about.eyebrow': { he:'אודות', en:'About' },
   'about.title': { he:'Softec Vision Ltd', en:'Softec Vision Ltd' },
   'about.body': { he:'אנחנו מתכננים ומייצרים ריהוט טכנולוגי כמערכת שלמה, עם גימור מדויק וניהול כבלים סמוי.', en:'We design and manufacture technology furniture as a complete system, with precise finishing and concealed cable management.' },
