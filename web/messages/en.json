@@ -59,6 +59,52 @@
     "minimum": "Select at least two products to compare.",
     "instructions": "Select 2–3 models to compare specifications side by side."
   },
+  "about": {
+    "eyebrow": "About",
+    "title": "Softec Vision Ltd",
+    "body": "We design and manufacture technology furniture as a complete system, with precise finishing and concealed cable management.",
+    "detail": "Dimensions, displays, connections and finishes are specified around your space and equipment.",
+    "spaces": "Designed for your environment",
+    "education": "Lecture halls and classrooms",
+    "display": "Conference and exhibition spaces",
+    "control": "Control and operations rooms",
+    "industry": "Industrial and testing facilities"
+  },
+  "process": {
+    "eyebrow": "Our Process",
+    "title": "Four Steps to a Work-Ready Station",
+    "body": "A structured process from requirements through on-site installation.",
+    "s1t": "Requirements",
+    "s1b": "Discuss the space, display count, use and site constraints.",
+    "s2t": "Design and Engineering",
+    "s2b": "Agree dimensions, component layout and finishes with your team.",
+    "s3t": "Manufacturing and Finishing",
+    "s3b": "Cut, bend and weld the steel, then apply a powder-coated finish.",
+    "s4t": "Integration and Installation",
+    "s4b": "Fit displays and computing equipment, test functionality and install on site."
+  },
+  "custom": {
+    "eyebrow": "Custom Solutions",
+    "title": "From Site Requirement to Finished Station",
+    "body": "Every project starts from a space, workflow or operational need, moves through engineering and ergonomics, and ends in an integrated, durable working environment.",
+    "action": "Book a Consultation",
+    "s1t": "Need",
+    "s1b": "It begins with a room, a workflow or an operational need — with the dimensions, equipment and how the station will actually be used.",
+    "s2t": "Engineering",
+    "s2b": "We translate the need into technical and ergonomic requirements, then engineer and manufacture the station around the project.",
+    "s3t": "Result",
+    "s3b": "An integrated, durable and accessible working environment, installed on site and ready for daily use."
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Does Your Space Need a Purpose-Built Station?",
+    "body": "Send us the room dimensions and a photo, and we will recommend a model or custom solution.",
+    "whatsapp": "Contact on WhatsApp",
+    "phone": "Telephone",
+    "email": "Email",
+    "detailsTitle": "Contact details",
+    "formNote": "A full inquiry form with file attachments is coming in the next phase. In the meantime, reach us on WhatsApp, by phone or by email."
+  },
   "footer": {
     "rights": "© Softec Vision Ltd",
     "privacy": "Privacy Policy",
