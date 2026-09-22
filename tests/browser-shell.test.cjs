@@ -61,6 +61,26 @@ test('menu accessible names track initial language, disclosure, language changes
   }
 });
 
+test('mobile language keyboard activation closes the menu and returns focus to its trigger', async () => {
+  const page = await createPage('he');
+  try {
+    const menuToggle = page.locator('#menuToggle');
+    const mobileLanguageToggle = page.locator('#mobileLanguageToggle');
+    await menuToggle.focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#mobileMenu').getAttribute('hidden'), null);
+    await mobileLanguageToggle.focus();
+    assert.equal(await mobileLanguageToggle.evaluate(element => element === document.activeElement), true);
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#mobileMenu').getAttribute('hidden'), '');
+    assert.equal(await menuToggle.getAttribute('aria-expanded'), 'false');
+    assert.equal(await menuToggle.evaluate(element => element === document.activeElement), true);
+    assert.equal(await page.locator('html').getAttribute('lang'), 'en');
+    assert.equal(await page.locator('html').getAttribute('dir'), 'ltr');
+    assert.match(page.url(), /[?&]lang=en(?:&|#|$)/);
+  } finally { await page.close(); }
+});
+
 test('320px header fits both directions with a visible scrollbar and 44px menu/language targets', async () => {
   for (const language of ['he', 'en']) {
     const page = await createPage(language);

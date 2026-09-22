@@ -1517,14 +1517,15 @@ function updateLanguageControl() {
   document.getElementById('fabWa').href = generalInquiryUrl;
 }
 
-function switchLanguage() {
+function switchLanguage(event) {
+  const restoreMenuFocus = !mobileMenu.hidden && mobileMenu.contains(event?.currentTarget);
   const nextLanguage = currentLang === 'he' ? 'en' : 'he';
   const normalized = normalizeCatalogState({ lang:nextLanguage, cat:activeCat, sub:activeSub });
   activeCat = normalized.cat;
   activeSub = normalized.sub;
   setLanguage(nextLanguage, { render:false });
   syncLanguageUrl(nextLanguage);
-  setMenuOpen(false);
+  setMenuOpen(false, restoreMenuFocus);
   renderPage();
   document.getElementById('catalogStatus').textContent = getText(nextLanguage === 'en' ? 'language.changedToEnglish' : 'language.changedToHebrew');
 }
