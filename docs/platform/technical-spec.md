@@ -316,13 +316,23 @@ a **business address** before publication (already flagged in the compliance not
 
 ---
 
-## 15. Open decisions
-1. **Replace vs. coexist** with the static site during transition (recommend replace).
-2. **i18n storage:** translation tables (recommended, scalable) vs. `jsonb` per-locale (simpler).
-3. **Email notifications** for inquiries: in v1 or later? (Resend vs. Supabase SMTP.)
-4. **CAPTCHA** provider: Cloudflare Turnstile (free, recommended) vs. hCaptcha.
-5. **Legal pages** storage: DB-backed (editable in CMS) vs. MDX in-repo (developer-edited).
-6. **Inquiry retention** period and whether to email attachments or keep them only in Storage.
-7. **Design system:** Tailwind (recommended) vs. porting the existing hand-written CSS.
-8. **GA4/GTM**: which (GA4 direct vs. GTM container), and the real identifier at launch.
-9. **Business address** availability for `LocalBusiness` schema and legal disclosure.
+## 15. Decisions (locked 2026-09-22)
+1. **Static site → full replacement.** The new platform replaces the static site at launch; the
+   static site is kept only as a design/content reference.
+2. **i18n storage: translation tables** (scalable to many languages) + `next-intl` locale routing.
+3. **CAPTCHA: Cloudflare Turnstile** (free, privacy-friendly, mostly invisible).
+4. **Email notifications for inquiries: deferred to v2.** v1 stores inquiries in the CMS inbox only.
+5. **Legal pages: DB-backed, editable in the CMS.**
+6. **Analytics: GA4 direct** (single `gtag.js`, consent-gated) — **not** routed through GTM in v1.
+   GTM remains a future option if many tags need managing without deploys.
+7. **Design system: Tailwind CSS** with the Architectural Precision tokens ported in.
+
+### Still needed from the client (not blockers for Phase 1)
+- **Business address** — for `LocalBusiness` schema and legal disclosure (also flagged in the
+  compliance notes).
+- **Real GA4 Measurement ID** (`G-XXXXXXXXXX`) — create the GA4 property before the Phase 3 launch;
+  until then no analytics loads and no analytics request is made.
+- **Inquiry retention period** — to confirm during Phase 2/3 (proposed default: 24 months, then
+  auto-archive/delete); attachments stay in the private bucket (not emailed).
+- **Account access** — Supabase, Vercel and the domain/DNS — needed from Phase 2 onward. Phase 1 is
+  built and previewed on development accounts.
