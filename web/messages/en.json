@@ -28,6 +28,37 @@
     "av": "Integrated AV",
     "accessible": "Accessible Solutions"
   },
+  "catalog": {
+    "title": "Product Families",
+    "body": "Choose a family to find a station suited to your working environment.",
+    "all": "All",
+    "allDescription": "Explore models across every product family.",
+    "subcategoryCount": "subcategories",
+    "statusCount": "products shown",
+    "details": "Product Details",
+    "productImage": "Product image",
+    "emptyTitle": "No models are currently listed in this category",
+    "emptyBody": "We design and manufacture to your requirements.",
+    "customAction": "Discuss a Custom Solution"
+  },
+  "product": {
+    "specifications": "Technical Specifications",
+    "inquiry": "Ask About This Product on WhatsApp",
+    "quote": "Request a quote",
+    "related": "Related products",
+    "backToCatalog": "Back to catalog",
+    "toBeCompleted": "To be completed"
+  },
+  "compare": {
+    "title": "Compare Products",
+    "add": "Add to Comparison",
+    "remove": "Remove from Comparison",
+    "open": "Open Comparison",
+    "clear": "Clear Selection",
+    "empty": "No products are selected for comparison.",
+    "minimum": "Select at least two products to compare.",
+    "instructions": "Select 2–3 models to compare specifications side by side."
+  },
   "footer": {
     "rights": "© Softec Vision Ltd",
     "privacy": "Privacy Policy",
