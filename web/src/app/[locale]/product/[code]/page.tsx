@@ -115,7 +115,7 @@ export default async function ProductPage({
               {t('inquiry')}
             </a>
             <Link
-              href="/contact"
+              href={`/contact?product=${product.code}`}
               className="inline-flex min-h-[48px] items-center rounded bg-blueprint px-5 font-bold text-pure hover:bg-graphite"
             >
               {t('quote')}
