@@ -26,43 +26,69 @@ export default async function HomePage({
     { n: '02', t: tcustom('s2t'), b: tcustom('s2b') },
     { n: '03', t: tcustom('s3t'), b: tcustom('s3b') }
   ];
+  // Hero story arc: Need → Engineering → Result, in short.
+  const arc = [
+    { n: '01', t: tcustom('s1t'), b: t('s1') },
+    { n: '02', t: tcustom('s2t'), b: t('s2') },
+    { n: '03', t: tcustom('s3t'), b: t('s3') }
+  ];
 
   return (
     <>
-      {/* Hero */}
+      {/* Hero — storytelling */}
       <section className="bg-paper">
-        <div className="mx-auto grid max-w-shell items-center gap-8 px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,76px)] lg:grid-cols-2">
-          <div className="reveal reveal-left">
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
-            <h1 className="text-[clamp(2.25rem,4.5vw,3.6rem)] font-extrabold leading-[1.08] tracking-tight">
-              {t('title')}
-            </h1>
-            <p className="mt-5 max-w-[48ch] text-lg leading-relaxed text-machine">{t('body')}</p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/contact" className="inline-flex min-h-[48px] items-center justify-center rounded bg-blueprint px-6 font-bold text-pure hover:bg-graphite">
-                {t('quote')}
-              </Link>
-              <Link href="/catalog" className="inline-flex min-h-[48px] items-center justify-center rounded border border-line px-6 font-bold text-graphite hover:border-machine hover:bg-pure">
-                {t('explore')}
-              </Link>
+        <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,76px)]">
+          <div className="grid items-center gap-8 lg:grid-cols-2">
+            <div className="reveal reveal-left">
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
+              <h1 className="text-[clamp(2.25rem,4.5vw,3.6rem)] font-extrabold leading-[1.08] tracking-tight">
+                {t('title')}
+              </h1>
+              <p className="mt-5 max-w-[48ch] text-lg leading-relaxed text-machine">{t('body')}</p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link href="/contact" className="inline-flex min-h-[48px] items-center justify-center rounded bg-blueprint px-6 font-bold text-pure hover:bg-graphite">
+                  {t('quote')}
+                </Link>
+                <Link href="/catalog" className="inline-flex min-h-[48px] items-center justify-center rounded border border-line px-6 font-bold text-graphite hover:border-machine hover:bg-pure">
+                  {t('explore')}
+                </Link>
+              </div>
+            </div>
+
+            <div className="reveal reveal-right rounded border border-line bg-pure p-4">
+              <div className="aspect-[4/3] overflow-hidden rounded bg-paper">
+                <Image
+                  src="/products/LS-1000LPT.jpg"
+                  alt={`${t('model')} (LS-1000LPT)`}
+                  width={900}
+                  height={675}
+                  priority
+                  className="h-full w-full object-contain"
+                />
+              </div>
+              <p className="mt-3 flex items-center justify-between px-1 text-sm">
+                <span dir="ltr" className="font-bold text-graphite">LS-1000LPT</span>
+                <span className="text-machine">{t('model')}</span>
+              </p>
             </div>
           </div>
 
-          <div className="reveal reveal-right rounded border border-line bg-pure p-4">
-            <div className="aspect-[4/3] overflow-hidden rounded bg-paper">
-              <Image
-                src="/products/LS-1000LPT.jpg"
-                alt={`${t('model')} (LS-1000LPT)`}
-                width={900}
-                height={675}
-                priority
-                className="h-full w-full object-contain"
-              />
-            </div>
-            <p className="mt-3 flex items-center justify-between px-1 text-sm">
-              <span dir="ltr" className="font-bold text-graphite">LS-1000LPT</span>
-              <span className="text-machine">{t('model')}</span>
-            </p>
+          {/* Story arc: Need → Engineering → Result */}
+          <div className="reveal reveal-up mt-12">
+            <p className="text-sm font-semibold text-machine">{t('storyLead')}</p>
+            <ol className="mt-3 grid gap-px overflow-hidden rounded border border-line bg-line sm:grid-cols-3">
+              {arc.map((step) => (
+                <li key={step.n} className="bg-paper p-5">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-sm font-extrabold text-softec" dir="ltr">
+                      {step.n}
+                    </span>
+                    <h2 className="text-lg font-bold tracking-tight">{step.t}</h2>
+                  </div>
+                  <p className="mt-1 text-sm leading-relaxed text-machine">{step.b}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
