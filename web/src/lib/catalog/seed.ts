@@ -224,5 +224,149 @@ export const PRODUCTS: Product[] = [
       ph('dimensions'), ph('weight'), ph('power'),
       s('cable', 'סמוי מלא', 'Fully concealed')
     ]
+  },
+  {
+    code: 'ACCESSIBLE-TLV',
+    cat: 'podium',
+    sub: 'accessible',
+    name: { he: 'פודיום נגיש חכם', en: 'Smart Accessible Podium' },
+    desc: {
+      he: 'עמדת מרצה נגישה באולם הרצאות, עם מסך עבודה, פאנל שליטה ומיקרופון משולבים במשטח העליון.',
+      en: 'An accessible lecturer station in a lecture hall, with a work display, control panel and microphone integrated into the top surface.'
+    },
+    image: '/products/new/accessible-podium-tel-aviv-01.webp',
+    imageAlt: {
+      he: 'פודיום נגיש חכם אפור של אוניברסיטת תל אביב עם מסך משולב',
+      en: 'Grey smart accessible podium for Tel Aviv University with an integrated display'
+    },
+    gallery: [
+      {
+        src: '/products/new/accessible-podium-tel-aviv-02.webp',
+        alt: { he: 'מבט צד על הפודיום הנגיש ומסך השליטה', en: 'Side view of the accessible podium and its control display' }
+      },
+      {
+        src: '/products/new/accessible-podium-tel-aviv-03.webp',
+        alt: { he: 'משטח העבודה הנגיש עם מסך, מקלדת, עכבר ופאנל AV', en: 'Accessible work surface with display, keyboard, mouse and AV control panel' }
+      }
+    ],
+    specs: [
+      s('displays', 'מסך עבודה + פאנל AV', 'Work display + AV control panel'),
+      s('accessibility', 'משטח עבודה בגובה נגיש', 'Accessible-height work surface'),
+      ph('dimensions'), ph('weight'), ph('power')
+    ]
+  },
+  {
+    code: 'BIO-DOUBLE',
+    cat: 'podium',
+    sub: 'double',
+    name: { he: 'עמדת מרצה כפולה ביולוגי', en: 'Biology Dual Lecturer Station' },
+    desc: {
+      he: 'עמדת מרצה רחבה עם שני משטחי צד נשלפים, משטח עבודה מעץ וארון ציוד מרכזי הניתן לנעילה.',
+      en: 'A wide lecturer station with two pull-out side surfaces, a timber worktop and a lockable central equipment cabinet.'
+    },
+    image: '/products/new/biology-double-podium-01.webp',
+    imageAlt: { he: 'עמדת מרצה כפולה לבנה עם שני משטחי צד נשלפים', en: 'White dual lecturer station with two pull-out side surfaces' },
+    gallery: [
+      {
+        src: '/products/new/biology-double-podium-02.webp',
+        alt: { he: 'מבט קדמי על עמדת המרצה הכפולה של המכון למחקר ביולוגי', en: 'Front view of the dual lecturer station for the Israel Institute for Biological Research' }
+      }
+    ],
+    specs: [s('finish', 'גוף לבן ומשטח עץ', 'White body with timber worktop'), ph('dimensions'), ph('weight')]
+  },
+  {
+    code: 'G-1',
+    cat: 'podium',
+    sub: 'smart',
+    name: { he: 'עמדת מרצה G-1', en: 'G-1 Lecturer Station' },
+    desc: {
+      he: 'עמדת מרצה קומפקטית עם משטח עבודה רחב, מקום למחשב נייד ושתי זרועות גמישות למיקרופון ולתאורה.',
+      en: 'A compact lecturer station with a wide work surface, laptop space and two flexible arms for a microphone and task light.'
+    },
+    image: '/products/new/lecturer-station-g1-01.webp',
+    imageAlt: { he: 'עמדת מרצה G-1 לבנה ושחורה עם מחשב נייד ושתי זרועות', en: 'White and black G-1 lecturer station with a laptop and two flexible arms' },
+    gallery: [
+      {
+        src: '/products/new/lecturer-station-g1-02.webp',
+        alt: { he: 'מבט חזיתי על משטח העבודה של עמדת G-1', en: 'Front view of the G-1 lecturer station work surface' }
+      }
+    ],
+    specs: [s('displays', 'מקום למחשב נייד', 'Laptop workspace'), s('cable', 'פתחים משולבים במשטח', 'Integrated worktop ports'), ph('dimensions')]
+  },
+  {
+    code: 'NT-PODIUM',
+    cat: 'podium',
+    sub: 'no-tech',
+    name: { he: 'עמדת מרצה ללא טכנולוגיה', en: 'Non-Technology Lecturer Podium' },
+    desc: { he: 'פודיום שחור מינימליסטי עם משטח כתיבה רחב ומיקרופון גמיש.', en: 'A minimalist black podium with a wide writing surface and flexible microphone.' },
+    image: '/products/new/non-tech-lecturer-podium.webp',
+    imageAlt: { he: 'פודיום שחור ללא מסך עם מיקרופון גמיש', en: 'Black podium without a display, fitted with a flexible microphone' },
+    specs: [s('displays', 'ללא מסך משולב', 'No integrated display'), ph('dimensions'), ph('weight')]
+  },
+  {
+    code: 'L-2',
+    cat: 'podium',
+    sub: 'no-tech',
+    name: { he: 'פודיום אלומיניום L-2', en: 'L-2 Aluminium Podium' },
+    desc: { he: 'פודיום אלומיניום קל-מראה עם מדף עבודה עליון ומדף פנימי פתוח.', en: 'A lightweight-looking aluminium podium with an upper work surface and an open internal shelf.' },
+    image: '/products/new/aluminum-podium-l2.webp',
+    imageAlt: { he: 'פודיום אלומיניום L-2 עם מדף פנימי', en: 'L-2 aluminium podium with an internal shelf' },
+    specs: [s('finish', 'אלומיניום', 'Aluminium'), ph('dimensions'), ph('weight')]
+  },
+  {
+    code: 'IL-18',
+    cat: 'podium',
+    sub: 'no-tech',
+    name: { he: 'פודיום IL-18', en: 'IL-18 Podium' },
+    desc: { he: 'פודיום לבן קומפקטי עם גוף סגור, משטח עליון כהה ופתחי מעבר כבלים.', en: 'A compact white podium with an enclosed body, dark worktop and cable pass-throughs.' },
+    image: '/products/new/podium-il18-01.webp',
+    imageAlt: { he: 'פודיום IL-18 לבן במבט קדמי', en: 'White IL-18 podium viewed from the front' },
+    gallery: [
+      { src: '/products/new/podium-il18-02.webp', alt: { he: 'שתי זוויות של פודיום IL-18', en: 'Two views of the IL-18 podium' } }
+    ],
+    specs: [s('cable', 'פתחים משולבים', 'Integrated pass-throughs'), ph('dimensions'), ph('weight')]
+  },
+  {
+    code: 'MEMORIAL-HALL',
+    cat: 'custom',
+    name: { he: 'פודיום היכל ההנצחה', en: 'Memorial Hall Podium' },
+    desc: { he: 'פודיום מותאם להיכל הזיכרון הממלכתי לחללי מערכות ישראל, עם חזית ממותגת ותאורה מובנית.', en: 'A custom podium for Israel’s National Memorial Hall, with a branded front panel and integrated task lighting.' },
+    image: '/products/new/memorial-hall-podium-01.webp',
+    imageAlt: { he: 'פודיום לבן בהיכל הזיכרון הממלכתי לצד דגלים', en: 'White podium in Israel’s National Memorial Hall beside ceremonial flags' },
+    gallery: [
+      { src: '/products/new/memorial-hall-podium-02.webp', alt: { he: 'מבט צד על הפודיום בהיכל ההנצחה מול קירות הזיכרון', en: 'Side view of the memorial hall podium in front of the remembrance displays' } }
+    ],
+    specs: [s('finish', 'חזית מותאמת וממותגת', 'Custom branded front'), ph('dimensions'), ph('weight')]
+  },
+  {
+    code: 'ROTHSCHILD',
+    cat: 'custom',
+    name: { he: 'פודיום קרן אדמונד דה רוטשילד', en: 'Edmond de Rothschild Foundation Podium' },
+    desc: { he: 'פודיום שחור מותאם אישית עם חזית ממותגת ומשטח כתיבה רחב.', en: 'A custom black podium with a branded front panel and wide writing surface.' },
+    image: '/products/new/rothschild-foundation-podium-01.webp',
+    imageAlt: { he: 'פודיום שחור ממותג של קרן אדמונד דה רוטשילד', en: 'Black branded podium for the Edmond de Rothschild Foundation' },
+    gallery: [
+      { src: '/products/new/rothschild-foundation-podium-02.webp', alt: { he: 'שתי זוויות של פודיום קרן אדמונד דה רוטשילד', en: 'Two views of the Edmond de Rothschild Foundation podium' } }
+    ],
+    specs: [s('finish', 'גוף שחור וחזית ממותגת', 'Black body with branded front'), ph('dimensions'), ph('weight')]
+  },
+  {
+    code: 'PREMIUM-LECTERN',
+    cat: 'podium',
+    sub: 'smart',
+    name: { he: 'פודיום מרצה מהודר', en: 'Premium Lecturer Podium' },
+    desc: { he: 'פודיום מהודר בגוון אפור עם מסך משולב, מיקרופון וחזית מחורצת הניתנת למיתוג.', en: 'A premium grey podium with an integrated display, microphone and fluted, brand-ready front.' },
+    image: '/products/new/premium-lecturer-podium.webp',
+    imageAlt: { he: 'פודיום מרצה אפור מהודר עם מסך ומיקרופון', en: 'Premium grey lecturer podium with an integrated display and microphone' },
+    specs: [s('displays', 'מסך משולב', 'Integrated display'), s('finish', 'חזית מחורצת וממותגת', 'Fluted branded front'), ph('dimensions')]
+  },
+  {
+    code: 'SDEROT-HALL',
+    cat: 'custom',
+    name: { he: 'פודיום אולם המופעים שדרות', en: 'Sderot Performing Arts Hall Podium' },
+    desc: { he: 'פודיום לבן מותאם לאולם המופעים שדרות, עם חזית ממותגת, משטח רחב ומיקרופון גמיש.', en: 'A custom white podium for the Sderot Performing Arts Hall, with a branded fascia, wide surface and flexible microphone.' },
+    image: '/products/new/sderot-performing-arts-podium.webp',
+    imageAlt: { he: 'פודיום לבן ממותג של אולם המופעים שדרות', en: 'White branded podium for the Sderot Performing Arts Hall' },
+    specs: [s('finish', 'חזית לבנה ממותגת', 'White branded fascia'), ph('dimensions'), ph('weight')]
   }
 ];

@@ -10,6 +10,9 @@ export default async function ProductCard({ product }: { product: Product }) {
   const t = await getTranslations('catalog');
   const name = localized(product.name, locale);
   const cue = product.specs.length ? localized(product.specs[0].value, locale) : '';
+  const imageAlt = product.imageAlt
+    ? localized(product.imageAlt, locale)
+    : `${name} (${product.code}) — ${t('productImage')}`;
 
   return (
     <article className="flex h-full flex-col gap-3">
@@ -17,7 +20,7 @@ export default async function ProductCard({ product }: { product: Product }) {
         <div className="aspect-[4/3] overflow-hidden rounded border border-line bg-pure">
           <Image
             src={product.image}
-            alt={`${name} (${product.code}) — ${t('productImage')}`}
+            alt={imageAlt}
             width={640}
             height={480}
             className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.02]"

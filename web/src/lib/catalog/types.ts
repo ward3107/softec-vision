@@ -31,6 +31,10 @@ export interface Product {
   desc: Localized;
   /** Public path under /public (Supabase Storage in production). */
   image: string;
+  /** A product-specific alternative description for the primary image. */
+  imageAlt?: Localized;
+  /** Additional product views. The primary image remains the catalog thumbnail. */
+  gallery?: Array<{ src: string; alt: Localized }>;
   specs: SpecEntry[];
   model3d?: string;
 }

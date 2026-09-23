@@ -52,6 +52,10 @@ export default async function ProductPage({
   const tc = await getTranslations('catalog');
   const related = await getRelatedProducts(product, l);
   const name = localized(product.name, l);
+  const primaryAlt = product.imageAlt
+    ? localized(product.imageAlt, l)
+    : `${name} (${product.code}) — ${tc('productImage')}`;
+  const gallery = product.gallery ?? [];
 
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(28px,4vw,56px)] pb-28">
@@ -66,15 +70,37 @@ export default async function ProductPage({
       </nav>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2">
-        <div className="reveal reveal-left overflow-hidden rounded border border-line bg-pure">
-          <Image
-            src={product.image}
-            alt={`${name} (${product.code}) — ${tc('productImage')}`}
-            width={900}
-            height={675}
-            priority
-            className="h-full w-full object-contain"
-          />
+        <div className="reveal reveal-left">
+          <div className="aspect-[4/3] overflow-hidden rounded border border-line bg-pure">
+            <Image
+              src={product.image}
+              alt={primaryAlt}
+              width={900}
+              height={675}
+              priority
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="h-full w-full object-contain"
+            />
+          </div>
+          {gallery.length > 0 && (
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {gallery.map((item) => (
+                <div
+                  key={item.src}
+                  className="aspect-[4/3] overflow-hidden rounded border border-line bg-pure"
+                >
+                  <Image
+                    src={item.src}
+                    alt={localized(item.alt, l)}
+                    width={480}
+                    height={360}
+                    sizes="(min-width: 1024px) 16vw, 33vw"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="reveal reveal-right">
