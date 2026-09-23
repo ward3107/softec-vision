@@ -51,3 +51,12 @@ test('footer renders the saved creator signature letter by letter', () => {
   assert.match(css, /@keyframes signatureWrite/);
   assert.match(css, /prefers-reduced-motion/);
 });
+
+test('floating controls keep WhatsApp left and accessibility right', () => {
+  const dock = read('web', 'src', 'components', 'widgets', 'FloatingDock.tsx');
+  const widget = read('web', 'src', 'components', 'a11y', 'AccessibilityWidget.tsx');
+
+  assert.match(dock, /fixed bottom-5 left-4[^\n]*[\s\S]*wa\.me/);
+  assert.match(dock, /fixed bottom-5 right-4[^\n]*[\s\S]*<AccessibilityWidget/);
+  assert.match(widget, /absolute bottom-14 right-0/);
+});
