@@ -12,6 +12,10 @@ declare global {
         'ar-modes'?: string;
         'camera-controls'?: boolean;
         'auto-rotate'?: boolean;
+        'camera-orbit'?: string;
+        'min-camera-orbit'?: string;
+        'max-camera-orbit'?: string;
+        'interaction-prompt'?: 'auto' | 'none';
         'shadow-intensity'?: string;
         exposure?: string;
         loading?: 'auto' | 'lazy' | 'eager';
