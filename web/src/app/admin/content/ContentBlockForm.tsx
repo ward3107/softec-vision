@@ -8,7 +8,7 @@ const textarea = `${input} min-h-[6rem]`;
 
 const B = S.content.blocks;
 const FIELD_LABEL = S.content.fields;
-const MULTILINE_FIELDS = new Set(['body']);
+const isMultiline = (field: string) => field === 'body' || /^a\d+$/.test(field); // body copy and FAQ answers
 
 export default function ContentBlockForm({ block }: { block: AdminContentBlock }) {
   const meta = B[block.key];
@@ -21,7 +21,7 @@ export default function ContentBlockForm({ block }: { block: AdminContentBlock }
       <form action={action} className="grid gap-4">
         {block.fields.map((field) => {
           const label = FIELD_LABEL[field as keyof typeof FIELD_LABEL] ?? field;
-          const Tag = MULTILINE_FIELDS.has(field) ? 'textarea' : 'input';
+          const Tag = isMultiline(field) ? 'textarea' : 'input';
           return (
             <div key={field} className="grid gap-4 border-t border-line pt-4 first:border-t-0 first:pt-0 sm:grid-cols-2 dark:border-white/10">
               {(['he', 'en'] as const).map((locale) => {

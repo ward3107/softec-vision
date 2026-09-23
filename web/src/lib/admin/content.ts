@@ -13,8 +13,13 @@ const SHIPPED_TEXT: Record<ContentBlockKey, { he: ContentBlockData; en: ContentB
   'home.capabilities': {
     he: { custom: heMessages.capabilities.custom, av: heMessages.capabilities.av, accessible: heMessages.capabilities.accessible },
     en: { custom: enMessages.capabilities.custom, av: enMessages.capabilities.av, accessible: enMessages.capabilities.accessible }
-  }
+  },
+  'home.faq': { he: pick(heMessages.faq, CONTENT_BLOCKS['home.faq']), en: pick(enMessages.faq, CONTENT_BLOCKS['home.faq']) }
 };
+
+function pick(messages: Record<string, string>, fields: readonly string[]): ContentBlockData {
+  return Object.fromEntries(fields.map((field) => [field, messages[field] ?? '']));
+}
 
 export interface AdminContentBlock {
   key: ContentBlockKey;

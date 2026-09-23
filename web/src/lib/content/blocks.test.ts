@@ -1,5 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { parseContentBlockForm, resolveText, rowsToContentBlocks } from './blocks';
+import enMessages from '../../../messages/en.json';
+import heMessages from '../../../messages/he.json';
+import { CONTENT_BLOCKS, FAQ_COUNT, parseContentBlockForm, resolveText, rowsToContentBlocks } from './blocks';
+
+describe('home.faq block', () => {
+  it('pairs every question with an answer, FAQ_COUNT times', () => {
+    const expected = Array.from({ length: FAQ_COUNT }, (_, i) => [`q${i + 1}`, `a${i + 1}`]).flat();
+    expect([...CONTENT_BLOCKS['home.faq']]).toEqual(expected);
+  });
+
+  it('ships non-empty copy for every field in both languages', () => {
+    for (const messages of [heMessages.faq, enMessages.faq] as Record<string, string>[]) {
+      for (const field of CONTENT_BLOCKS['home.faq']) expect(messages[field]?.trim()).toBeTruthy();
+    }
+  });
+});
 
 describe('rowsToContentBlocks', () => {
   it('maps known blocks by locale', () => {
