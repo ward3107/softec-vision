@@ -55,8 +55,40 @@ export default function ImageLightbox({
   const dragged = useRef(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const restoreRef = useRef<Element | null>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+  // During a gesture the transform is written straight to the DOM (one write per
+  // animation frame) instead of through React state, so a pinch stays at 60fps;
+  // `live` holds the in-flight values and `active` marks that a gesture is running.
+  const live = useRef({ scale: 1, pan: { x: 0, y: 0 } });
+  const active = useRef(false);
+  const raf = useRef(0);
+
+  const paint = useCallback(() => {
+    if (raf.current) return;
+    raf.current = requestAnimationFrame(() => {
+      raf.current = 0;
+      const el = imgRef.current;
+      if (el) el.style.transform = `translate(${live.current.pan.x}px, ${live.current.pan.y}px) scale(${live.current.scale})`;
+    });
+  }, []);
+
+  const commit = useCallback(() => {
+    if (raf.current) {
+      cancelAnimationFrame(raf.current);
+      raf.current = 0;
+    }
+    const el = imgRef.current;
+    if (el) {
+      el.style.transition = '';
+      el.style.cursor = '';
+    }
+    setScale(live.current.scale);
+    setPan(live.current.pan);
+  }, []);
 
   const reset = useCallback(() => {
+    live.current = { scale: 1, pan: { x: 0, y: 0 } };
+    active.current = false;
     setScale(1);
     setPan({ x: 0, y: 0 });
   }, []);
@@ -74,6 +106,7 @@ export default function ImageLightbox({
     return () => {
       document.body.style.overflow = previous;
       (restoreRef.current as HTMLElement | null)?.focus?.();
+      if (raf.current) cancelAnimationFrame(raf.current);
     };
   }, [open]);
 
@@ -123,6 +156,11 @@ export default function ImageLightbox({
   const twoPoints = () => [...pointers.current.values()] as [{ x: number; y: number }, { x: number; y: number }];
   const gap = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.hypot(a.x - b.x, a.y - b.y);
 
+  const freezeTransition = () => {
+    const el = imgRef.current;
+    if (el) el.style.transition = 'none'; // no 150ms easing while the fingers drive it
+  };
+
   const onPointerDown = (e: React.PointerEvent) => {
     dragged.current = false;
     try {
@@ -131,13 +169,23 @@ export default function ImageLightbox({
       // A stray pointerId (e.g. the element just re-rendered) — capture is a nicety, not required.
     }
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    // Start from the in-flight values if a gesture is already running (e.g. a
+    // second finger added mid-drag), otherwise from what's committed.
+    const base = active.current ? live.current : { scale, pan };
     if (pointers.current.size === 2) {
       // Two fingers down → start a pinch (works from 1× too, so fingers alone zoom in).
       const [a, b] = twoPoints();
-      pinch.current = { dist: gap(a, b), scale, ox: pan.x, oy: pan.y, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
+      pinch.current = { dist: gap(a, b), scale: base.scale, ox: base.pan.x, oy: base.pan.y, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
       drag.current = null;
-    } else if (pointers.current.size === 1 && scale > 1) {
-      drag.current = { x: e.clientX, y: e.clientY, ox: pan.x, oy: pan.y };
+      live.current = { scale: base.scale, pan: { ...base.pan } };
+      active.current = true;
+      freezeTransition();
+    } else if (pointers.current.size === 1 && base.scale > 1) {
+      drag.current = { x: e.clientX, y: e.clientY, ox: base.pan.x, oy: base.pan.y };
+      live.current = { scale: base.scale, pan: { ...base.pan } };
+      active.current = true;
+      freezeTransition();
+      if (imgRef.current) imgRef.current.style.cursor = 'grabbing';
     }
   };
   const onPointerMove = (e: React.PointerEvent) => {
@@ -150,22 +198,35 @@ export default function ImageLightbox({
       const dmx = (a.x + b.x) / 2 - pinch.current.mx;
       const dmy = (a.y + b.y) / 2 - pinch.current.my;
       dragged.current = true;
-      setScale(next);
-      setPan(clampPan(pinch.current.ox + dmx, pinch.current.oy + dmy, next));
+      live.current = { scale: next, pan: clampPan(pinch.current.ox + dmx, pinch.current.oy + dmy, next) };
+      paint();
       return;
     }
     if (!drag.current) return;
     const dx = e.clientX - drag.current.x;
     const dy = e.clientY - drag.current.y;
     if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragged.current = true;
-    setPan(clampPan(drag.current.ox + dx, drag.current.oy + dy, scale));
+    live.current = { scale: live.current.scale, pan: clampPan(drag.current.ox + dx, drag.current.oy + dy, live.current.scale) };
+    paint();
   };
   const onPointerUp = (e: React.PointerEvent) => {
     pointers.current.delete(e.pointerId);
     if (pointers.current.size < 2) pinch.current = null;
-    // Lifting one finger of a pinch → keep panning smoothly with the one that remains.
-    const [only] = twoPoints();
-    drag.current = pointers.current.size === 1 && scale > 1 && only ? { x: only.x, y: only.y, ox: pan.x, oy: pan.y } : null;
+    // Lifting one finger of a pinch → keep panning with the one that remains (no commit yet, so no jump).
+    if (pointers.current.size === 1 && active.current && live.current.scale > 1) {
+      const [only] = twoPoints();
+      if (only) {
+        drag.current = { x: only.x, y: only.y, ox: live.current.pan.x, oy: live.current.pan.y };
+        return;
+      }
+    }
+    if (pointers.current.size === 0) {
+      drag.current = null;
+      if (active.current) {
+        active.current = false;
+        commit();
+      }
+    }
   };
   const onImageClick = () => {
     if (dragged.current) {
@@ -241,6 +302,7 @@ export default function ImageLightbox({
       )}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+        ref={imgRef}
         src={image.src}
         alt={image.alt}
         onClick={(e) => {
@@ -253,9 +315,9 @@ export default function ImageLightbox({
         onPointerCancel={onPointerUp}
         draggable={false}
         style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${scale})` }}
-        className={`max-h-[92vh] max-w-[94vw] touch-none object-contain ${
-          drag.current || pinch.current ? '' : 'transition-transform duration-150'
-        } ${scale === 1 ? 'cursor-zoom-in' : drag.current ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`max-h-[92vh] max-w-[94vw] touch-none object-contain transition-transform duration-150 ${
+          scale === 1 ? 'cursor-zoom-in' : 'cursor-grab'
+        }`}
       />
       <p className="pointer-events-none absolute bottom-4 start-0 end-0 text-center text-xs text-white/70">
         {scale > 1 ? (
