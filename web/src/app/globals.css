@@ -253,27 +253,14 @@ body.brand-splash-open {
   color: #fff;
   text-decoration-color: currentColor;
 }
-.creator-signature__cursor {
-  width: 2px;
-  height: 1.15em;
-  margin-inline-start: 3px;
-  background: #3eb6df;
-  animation: signatureCursor 0.75s steps(1, end) infinite;
-}
 @keyframes signatureWrite {
   to { opacity: 1; transform: none; }
-}
-@keyframes signatureCursor {
-  50% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .creator-signature__character {
     opacity: 1;
     transform: none;
     animation: none !important;
-  }
-  .creator-signature__cursor {
-    display: none;
   }
 }
 .brand-splash__card {
