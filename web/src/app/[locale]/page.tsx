@@ -216,30 +216,48 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how" aria-labelledby="how-title" className="bg-pure dark:bg-surface">
-        <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
-          <div className="reveal reveal-left">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-blueprint dark:text-skyline">
-              {tprocess('eyebrow')}
-            </p>
-            <h2 id="how-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
+      {/* How it works — the whole process (formerly its own page), set apart as a blueprint band */}
+      <section id="how" aria-labelledby="how-title" className="relative overflow-hidden bg-blueprint text-pure">
+        <div className="process-band__grid" aria-hidden="true" />
+        <div className="relative mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(48px,6vw,96px)]">
+          <div className="reveal reveal-left max-w-2xl">
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#BFE3F8]">{tprocess('eyebrow')}</p>
+            <h2 id="how-title" className="text-[clamp(1.9rem,3.2vw,2.8rem)] font-extrabold tracking-tight text-pure">
               {tprocess('title')}
             </h2>
-            <p className="mt-2 max-w-2xl text-machine dark:text-fog">{tprocess('body')}</p>
+            <p className="mt-3 text-lg text-[#DCEEF9]">{tprocess('body')}</p>
           </div>
-          <ol className="reveal reveal-up mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <ol className="reveal reveal-up relative mt-12 grid gap-8 before:absolute before:bottom-6 before:start-6 before:top-6 before:border-s-2 before:border-dashed before:border-white/40 lg:grid-cols-4 lg:gap-6 lg:before:bottom-auto lg:before:end-6 lg:before:border-s-0 lg:before:border-t-2">
             {processSteps.map((step) => (
-              <li key={step.n} className="rounded border border-line bg-paper p-5 dark:border-white/10 dark:bg-canvas">
-                <span className="text-2xl font-extrabold text-blueprint dark:text-skyline">{step.n}</span>
-                <h3 className="mt-2 text-base font-bold">{step.t}</h3>
-                <p className="mt-1 text-sm text-machine dark:text-fog">{step.b}</p>
+              <li key={step.n} className="relative ps-16 lg:ps-0 lg:pt-16">
+                <span className="absolute start-0 top-0 z-10 grid h-12 w-12 place-items-center rounded-full border-2 border-pure bg-blueprint text-lg font-extrabold text-pure">
+                  {step.n}
+                </span>
+                <h3 className="text-lg font-bold text-pure">{step.t}</h3>
+                <p className="mt-2 leading-relaxed text-[#DCEEF9]">{step.b}</p>
               </li>
             ))}
           </ol>
-          <Link href="/process" className="reveal reveal-up mt-6 inline-flex font-bold text-blueprint hover:underline dark:text-skyline">
-            {tnav('process')} →
-          </Link>
+          <div className="reveal reveal-up mt-12 flex flex-col gap-4 rounded border border-white/25 bg-white/10 p-6 sm:flex-row sm:items-start">
+            <svg
+              className="h-10 w-10 flex-none text-pure rtl:-scale-x-100"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 6h11v9H3zM14 9h4l3 3v3h-7" />
+              <circle cx="7" cy="17.5" r="1.75" />
+              <circle cx="17" cy="17.5" r="1.75" />
+            </svg>
+            <div>
+              <h3 className="text-lg font-bold text-pure">{tprocess('deliveryTitle')}</h3>
+              <p className="mt-1 max-w-[70ch] leading-relaxed text-[#DCEEF9]">{tprocess('deliveryBody')}</p>
+            </div>
+          </div>
         </div>
       </section>
 

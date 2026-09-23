@@ -12,6 +12,10 @@ const nextConfig = {
       { protocol: 'https', hostname: '*.supabase.co' },
       { protocol: 'https', hostname: '*.supabase.in' }
     ]
+  },
+  // The process page now lives on the home page as the "How it works" section.
+  async redirects() {
+    return [{ source: '/:locale(he|en)/process', destination: '/:locale#how', permanent: true }];
   }
 };
 

@@ -11,8 +11,7 @@ export default async function Header() {
   const links = [
     { href: '/catalog', label: t('products') },
     { href: '/custom', label: t('custom') },
-    { href: '/about', label: t('about') },
-    { href: '/process', label: t('process') }
+    { href: '/about', label: t('about') }
   ];
 
   return (
