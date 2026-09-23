@@ -104,7 +104,9 @@
     "s3t": "Manufacturing and Finishing",
     "s3b": "Cut, bend and weld the steel, then apply a powder-coated finish.",
     "s4t": "Integration and Installation",
-    "s4b": "Fit displays and computing equipment, test functionality and install on site."
+    "s4b": "Fit displays and computing equipment, test functionality and install on site.",
+    "deliveryTitle": "Delivery & Installation",
+    "deliveryBody": "Every station is manufactured and tested in Israel. Within Israel, our team installs and commissions it on site. For projects further afield, the station ships ready to install, with setup guidance for your team or local contractor."
   },
   "custom": {
     "eyebrow": "Custom Solutions",

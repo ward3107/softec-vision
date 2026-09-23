@@ -47,6 +47,11 @@ export default async function ProcessPage({
           </li>
         ))}
       </ol>
+
+      <div className="reveal reveal-up mt-12 max-w-2xl rounded border-s-2 border-softec bg-paper p-6">
+        <h2 className="text-lg font-bold">{t('deliveryTitle')}</h2>
+        <p className="mt-2 text-machine">{t('deliveryBody')}</p>
+      </div>
     </section>
   );
 }
