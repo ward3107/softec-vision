@@ -11,8 +11,11 @@ insert into products (id, code, category_id, status) values
   ('00000000-0000-4000-8000-00000000f002', 'RLS-DRAFT', '00000000-0000-4000-8000-00000000c001', 'draft');
 insert into auth.users (id, email) values
   ('00000000-0000-4000-8000-0000000000a1', 'staff@example.com'),
-  ('00000000-0000-4000-8000-0000000000b2', 'visitor@example.com');
-insert into profiles (id, role, full_name) values ('00000000-0000-4000-8000-0000000000a1', 'editor', 'Staff Member');
+  ('00000000-0000-4000-8000-0000000000b2', 'visitor@example.com'),
+  ('00000000-0000-4000-8000-0000000000c3', 'owner@example.com');
+insert into profiles (id, role, full_name) values
+  ('00000000-0000-4000-8000-0000000000a1', 'editor', 'Staff Member'),
+  ('00000000-0000-4000-8000-0000000000c3', 'admin', 'Owner');
 insert into storage.objects (bucket_id, name) values ('inquiry-attachments', 'seed/plan.pdf');
 
 -- ── The server (service role) stores an inquiry with the Stage 2 fields ──────
@@ -108,7 +111,28 @@ begin
     raise exception 'staff must be able to edit products';
   end if;
   delete from inquiries where id = '00000000-0000-4000-8000-00000000e001';
-  if (select count(*) from inquiries) <> 1 then raise exception 'inquiries must not be deletable through the API'; end if;
+  if (select count(*) from inquiries) <> 1 then raise exception 'editors must not delete inquiries'; end if;
+  delete from storage.objects where bucket_id = 'inquiry-attachments';
+  if (select count(*) from storage.objects where bucket_id = 'inquiry-attachments') <> 1 then
+    raise exception 'editors must not delete attachment files';
+  end if;
+end $$;
+rollback;
+
+-- ── Admin (owner) may erase an inquiry on request ────────────────────────────
+begin;
+set local role authenticated;
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000c3', true) \g /dev/null
+do $$
+begin
+  if (select count(*) from profiles) <> 2 then raise exception 'admin must see all profiles (recursion fix)'; end if;
+  delete from storage.objects where bucket_id = 'inquiry-attachments';
+  delete from inquiries where id = '00000000-0000-4000-8000-00000000e001';
+  if (select count(*) from inquiries) <> 0 then raise exception 'admin must be able to erase an inquiry'; end if;
+  if (select count(*) from inquiry_attachments) <> 0 then raise exception 'attachment records must cascade'; end if;
+  if (select count(*) from storage.objects where bucket_id = 'inquiry-attachments') <> 0 then
+    raise exception 'admin must be able to delete attachment files';
+  end if;
 end $$;
 rollback;
 
