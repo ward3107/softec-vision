@@ -4,13 +4,14 @@ The website publishes only facts the business has confirmed. Anything below is
 **not shown** on the site until the owner supplies it. Fill in the blanks (or
 reply with the values) and they will be added.
 
-_Last updated: Stage 2 — quote requests._
+_Last updated: Stage 3 — Supabase database and owner admin area._
 
-## 0. Setup steps (turn on online quote requests)
+## 0. Setup steps (turn on online quote requests + the owner admin area)
 
-The quote form is live. Until one of the steps below is done it opens WhatsApp
-with the visitor's details (nothing is lost). After either step, requests are
-submitted on the site, with an optional photo/PDF attachment.
+The quote form is live. Until step A or B below is done it opens WhatsApp with
+the visitor's details (nothing is lost). The owner admin area (`/admin` — review
+quote requests, edit products) needs step B and is built and tested; it shows
+"not yet enabled" until then.
 
 **A. Email every request to visionsoftec5@gmail.com (5 minutes).**
 1. Sign in to visionsoftec5@gmail.com and open https://myaccount.google.com/security
@@ -21,19 +22,48 @@ submitted on the site, with an optional photo/PDF attachment.
    `GMAIL_APP_PASSWORD` = that code (Production and Preview), then redeploy.
    Do not send the code by chat or email.
 
-**B. Also save requests in a database (Supabase, EU region).** Needed for the
-owner admin area (reviewing requests, editing products). Create a free Supabase
-project named "softec-vision" in the **Frankfurt (eu-central-1)** region — in a
-Softec-owned organisation, not in another company's — and either give the
-developer access to it or add `NEXT_PUBLIC_SUPABASE_URL`,
-`NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` in Vercel.
-The database migrations are ready and tested.
+**B. Also save requests in a database, and turn on the owner admin area
+(Supabase, EU region).**
+1. Create a free Supabase project named "softec-vision" in the **Frankfurt
+   (eu-central-1)** region, in a Softec-owned organisation (not another
+   company's).
+2. Apply the database migrations: in the Supabase dashboard's **SQL Editor**,
+   run each file in `web/supabase/migrations/` in order (0001 through 0005),
+   or give the developer access to run them for you.
+3. In Vercel → project **softecvision** → Settings → Environment Variables, add
+   `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and
+   `SUPABASE_SERVICE_ROLE_KEY` (from the Supabase project's API settings),
+   then redeploy. Never share the service-role key outside Vercel's
+   environment variables — it bypasses all access rules.
+4. Create your own sign-in: Supabase dashboard → **Authentication → Users →
+   Add user**, with your email and a password. Then, still in the dashboard,
+   open **SQL Editor** and run (with your own email):
+   ```sql
+   insert into public.profiles (id, role, full_name)
+   select id, 'admin', 'Your Name' from auth.users where email = 'you@example.com';
+   ```
+   Repeat with `'editor'` instead of `'admin'` for any other staff member who
+   should review quote requests and edit products but not permanently erase
+   data. Only accounts with a row here can sign in at `/admin` — there is no
+   public sign-up (email sign-ups are switched off in the dashboard's
+   **Authentication → Sign In / Providers** settings; please confirm this is
+   off after creating the project).
+5. Sign in at `/admin`, open **מוצרים** (Products), and click **ייבוא הקטלוג**
+   (Import catalog) once. This copies the current 18 products into the
+   database so they can be edited going forward; it is safe even if run more
+   than once (it never overwrites a product that is already there).
 
 ## 1. Product specifications
 
 Unconfirmed values are kept in `web/src/lib/catalog/seed.ts` as placeholders and
 are hidden from visitors (product pages, comparison table, product cards).
 Product pages instead invite visitors to ask for dimensions and drawings.
+
+Once the database is set up (§0.B) and the catalog imported, every value below
+can be filled in directly at `/admin/products` — sign in, open a product, and
+fill in both the Hebrew and English side of a spec (an empty field is skipped
+on the site; a value entered in only one language is rejected, so the two
+stay in sync). No further request to the developer is needed for these.
 
 | Code | Product | Still missing |
 |---|---|---|
