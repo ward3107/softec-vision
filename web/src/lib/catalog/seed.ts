@@ -116,7 +116,7 @@ export const PRODUCTS: Product[] = [
       he: 'שני מסכים בזווית אחודה על משטח רחב, עם פתחי בקרה מרכזיים ועמוד מאוורר לציוד מחשוב פנימי. לעבודה משותפת מול קהל משני צדי העמדה.',
       en: 'Two displays aligned on a wide work surface, with central controls and a ventilated column for integrated computing equipment. Designed for shared presentation work facing an audience.'
     },
-    image: '/products/V-18W.jpg',
+    image: '/products/V-18W-transparent.webp',
     specs: [
       s('displays', '2 מסכים', '2 displays'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -132,7 +132,7 @@ export const PRODUCTS: Product[] = [
       he: 'מסך מגע נטוי על בסיס משולש יציב, בגימור דו-גוני חד. מיועדת לחללי תצוגה ותערוכות בהם הציוד עצמו הוא חלק מהחוויה.',
       en: 'An angled touch display on a stable triangular base with a crisp two-tone finish. Designed for exhibitions and display spaces where the equipment is part of the experience.'
     },
-    image: '/products/IX-1.jpg',
+    image: '/products/IX-1-transparent.webp',
     specs: [
       s('displays', 'מסך מגע גדול', 'Large touch display'),
       s('finish', 'פח צבוע דו-גוני', 'Two-tone powder-coated steel'),
@@ -149,7 +149,7 @@ export const PRODUCTS: Product[] = [
       he: 'עמדה מתקפלת על גלגלים, עם זרוע מסך, מדף למחשב נייד וארונית צד נעילה. פתרון לכיתות שדורשות סידור מחדש בין שיעורים.',
       en: 'A folding mobile station with a monitor arm, laptop shelf and lockable side cabinet. A practical solution for classrooms that are rearranged between sessions.'
     },
-    image: '/products/SD-2.jpg',
+    image: '/products/SD-2-transparent.webp',
     specs: [
       s('displays', 'מסך + מדף למחשב נייד', 'Display + laptop shelf'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -166,7 +166,7 @@ export const PRODUCTS: Product[] = [
       he: 'שולחן בקרה עם שתיים עד שלוש זרועות מסך מתעקלות, דלת גישה צדדית לחיווט ותושבת יציבה לעבודה ממושכת. לחדרי בקרה ותפעול.',
       en: 'A control desk with two or three articulated display arms, side cable-access door and a stable structure for extended operation in control and operations rooms.'
     },
-    image: '/products/CD-3.jpg',
+    image: '/products/CD-3-transparent.webp',
     specs: [
       s('displays', '2–3 זרועות מסך', '2–3 display arms'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -183,7 +183,7 @@ export const PRODUCTS: Product[] = [
       he: 'עמדת מרצה בגובה נגיש, עם פאנל בקרת AV משולב, זרוע מיקרופון ומעבר כבלים מובנה. מתוכננת לאולמות הרצאה ולתקני נגישות.',
       en: 'An accessible-height lecturer station with an integrated AV control panel, microphone arm and built-in cable routing, designed for lecture halls and accessibility requirements.'
     },
-    image: '/products/RAV-500.jpg',
+    image: '/products/RAV-500-transparent.webp',
     specs: [
       s('displays', 'מסך ראשי + פאנל AV', 'Main display + AV panel'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -200,7 +200,7 @@ export const PRODUCTS: Product[] = [
       he: 'קונסולת בדיקה עם מסך ראשי ותצוגת משנה, לוח מקשים ייעודי וארונית אלקטרוניקה נעולה. לתחנות בדיקה ותפעול תעשייתי.',
       en: 'A test console with a primary display, secondary display, dedicated keypad and lockable electronics cabinet for industrial test and operator stations.'
     },
-    image: '/products/V-5.jpg',
+    image: '/products/V-5-transparent.webp',
     specs: [
       s('displays', 'מסך ראשי + תצוגת משנה', 'Main + secondary display'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -217,7 +217,7 @@ export const PRODUCTS: Product[] = [
       he: 'דגם הדגל: שני מסכים רחבים ושני מסכי עזר עליונים, שתי מקלדות, ועמוד מאוורר על בסיס מפוסל ליציבות מרבית.',
       en: 'The flagship model: two wide displays, two upper auxiliary displays, dual keyboards and a ventilated column on a sculpted base for maximum stability.'
     },
-    image: '/products/V-19W.jpg',
+    image: '/products/V-19W-transparent.webp',
     specs: [
       s('displays', '2 רחבים + 2 עזר', '2 wide + 2 auxiliary'),
       s('finish', 'פח צבוע דו-גוני', 'Two-tone powder-coated steel'),

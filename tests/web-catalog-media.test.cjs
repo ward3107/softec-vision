@@ -42,3 +42,16 @@ test('every new product supplies localized primary-image alt text', () => {
   assert.equal((newProductBlock.match(/imageAlt:\s*\{\s*he:/g) || []).length, expectedCodes.length);
   assert.equal((newProductBlock.match(/imageAlt:\s*\{[^}]*en:/g) || []).length, expectedCodes.length);
 });
+
+test('legacy catalog products use lightweight transparent WebP cutouts', () => {
+  const codes = ['CD-3', 'IX-1', 'RAV-500', 'SD-2', 'V-18W', 'V-19W', 'V-5'];
+
+  for (const code of codes) {
+    const publicPath = `/products/${code}-transparent.webp`;
+    const file = path.join(root, 'web', 'public', ...publicPath.split('/').filter(Boolean));
+
+    assert.match(seed, new RegExp(`image: '${publicPath}'`));
+    assert.ok(fs.existsSync(file), `${publicPath} must exist`);
+    assert.ok(fs.statSync(file).size < 150_000, `${publicPath} should stay below 150 KB`);
+  }
+});
