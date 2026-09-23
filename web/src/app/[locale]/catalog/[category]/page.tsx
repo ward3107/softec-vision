@@ -11,6 +11,7 @@ import {
 } from '@/lib/catalog';
 import type { AppLocale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
+import BackButton from '@/components/BackButton';
 import ProductCard from '@/components/catalog/ProductCard';
 import ProductScroller from '@/components/catalog/ProductScroller';
 
@@ -63,7 +64,11 @@ export default async function CategoryPage({
 
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)] pb-28">
-      <nav className="text-sm text-machine dark:text-fog">
+      <BackButton
+        fallbackHref={state.sub === 'all' ? '/catalog' : `/catalog/${cat.key}`}
+        label={t('back')}
+      />
+      <nav className="mt-5 text-sm text-machine dark:text-fog">
         <Link href="/catalog" className="hover:text-blueprint dark:hover:text-skyline">
           {t('title')}
         </Link>

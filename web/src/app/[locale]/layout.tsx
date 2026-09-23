@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
@@ -11,6 +12,7 @@ import CompareTray from '@/components/catalog/CompareTray';
 import RevealController from '@/components/motion/RevealController';
 import FloatingDock from '@/components/widgets/FloatingDock';
 import BrandSplash from '@/components/BrandSplash';
+import NavTracker from '@/components/NavTracker';
 import JsonLd, { organizationSchema } from '@/components/JsonLd';
 import ConsentBanner from '@/components/consent/ConsentBanner';
 import { ConsentProvider } from '@/components/consent/ConsentProvider';
@@ -118,6 +120,9 @@ export default async function LocaleLayout({
               </div>
               <CompareTray />
               <FloatingDock waNumber={WA_NUMBER} />
+              <Suspense fallback={null}>
+                <NavTracker />
+              </Suspense>
               <RevealController />
               <ConsentBanner />
             </CompareProvider>
