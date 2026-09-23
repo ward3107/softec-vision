@@ -10,6 +10,7 @@ import { CompareProvider } from '@/components/catalog/CompareProvider';
 import CompareTray from '@/components/catalog/CompareTray';
 import RevealController from '@/components/motion/RevealController';
 import FloatingDock from '@/components/widgets/FloatingDock';
+import BrandSplash from '@/components/BrandSplash';
 import { WA_NUMBER } from '@/lib/catalog/seed';
 import '../globals.css';
 
@@ -20,6 +21,7 @@ import '../globals.css';
  */
 const BOOT_SCRIPT = `(function(){try{
   var d=document.documentElement;d.classList.add('js');
+  if(localStorage.getItem('softec-brand-intro-seen')==='1'){d.classList.add('brand-splash-seen');}
   var f=parseInt(localStorage.getItem('a11y-font')||'0',10);
   if(f){d.style.fontSize=(100+f*8)+'%';}
   ['contrast','grayscale','invert','links','headings','readable','linespacing','letterspacing','bigcursor','hideimages','nomotion'].forEach(function(k){
@@ -72,6 +74,7 @@ export default async function LocaleLayout({
     <html lang={locale} dir={dir} className={assistant.variable} suppressHydrationWarning>
       <body className="min-h-screen bg-paper font-sans text-graphite antialiased" suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
+        <BrandSplash />
         <NextIntlClientProvider messages={messages}>
           <CompareProvider>
             <a href="#main" className="skip-link">

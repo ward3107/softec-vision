@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import BrandLogo from '@/components/BrandLogo';
 
 export default async function AboutPage({
   params
@@ -15,7 +16,10 @@ export default async function AboutPage({
       <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-24">
         <div className="reveal reveal-left">
-          <h1 className="text-[clamp(2rem,3.5vw,3rem)] font-extrabold tracking-tight">{t('title')}</h1>
+          <h1>
+            <span className="sr-only">{t('title')}</span>
+            <BrandLogo className="max-w-[420px]" />
+          </h1>
           <p className="mt-4 text-lg text-machine">{t('body')}</p>
           <p className="mt-3 text-lg text-machine">{t('detail')}</p>
         </div>

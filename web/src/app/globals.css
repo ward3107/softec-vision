@@ -41,6 +41,71 @@
   }
 }
 
+/* First-visit brand introduction. The saved-state class is applied before
+   paint so returning visitors never see a flash of the overlay. */
+body.brand-splash-open {
+  overflow: hidden;
+}
+.brand-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #0b1f33;
+  animation: brandSplashExit 0.55s ease 2.25s forwards;
+}
+.brand-splash-seen .brand-splash {
+  display: none;
+}
+.brand-splash__card {
+  width: min(760px, 92vw);
+  overflow: hidden;
+  border-radius: 18px;
+  background: #fff;
+  padding: clamp(20px, 4vw, 42px);
+  box-shadow: 0 28px 90px rgb(0 0 0 / 32%);
+  animation: brandSplashReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.brand-splash__logo {
+  display: block;
+}
+.brand-splash__line {
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin-top: clamp(12px, 2vw, 20px);
+  border-radius: 999px;
+  background: #3eb6df;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: brandLineSweep 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
+}
+html[dir='rtl'] .brand-splash__line {
+  transform-origin: right center;
+}
+@keyframes brandSplashReveal {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes brandLineSweep {
+  to { transform: scaleX(1); }
+}
+@keyframes brandSplashExit {
+  to { opacity: 0; visibility: hidden; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-splash,
+  .brand-splash__card,
+  .brand-splash__line {
+    animation: none !important;
+  }
+  .brand-splash__line {
+    transform: scaleX(1);
+  }
+}
+
 /* ------------------------------------------------------------------ *
  * Scroll-reveal (storytelling motion).
  * Progressive enhancement: elements are fully visible by default, and
