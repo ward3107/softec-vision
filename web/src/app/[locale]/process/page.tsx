@@ -1,4 +1,18 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import type { AppLocale } from '@/i18n/routing';
+import { pageMetadata } from '@/lib/seo';
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const nav = await getTranslations({ locale, namespace: 'nav' });
+  const proc = await getTranslations({ locale, namespace: 'process' });
+  return pageMetadata({ locale: locale as AppLocale, path: '/process', title: nav('process'), description: proc('body') });
+}
 
 export default async function ProcessPage({
   params

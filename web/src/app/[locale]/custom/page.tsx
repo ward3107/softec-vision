@@ -1,5 +1,19 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
+import type { AppLocale } from '@/i18n/routing';
+import { pageMetadata } from '@/lib/seo';
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const nav = await getTranslations({ locale, namespace: 'nav' });
+  const cu = await getTranslations({ locale, namespace: 'custom' });
+  return pageMetadata({ locale: locale as AppLocale, path: '/custom', title: nav('custom'), description: cu('body') });
+}
 
 export default async function CustomPage({
   params

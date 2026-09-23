@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { routing, type AppLocale } from '@/i18n/routing';
+import { pageMetadata } from '@/lib/seo';
 import legalContent from '@/lib/legal/content.json';
 
 type LocalizedStr = { he: string; en: string };
@@ -35,7 +36,12 @@ export async function generateMetadata({
   const { locale, doc } = await params;
   const d = content[doc];
   if (!d) return {};
-  return { title: `${loc(d.h1, locale)} — Softec Vision` };
+  return pageMetadata({
+    locale: locale as AppLocale,
+    path: `/legal/${doc}`,
+    title: loc(d.h1, locale),
+    description: loc(d.lead, locale)
+  });
 }
 
 export default async function LegalDocPage({

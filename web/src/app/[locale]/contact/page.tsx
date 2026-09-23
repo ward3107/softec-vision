@@ -1,11 +1,24 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { AppLocale } from '@/i18n/routing';
 import { buildInquiryUrl, filterProducts, localized } from '@/lib/catalog';
 import { WA_NUMBER } from '@/lib/catalog/seed';
+import { pageMetadata } from '@/lib/seo';
 import ContactForm from '@/components/contact/ContactForm';
 
 const PHONE = '03-6968777';
 const EMAIL = 'Alon@softec.co.il';
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const nav = await getTranslations({ locale, namespace: 'nav' });
+  const c = await getTranslations({ locale, namespace: 'contact' });
+  return pageMetadata({ locale: locale as AppLocale, path: '/contact', title: nav('contact'), description: c('body') });
+}
 
 export default async function ContactPage({
   params,

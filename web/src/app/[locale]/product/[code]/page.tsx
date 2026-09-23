@@ -12,10 +12,14 @@ import {
   isPlaceholder,
   localized
 } from '@/lib/catalog';
-import { PRODUCTS } from '@/lib/catalog/seed';
+import { PRODUCTS, CATEGORIES } from '@/lib/catalog/seed';
+import { pageMetadata, SITE_URL, BRAND } from '@/lib/seo';
 import CompareButton from '@/components/catalog/CompareButton';
 import ProductCard from '@/components/catalog/ProductCard';
 import ShareButton from '@/components/widgets/ShareButton';
+import JsonLd, { breadcrumbSchema } from '@/components/JsonLd';
+
+const absoluteImage = (src: string) => (src.startsWith('http') ? src : `${SITE_URL}${src.startsWith('/') ? '' : '/'}${src}`);
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) => PRODUCTS.map((p) => ({ locale, code: p.code })));
@@ -30,10 +34,15 @@ export async function generateMetadata({
   const product = await getProduct(code);
   if (!product) return {};
   const l = locale as AppLocale;
-  return {
-    title: `${localized(product.name, l)} · ${product.code} — Softec Vision`,
-    description: localized(product.desc, l)
-  };
+  const cat = CATEGORIES.find((c) => c.key === product.cat);
+  return pageMetadata({
+    locale: l,
+    path: `/product/${product.code}`,
+    title: `${localized(product.name, l)} · ${product.code}`,
+    description: localized(product.desc, l),
+    locales: cat?.visibleIn,
+    image: absoluteImage(product.image)
+  });
 }
 
 export default async function ProductPage({
@@ -50,8 +59,29 @@ export default async function ProductPage({
 
   const t = await getTranslations('product');
   const tc = await getTranslations('catalog');
+  const tn = await getTranslations('nav');
   const related = await getRelatedProducts(product, l);
   const name = localized(product.name, l);
+  const category = CATEGORIES.find((c) => c.key === product.cat);
+
+  const productLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name,
+    sku: product.code,
+    mpn: product.code,
+    image: [absoluteImage(product.image)],
+    description: localized(product.desc, l),
+    brand: { '@type': 'Brand', name: BRAND },
+    manufacturer: { '@type': 'Organization', name: 'Softec Vision Ltd' },
+    ...(category ? { category: localized(category.label, l) } : {})
+  };
+  const breadcrumbLd = breadcrumbSchema(l, [
+    { name: BRAND, path: '' },
+    { name: tn('products'), path: '/catalog' },
+    ...(category ? [{ name: localized(category.label, l), path: `/catalog/${category.key}` }] : []),
+    { name, path: `/product/${product.code}` }
+  ]);
   const primaryAlt = product.imageAlt
     ? localized(product.imageAlt, l)
     : `${name} (${product.code}) — ${tc('productImage')}`;
@@ -59,6 +89,7 @@ export default async function ProductPage({
 
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(28px,4vw,56px)] pb-28">
+      <JsonLd data={[productLd, breadcrumbLd]} />
       <nav className="text-sm text-machine">
         <Link href="/catalog" className="hover:text-blueprint">
           {t('backToCatalog')}

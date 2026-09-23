@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
@@ -8,7 +9,26 @@ import {
   normalizeCatalogState
 } from '@/lib/catalog';
 import type { AppLocale } from '@/i18n/routing';
+import { pageMetadata } from '@/lib/seo';
 import ProductCard from '@/components/catalog/ProductCard';
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string; category: string }>;
+}): Promise<Metadata> {
+  const { locale, category } = await params;
+  const l = locale as AppLocale;
+  const cat = (await getVisibleCategories(l)).find((c) => c.key === category);
+  if (!cat) return {};
+  return pageMetadata({
+    locale: l,
+    path: `/catalog/${category}`,
+    title: localized(cat.label, l),
+    description: localized(cat.description, l),
+    locales: cat.visibleIn
+  });
+}
 
 export default async function CategoryPage({
   params,
