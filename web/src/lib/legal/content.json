@@ -5,8 +5,8 @@
       "en": "Privacy Policy"
     },
     "lastUpdated": {
-      "he": "22 בספטמבר 2026",
-      "en": "22 September 2026"
+      "he": "23 בספטמבר 2026",
+      "en": "23 September 2026"
     },
     "lastUpdatedLabel": {
       "he": "עודכן לאחרונה:",
@@ -56,8 +56,8 @@
           "en": "Information we collect"
         },
         "body": {
-          "he": "<p>אנו אוספים מידע מוגבל:</p><ul><li><strong>מידע שאתם מוסרים ביוזמתכם</strong> — כאשר אתם פונים אלינו דרך WhatsApp, טלפון או טופס יצירת קשר, אנו מקבלים את הפרטים שבחרתם לשתף (למשל שם, פרטי התקשרות ותיאור הצורך).</li><li><strong>העדפות מקומיות</strong> — העדפת שפה, הגדרות נגישות ובחירת ההסכמה שלכם נשמרות בדפדפן שלכם (localStorage) לצורך תפעול האתר.</li><li><strong>נתוני שימוש (בכפוף להסכמה)</strong> — אם וכאשר תופעל אנליטיקה, ייאספו נתונים אגרגטיביים על השימוש באתר, רק לאחר הסכמה תקפה באזורים שבהם נדרשת הסכמה.</li></ul>",
-          "en": "<p>We collect limited information:</p><ul><li><strong>Information you provide</strong> — when you contact us through WhatsApp, telephone or a contact form, we receive the details you choose to share (for example name, contact details and a description of your need).</li><li><strong>Local preferences</strong> — your language preference, accessibility settings and consent choice are stored in your browser (localStorage) to operate the site.</li><li><strong>Usage data (subject to consent)</strong> — if and when analytics is enabled, aggregate usage data is collected, only after valid consent in regions where consent is required.</li></ul>"
+          "he": "<p>אנו אוספים מידע מוגבל:</p><ul><li><strong>מידע שאתם מוסרים ביוזמתכם</strong> — כאשר אתם פונים אלינו דרך WhatsApp, טלפון או טופס בקשת הצעת מחיר, אנו מקבלים את הפרטים שבחרתם לשתף: למשל שם, חברה, טלפון, דוא\"ל, מדינה, סוג הפרויקט, מוצר מבוקש, מידות החלל והדרישות, וקובץ אופציונלי (תמונה, סקיצה או PDF) שצירפתם.</li><li><strong>העדפות מקומיות</strong> — העדפת שפה, הגדרות נגישות ובחירת ההסכמה שלכם נשמרות בדפדפן שלכם (localStorage) לצורך תפעול האתר.</li><li><strong>נתונים טכניים למניעת ספאם</strong> — בעת שליחת טופס בקשת הצעת מחיר, אנו מייצרים גיבוב חד-כיווני (hash) של כתובת ה-IP שלכם (לא את הכתובת עצמה) כדי להגביל שימוש לרעה בטופס; אין בכך כדי לזהות אתכם.</li><li><strong>נתוני שימוש (בכפוף להסכמה)</strong> — אם וכאשר תופעל אנליטיקה, ייאספו נתונים אגרגטיביים על השימוש באתר, רק לאחר הסכמה תקפה באזורים שבהם נדרשת הסכמה.</li></ul>",
+          "en": "<p>We collect limited information:</p><ul><li><strong>Information you provide</strong> — when you contact us through WhatsApp, telephone or the quote-request form, we receive the details you choose to share: for example your name, company, phone, email, country, project type, product of interest, room dimensions and requirements, and an optional photo, sketch or PDF you attach.</li><li><strong>Local preferences</strong> — your language preference, accessibility settings and consent choice are stored in your browser (localStorage) to operate the site.</li><li><strong>Technical data for spam prevention</strong> — when you submit the quote-request form, we derive a one-way hash of your IP address (not the address itself) to limit abuse of the form; it is not used to identify you.</li><li><strong>Usage data (subject to consent)</strong> — if and when analytics is enabled, aggregate usage data is collected, only after valid consent in regions where consent is required.</li></ul>"
         }
       },
       {
@@ -111,8 +111,8 @@
           "en": "Sharing and processors"
         },
         "body": {
-          "he": "<p>איננו מוכרים מידע אישי. אנו עשויים להיעזר בספקי שירות (מעבדי מידע) לצורך הפעלת האתר ולמענה לפניות, למשל אירוח ב-Vercel ואפשרות לספק טפסים/בסיס נתונים כגון Supabase המתארח באיחוד האירופי (גרמניה). ספקים אלה מעבדים מידע לפי הוראותינו בלבד. פנייה דרך WhatsApp כפופה גם למדיניות הפרטיות של אותו שירות.</p>",
-          "en": "<p>We do not sell personal information. We may use service providers (processors) to operate the site and respond to inquiries, for example hosting on Vercel and a possible form/database provider such as Supabase hosted in the EU (Germany). These providers process information only on our instructions. Contacting us via WhatsApp is also subject to that service’s own privacy policy.</p>"
+          "he": "<p>איננו מוכרים מידע אישי. אנו נעזרים בספקי שירות (מעבדי מידע) לצורך הפעלת האתר ולמענה לפניות: אירוח ב-Vercel; כאשר מוגדר — ספק טפסים ובסיס נתונים, Supabase, המתארח באיחוד האירופי (פרנקפורט, גרמניה), השומר את בקשות הצעת המחיר וכל קובץ מצורף (תמונה, סקיצה או PDF) באזור אחסון פרטי הנגיש לצוותנו בלבד, באמצעות קישורים שתוקפם פג לאחר דקות ספורות; וכאשר מוגדר — שליחת דוא\"ל באמצעות Google (Gmail). ספקים אלה מעבדים מידע לפי הוראותינו בלבד. פנייה דרך WhatsApp כפופה גם למדיניות הפרטיות של אותו שירות.</p>",
+          "en": "<p>We do not sell personal information. We use service providers (processors) to operate the site and respond to inquiries: hosting on Vercel; when configured, a form and database provider — Supabase, hosted in the EU (Frankfurt, Germany) — which stores quote requests and any attached photo, sketch or PDF in a private storage area accessible only to our staff, through links that expire after a few minutes; and, when configured, email delivery through Google (Gmail). These providers process information only on our instructions. Contacting us via WhatsApp is also subject to that service’s own privacy policy.</p>"
         }
       },
       {
