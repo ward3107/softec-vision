@@ -1,9 +1,18 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { parseStatusUpdate } from '@/lib/admin/inquiries';
+import {
+  CANONICAL_SPEC_KEYS,
+  echoFormValues,
+  importBuiltInCatalog,
+  parseProductForm,
+  saveProduct,
+  valuesFromParsedForm
+} from '@/lib/admin/products';
 import { createUserClient, isSupabaseConfigured, requireStaff } from '@/lib/admin/session';
+import { CATALOG_TAG } from '@/lib/catalog/source';
 
 export type SignInState = { error?: 'missing' | 'invalid' | 'notConfigured' };
 
@@ -52,4 +61,35 @@ export async function eraseInquiry(fd: FormData) {
   if (error) throw new Error(error.message);
   revalidatePath('/admin');
   redirect('/admin?erased=1');
+}
+
+export type SaveProductState = {
+  errors?: Record<string, string>;
+  /** What was submitted, echoed back so a rejected form never loses the owner's edits. */
+  values?: Record<string, string>;
+  saved?: boolean;
+};
+
+export async function saveProductAction(
+  code: string,
+  _previous: SaveProductState,
+  fd: FormData
+): Promise<SaveProductState> {
+  const { client } = await requireStaff();
+  const parsed = parseProductForm(fd, CANONICAL_SPEC_KEYS);
+  if (!parsed.ok) return { errors: parsed.errors, values: echoFormValues(fd, CANONICAL_SPEC_KEYS) };
+  await saveProduct(client, code, parsed.data);
+  revalidateTag(CATALOG_TAG);
+  revalidatePath('/admin/products');
+  revalidatePath(`/admin/products/${code}`);
+  return { saved: true, values: valuesFromParsedForm(parsed.data, CANONICAL_SPEC_KEYS) };
+}
+
+/** One-time seed of the built-in catalog into Supabase — admins only. */
+export async function importCatalogAction() {
+  const { client } = await requireStaff({ admin: true });
+  const added = await importBuiltInCatalog(client);
+  revalidateTag(CATALOG_TAG);
+  revalidatePath('/admin/products');
+  redirect(`/admin/products?imported=${added}`);
 }
