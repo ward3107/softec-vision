@@ -2,7 +2,9 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { saveContentBlock } from '@/lib/admin/content';
 import { parseStatusUpdate } from '@/lib/admin/inquiries';
+import { addGalleryImage, removeGalleryImage, removePrimaryImage, replacePrimaryImage } from '@/lib/admin/media';
 import {
   CANONICAL_SPEC_KEYS,
   echoFormValues,
@@ -13,6 +15,8 @@ import {
 } from '@/lib/admin/products';
 import { createUserClient, isSupabaseConfigured, requireStaff } from '@/lib/admin/session';
 import { CATALOG_TAG } from '@/lib/catalog/source';
+import { parseContentBlockForm, type ContentBlockKey } from '@/lib/content/blocks';
+import { CONTENT_TAG } from '@/lib/content/source';
 
 export type SignInState = { error?: 'missing' | 'invalid' | 'notConfigured' };
 
@@ -92,4 +96,55 @@ export async function importCatalogAction() {
   revalidateTag(CATALOG_TAG);
   revalidatePath('/admin/products');
   redirect(`/admin/products?imported=${added}`);
+}
+
+function revalidateProductMedia(code: string) {
+  revalidateTag(CATALOG_TAG);
+  revalidatePath('/admin/products');
+  revalidatePath(`/admin/products/${code}`);
+}
+
+/** Replaces a product's primary photo — any staff member. */
+export async function uploadProductImageAction(code: string, fd: FormData) {
+  const { client } = await requireStaff();
+  const file = fd.get('file');
+  const result = await replacePrimaryImage(client, code, file instanceof File ? file : new File([], ''));
+  revalidateProductMedia(code);
+  redirect(`/admin/products/${code}?media=${result.ok ? 'updated' : `error-${result.error}`}`);
+}
+
+/** Reverts a product's photo back to the built-in catalog image — any staff member. */
+export async function removeProductImageAction(code: string) {
+  const { client } = await requireStaff();
+  await removePrimaryImage(client, code);
+  revalidateProductMedia(code);
+  redirect(`/admin/products/${code}?media=removed`);
+}
+
+/** Adds one photo to a product's gallery — any staff member. */
+export async function addGalleryImageAction(code: string, fd: FormData) {
+  const { client } = await requireStaff();
+  const file = fd.get('file');
+  const result = await addGalleryImage(client, code, file instanceof File ? file : new File([], ''));
+  revalidateProductMedia(code);
+  redirect(`/admin/products/${code}?media=${result.ok ? 'added' : `error-${result.error}`}`);
+}
+
+/** Removes one gallery photo — any staff member. */
+export async function removeGalleryImageAction(code: string, fd: FormData) {
+  const { client } = await requireStaff();
+  const mediaId = String(fd.get('mediaId') ?? '');
+  if (/^[0-9a-f-]{36}$/i.test(mediaId)) await removeGalleryImage(client, mediaId);
+  revalidateProductMedia(code);
+  redirect(`/admin/products/${code}?media=removed`);
+}
+
+/** Saves one piece of marketing copy (e.g. the homepage hero) — any staff member. A field left blank reverts to the shipped copy. */
+export async function saveContentBlockAction(key: ContentBlockKey, fd: FormData) {
+  const { client } = await requireStaff();
+  const values = parseContentBlockForm(fd, key);
+  await saveContentBlock(client, key, values);
+  revalidateTag(CONTENT_TAG);
+  revalidatePath('/admin/content');
+  redirect('/admin/content?saved=1');
 }

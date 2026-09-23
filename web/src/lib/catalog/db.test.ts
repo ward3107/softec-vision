@@ -90,6 +90,64 @@ describe('rowsToProducts', () => {
     const [product] = rowsToProducts([row({ sub: null })], [base]);
     expect(product.sub).toBeUndefined();
   });
+
+  it('keeps the built-in image and gallery when no supabase URL is given, even with uploaded media', () => {
+    const [product] = rowsToProducts(
+      [row({ product_media: [{ storage_path: 'X-1/image-1.webp', kind: 'image', sort: 0, alt_translations: null }] })],
+      [base]
+    );
+    expect(product.image).toBe(base.image);
+    expect(product.gallery).toEqual(base.gallery);
+  });
+
+  it('prefers an owner-uploaded primary image over the built-in one', () => {
+    const [product] = rowsToProducts(
+      [
+        row({
+          product_media: [
+            { storage_path: 'X-1/image-2.webp', kind: 'image', sort: 1, alt_translations: null },
+            { storage_path: 'X-1/image-1.webp', kind: 'image', sort: 0, alt_translations: null }
+          ]
+        })
+      ],
+      [base],
+      undefined,
+      'https://proj.supabase.co'
+    );
+    expect(product.image).toBe('https://proj.supabase.co/storage/v1/object/public/product-media/X-1/image-1.webp');
+  });
+
+  it('prefers an owner-uploaded gallery over the built-in one, ordered and with per-image alt text', () => {
+    const [product] = rowsToProducts(
+      [
+        row({
+          product_media: [
+            { storage_path: 'X-1/g-2.webp', kind: 'gallery', sort: 1, alt_translations: { he: 'תמונה 2', en: 'View 2' } },
+            { storage_path: 'X-1/g-1.webp', kind: 'gallery', sort: 0, alt_translations: null }
+          ]
+        })
+      ],
+      [base],
+      undefined,
+      'https://proj.supabase.co'
+    );
+    expect(product.gallery).toEqual([
+      {
+        src: 'https://proj.supabase.co/storage/v1/object/public/product-media/X-1/g-1.webp',
+        alt: { he: 'טקסט חלופי', en: 'Alt text' }
+      },
+      {
+        src: 'https://proj.supabase.co/storage/v1/object/public/product-media/X-1/g-2.webp',
+        alt: { he: 'תמונה 2', en: 'View 2' }
+      }
+    ]);
+  });
+
+  it('falls back to the built-in image when no primary image was uploaded, even with a supabase URL', () => {
+    const [product] = rowsToProducts([row()], [base], undefined, 'https://proj.supabase.co');
+    expect(product.image).toBe(base.image);
+    expect(product.gallery).toEqual(base.gallery);
+  });
 });
 
 describe('buildImportPayload', () => {

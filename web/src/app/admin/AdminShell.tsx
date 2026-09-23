@@ -10,10 +10,10 @@ export default function AdminShell({
   children
 }: {
   email?: string | null;
-  active: 'inquiries' | 'products';
+  active: 'inquiries' | 'products' | 'content';
   children: React.ReactNode;
 }) {
-  const tab = (key: 'inquiries' | 'products', href: string) => (
+  const tab = (key: 'inquiries' | 'products' | 'content', href: string) => (
     <Link
       href={href}
       aria-current={active === key ? 'page' : undefined}
@@ -36,6 +36,7 @@ export default function AdminShell({
           <nav aria-label={S.appTitle} className="flex gap-4">
             {tab('inquiries', '/admin')}
             {tab('products', '/admin/products')}
+            {tab('content', '/admin/content')}
           </nav>
           <div className="ms-auto flex flex-wrap items-center gap-3 text-sm">
             {email && (

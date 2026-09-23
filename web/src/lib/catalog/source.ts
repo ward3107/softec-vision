@@ -12,7 +12,11 @@ export const CATALOG_TAG = 'catalog';
  * Published products from Supabase, or null while the catalog has not been
  * imported yet (the site then keeps using the built-in catalog).
  */
-export async function fetchManagedProducts(client: SupabaseClient, builtIn: Product[]): Promise<Product[] | null> {
+export async function fetchManagedProducts(
+  client: SupabaseClient,
+  builtIn: Product[],
+  supabaseUrl?: string
+): Promise<Product[] | null> {
   const { data, error } = await client.from('products').select(PRODUCT_SELECT).eq('status', 'published').order('sort');
   if (error) throw new Error(`catalog query failed: ${error.message}`);
   const rows = (data ?? []) as unknown as DbProductRow[];
@@ -21,7 +25,7 @@ export async function fetchManagedProducts(client: SupabaseClient, builtIn: Prod
     if (rpcError) throw new Error(`catalog check failed: ${rpcError.message}`);
     if (!managed) return null;
   }
-  return rowsToProducts(rows, builtIn);
+  return rowsToProducts(rows, builtIn, undefined, supabaseUrl);
 }
 
 /** Pick the catalog to show; a database outage never takes the site down. */
@@ -48,7 +52,7 @@ function getManagedLoader() {
   // Public (anon) access: Row Level Security returns published products only.
   const client = createClient(url, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
   // Errors are thrown, not cached, so the next request retries the database.
-  managedLoader = unstable_cache(() => fetchManagedProducts(client, PRODUCTS), ['catalog-products'], {
+  managedLoader = unstable_cache(() => fetchManagedProducts(client, PRODUCTS, url), ['catalog-products'], {
     tags: [CATALOG_TAG]
   });
   return managedLoader;
