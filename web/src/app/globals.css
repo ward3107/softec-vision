@@ -304,6 +304,17 @@ html[dir='rtl'] .brand-splash__line {
   }
 }
 
+/* Below desktop the side padding (20–46px) is narrower than the 42px side
+   travel, so an element waiting off-screen would poke past the viewport edge
+   and make the page scroll sideways. There, side reveals rise vertically
+   instead. (Clipping <html> would also hide it, but breaks the sticky header.) */
+@media (prefers-reduced-motion: no-preference) and (max-width: 1023px) {
+  .js .reveal-left,
+  .js .reveal-right {
+    transform: translate3d(0, 28px, 0);
+  }
+}
+
 /* ------------------------------------------------------------------ *
  * Accessibility widget states.
  *
