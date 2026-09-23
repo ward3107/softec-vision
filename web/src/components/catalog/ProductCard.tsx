@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
-import { localized, type Product } from '@/lib/catalog';
+import { localized, publicSpecs, type Product } from '@/lib/catalog';
 import type { AppLocale } from '@/i18n/routing';
 import CompareButton from './CompareButton';
 
@@ -9,7 +9,8 @@ export default async function ProductCard({ product }: { product: Product }) {
   const locale = (await getLocale()) as AppLocale;
   const t = await getTranslations('catalog');
   const name = localized(product.name, locale);
-  const cue = product.specs.length ? localized(product.specs[0].value, locale) : '';
+  const firstSpec = publicSpecs(product)[0];
+  const cue = firstSpec ? localized(firstSpec.value, locale) : '';
   const imageAlt = product.imageAlt
     ? localized(product.imageAlt, locale)
     : `${name} (${product.code}) — ${t('productImage')}`;

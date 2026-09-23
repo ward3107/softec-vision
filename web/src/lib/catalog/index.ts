@@ -1,6 +1,13 @@
 import type { AppLocale } from '@/i18n/routing';
 import { CATEGORIES, PRODUCTS, WA_NUMBER } from './seed';
-import { localized, type CatalogState, type Category, type Product } from './types';
+import {
+  isPlaceholder,
+  localized,
+  type CatalogState,
+  type Category,
+  type Product,
+  type SpecEntry
+} from './types';
 
 export * from './types';
 
@@ -52,6 +59,27 @@ export async function getProductsByCodes(codes: string[]): Promise<Product[]> {
     .filter((product): product is Product => Boolean(product));
 }
 
+const specIsConfirmed = (spec: SpecEntry) =>
+  !isPlaceholder(spec.value.he) && !isPlaceholder(spec.value.en);
+
+/**
+ * Specs a visitor may see. Values the owner has not yet confirmed stay in the
+ * data (so they are tracked) but are never published.
+ */
+export function publicSpecs(product: Product): SpecEntry[] {
+  return product.specs.filter(specIsConfirmed);
+}
+
+/** Spec keys still awaiting owner confirmation, in catalog order. */
+export function missingSpecKeys(product: Product): string[] {
+  return product.specs.filter((spec) => !specIsConfirmed(spec)).map((spec) => spec.key);
+}
+
+/**
+ * Related products visible in this locale: same subcategory first, then the
+ * same category, then the rest of the catalog — so a product that is alone in
+ * its family still gets suggestions.
+ */
 export async function getRelatedProducts(
   product: Product,
   locale: AppLocale,
@@ -60,12 +88,16 @@ export async function getRelatedProducts(
   const visibleKeys = new Set(
     CATEGORIES.filter((category) => category.visibleIn.includes(locale)).map((category) => category.key)
   );
-  return PRODUCTS.filter(
-    (candidate) =>
-      candidate.code !== product.code &&
-      candidate.cat === product.cat &&
-      visibleKeys.has(candidate.cat)
-  ).slice(0, limit);
+  const rank = (candidate: Product) => {
+    if (product.sub && candidate.cat === product.cat && candidate.sub === product.sub) return 0;
+    if (candidate.cat === product.cat) return 1;
+    return 2;
+  };
+  return PRODUCTS.filter((candidate) => candidate.code !== product.code && visibleKeys.has(candidate.cat))
+    .map((candidate, index) => ({ candidate, index, score: rank(candidate) }))
+    .sort((a, b) => a.score - b.score || a.index - b.index)
+    .slice(0, limit)
+    .map(({ candidate }) => candidate);
 }
 
 /** Localized WhatsApp inquiry link (general when no product is given). */

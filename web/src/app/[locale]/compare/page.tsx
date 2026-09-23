@@ -4,8 +4,8 @@ import { Link } from '@/i18n/navigation';
 import type { AppLocale } from '@/i18n/routing';
 import {
   getProductsByCodes,
-  isPlaceholder,
   localized,
+  publicSpecs,
   type Localized
 } from '@/lib/catalog';
 
@@ -38,11 +38,12 @@ export default async function ComparePage({
     );
   }
 
-  // Union of spec keys in first-seen order, with a label per key.
+  // Union of confirmed spec keys in first-seen order, with a label per key.
+  // Unconfirmed (placeholder) values are never published.
   const keys: string[] = [];
   const labels: Record<string, Localized> = {};
   for (const product of products) {
-    for (const spec of product.specs) {
+    for (const spec of publicSpecs(product)) {
       if (!keys.includes(spec.key)) {
         keys.push(spec.key);
         labels[spec.key] = spec.label;
@@ -51,7 +52,7 @@ export default async function ComparePage({
   }
   const valueFor = (code: string, key: string): string => {
     const product = products.find((p) => p.code === code);
-    const spec = product?.specs.find((s) => s.key === key);
+    const spec = product ? publicSpecs(product).find((s) => s.key === key) : undefined;
     return spec ? localized(spec.value, l) : '';
   };
 
@@ -94,13 +95,14 @@ export default async function ComparePage({
                 </th>
                 {products.map((product) => {
                   const value = valueFor(product.code, key);
-                  const placeholder = value === '' || isPlaceholder(value);
                   return (
-                    <td
-                      key={product.code}
-                      className={`py-3 pe-4 ${placeholder ? 'italic text-machine/70' : 'text-graphite'}`}
-                    >
-                      {value === '' ? '—' : placeholder ? tp('toBeCompleted') : value}
+                    <td key={product.code} className={`py-3 pe-4 ${value ? 'text-graphite' : 'text-machine'}`}>
+                      {value || (
+                        <>
+                          <span aria-hidden="true">—</span>
+                          <span className="sr-only">{tp('notSpecified')}</span>
+                        </>
+                      )}
                     </td>
                   );
                 })}
@@ -110,7 +112,9 @@ export default async function ComparePage({
         </table>
       </div>
 
-      <Link href="/catalog" className="mt-8 inline-block font-bold text-blueprint hover:underline">
+      <p className="mt-4 text-sm text-machine">{tp('detailsOnRequest')}</p>
+
+      <Link href="/catalog" className="mt-6 inline-block font-bold text-blueprint hover:underline">
         {tp('backToCatalog')}
       </Link>
     </div>

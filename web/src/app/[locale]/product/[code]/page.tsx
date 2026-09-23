@@ -9,8 +9,8 @@ import {
   buildInquiryUrl,
   getProduct,
   getRelatedProducts,
-  isPlaceholder,
-  localized
+  localized,
+  publicSpecs
 } from '@/lib/catalog';
 import { PRODUCTS, CATEGORIES } from '@/lib/catalog/seed';
 import { pageMetadata, SITE_URL, BRAND } from '@/lib/seo';
@@ -86,6 +86,7 @@ export default async function ProductPage({
     ? localized(product.imageAlt, l)
     : `${name} (${product.code}) — ${tc('productImage')}`;
   const gallery = product.gallery ?? [];
+  const specs = publicSpecs(product);
 
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(28px,4vw,56px)] pb-28">
@@ -141,27 +142,26 @@ export default async function ProductPage({
           <h1 className="text-[clamp(1.8rem,3.2vw,2.6rem)] font-extrabold tracking-tight">{name}</h1>
           <p className="mt-3 text-machine">{localized(product.desc, l)}</p>
 
-          {product.specs.length > 0 && (
-            <table className="mt-6 w-full border-collapse text-sm">
-              <caption className="sr-only">{t('specifications')}</caption>
-              <tbody>
-                {product.specs.map((spec) => {
-                  const value = localized(spec.value, l);
-                  const placeholder = isPlaceholder(value);
-                  return (
+          {specs.length > 0 && (
+            <section aria-labelledby="specs-title" className="mt-6">
+              <h2 id="specs-title" className="text-base font-bold">
+                {t('specifications')}
+              </h2>
+              <table className="mt-2 w-full border-collapse text-sm">
+                <tbody>
+                  {specs.map((spec) => (
                     <tr key={spec.key} className="border-b border-line">
                       <th scope="row" className="py-2 pe-4 text-start font-medium text-machine">
                         {localized(spec.label, l)}
                       </th>
-                      <td className={`py-2 ${placeholder ? 'italic text-machine/70' : 'text-graphite'}`}>
-                        {placeholder ? t('toBeCompleted') : value}
-                      </td>
+                      <td className="py-2 text-graphite">{localized(spec.value, l)}</td>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </section>
           )}
+          <p className="mt-3 text-sm text-machine">{t('detailsOnRequest')}</p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <a

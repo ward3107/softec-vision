@@ -100,6 +100,10 @@ export const PRODUCTS: Product[] = [
       en: 'An enclosed white lecturer station with an adjustable monitor arm, a clear work surface and fully internal cable management. Suited to small and medium classrooms and lecture spaces.'
     },
     image: '/products/LS-1000LPT.jpg',
+    imageAlt: {
+      he: 'עמדת מרצה קומפקטית לבנה עם זרוע מסך על המשטח העליון ומסך בחזית העמוד',
+      en: 'White compact lecturer station with a monitor arm on the top surface and a display on the front of the column'
+    },
     specs: [
       s('displays', 'מסך מגע ראשי + מסך קדמי', 'Main touch display + front display'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -117,6 +121,10 @@ export const PRODUCTS: Product[] = [
       en: 'Two displays aligned on a wide work surface, with central controls and a ventilated column for integrated computing equipment. Designed for shared presentation work facing an audience.'
     },
     image: '/products/V-18W-transparent.webp',
+    imageAlt: {
+      he: 'עמדה לבנה עם שני מסכים מעל משטח עבודה רחב ועמוד מאוורר על בסיס מקושת',
+      en: 'White station with two displays above a wide work surface and a ventilated column on a curved base'
+    },
     specs: [
       s('displays', '2 מסכים', '2 displays'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -133,6 +141,10 @@ export const PRODUCTS: Product[] = [
       en: 'An angled touch display on a stable triangular base with a crisp two-tone finish. Designed for exhibitions and display spaces where the equipment is part of the experience.'
     },
     image: '/products/IX-1-transparent.webp',
+    imageAlt: {
+      he: 'מסך מגע גדול ונטוי על בסיס זוויתי בגימור שחור ואדום',
+      en: 'Large tilted touch display on an angular base with a black and red finish'
+    },
     specs: [
       s('displays', 'מסך מגע גדול', 'Large touch display'),
       s('finish', 'פח צבוע דו-גוני', 'Two-tone powder-coated steel'),
@@ -150,6 +162,10 @@ export const PRODUCTS: Product[] = [
       en: 'A folding mobile station with a monitor arm, laptop shelf and lockable side cabinet. A practical solution for classrooms that are rearranged between sessions.'
     },
     image: '/products/SD-2-transparent.webp',
+    imageAlt: {
+      he: 'שולחן מרצה לבן על גלגלים עם זרוע מסך, מקום למחשב נייד וארונית צד סגורה',
+      en: 'White lecturer desk on casters with a monitor arm, laptop space and an enclosed side cabinet'
+    },
     specs: [
       s('displays', 'מסך + מדף למחשב נייד', 'Display + laptop shelf'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -167,6 +183,10 @@ export const PRODUCTS: Product[] = [
       en: 'A control desk with two or three articulated display arms, side cable-access door and a stable structure for extended operation in control and operations rooms.'
     },
     image: '/products/CD-3-transparent.webp',
+    imageAlt: {
+      he: 'שולחן בקרה לבן עם שלוש זרועות מסך מתכווננות ומשטח עבודה רחב',
+      en: 'White control desk with three articulated monitor arms and a wide work surface'
+    },
     specs: [
       s('displays', '2–3 זרועות מסך', '2–3 display arms'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -184,11 +204,15 @@ export const PRODUCTS: Product[] = [
       en: 'An accessible-height lecturer station with an integrated AV control panel, microphone arm and built-in cable routing, designed for lecture halls and accessibility requirements.'
     },
     image: '/products/RAV-500-transparent.webp',
+    imageAlt: {
+      he: 'עמדת מרצה נגישה אפורה עם מסך, מקלדת שקועה, מיקרופון גמיש, פאנל שליטה ולוח כוונון גובה',
+      en: 'Grey accessible lecturer station with a display, recessed keyboard, gooseneck microphone, touch control panel and height-adjustment keypad'
+    },
     specs: [
       s('displays', 'מסך ראשי + פאנל AV', 'Main display + AV panel'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
       ph('dimensions'), ph('weight'), ph('power'),
-      s('accessibility', 'מותאם תקן', 'Designed for accessibility standards')
+      s('accessibility', 'גובה עבודה נגיש', 'Accessible working height')
     ]
   },
   {
@@ -201,6 +225,10 @@ export const PRODUCTS: Product[] = [
       en: 'A test console with a primary display, secondary display, dedicated keypad and lockable electronics cabinet for industrial test and operator stations.'
     },
     image: '/products/V-5-transparent.webp',
+    imageAlt: {
+      he: 'קונסולת בקרה אפורה בהירה עם מסך ראשי נטוי, מסך מגע קטן, מיקרופון גמיש, מקלדת ומגירה ננעלת',
+      en: 'Light grey control console with an angled main display, small touch screen, gooseneck microphone, keyboard and lockable drawer'
+    },
     specs: [
       s('displays', 'מסך ראשי + תצוגת משנה', 'Main + secondary display'),
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
@@ -218,6 +246,10 @@ export const PRODUCTS: Product[] = [
       en: 'The flagship model: two wide displays, two upper auxiliary displays, dual keyboards and a ventilated column on a sculpted base for maximum stability.'
     },
     image: '/products/V-19W-transparent.webp',
+    imageAlt: {
+      he: 'עמדת מרצה לבנה ורחבה עם שני מסכים גדולים, שני מסכים עליונים קטנים ושתי מקלדות',
+      en: 'White wide lecturer station with two large displays, two small upper displays and two keyboards'
+    },
     specs: [
       s('displays', '2 רחבים + 2 עזר', '2 wide + 2 auxiliary'),
       s('finish', 'פח צבוע דו-גוני', 'Two-tone powder-coated steel'),

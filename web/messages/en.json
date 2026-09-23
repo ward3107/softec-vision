@@ -23,7 +23,11 @@
     "explore": "Explore products",
     "model": "Accessible lecturer and control station",
     "delivery": "From design and engineering to manufacturing, integration and on-site installation.",
-    "proof": ["Purpose-built manufacturing", "Complete AV integration", "Accessibility by design"],
+    "proof": [
+      "Purpose-built manufacturing",
+      "Complete AV integration",
+      "Accessibility by design"
+    ],
     "storyLead": "Every station follows the same path",
     "s1": "Your room, workflow and equipment.",
     "s2": "Translated into a steel design and built.",
@@ -53,7 +57,8 @@
     "quote": "Request a quote",
     "related": "Related products",
     "backToCatalog": "Back to catalog",
-    "toBeCompleted": "To be completed"
+    "notSpecified": "Not specified",
+    "detailsOnRequest": "For dimensions, technical drawings or configuration options for your project, contact us."
   },
   "compare": {
     "title": "Compare Products",
