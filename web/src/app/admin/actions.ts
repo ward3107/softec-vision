@@ -4,7 +4,14 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { saveContentBlock } from '@/lib/admin/content';
 import { parseStatusUpdate } from '@/lib/admin/inquiries';
-import { addGalleryImage, removeGalleryImage, removePrimaryImage, replacePrimaryImage } from '@/lib/admin/media';
+import {
+  addGalleryImage,
+  removeGalleryImage,
+  removePrimaryImage,
+  removeProductModel,
+  replacePrimaryImage,
+  replaceProductModel
+} from '@/lib/admin/media';
 import {
   CANONICAL_SPEC_KEYS,
   echoFormValues,
@@ -45,7 +52,7 @@ export async function setInquiryStatus(fd: FormData) {
   if (!update) return;
   const { error } = await client.from('inquiries').update({ status: update.status }).eq('id', update.id);
   if (error) throw new Error(error.message);
-  revalidatePath('/admin');
+  revalidatePath('/admin/inquiries');
   revalidatePath(`/admin/inquiries/${update.id}`);
 }
 
@@ -63,8 +70,8 @@ export async function eraseInquiry(fd: FormData) {
   }
   const { error } = await client.from('inquiries').delete().eq('id', id);
   if (error) throw new Error(error.message);
-  revalidatePath('/admin');
-  redirect('/admin?erased=1');
+  revalidatePath('/admin/inquiries');
+  redirect('/admin/inquiries?erased=1');
 }
 
 export type SaveProductState = {
@@ -137,6 +144,23 @@ export async function removeGalleryImageAction(code: string, fd: FormData) {
   if (/^[0-9a-f-]{36}$/i.test(mediaId)) await removeGalleryImage(client, mediaId);
   revalidateProductMedia(code);
   redirect(`/admin/products/${code}?media=removed`);
+}
+
+/** Replaces a product's 3D model — any staff member. */
+export async function uploadProductModelAction(code: string, fd: FormData) {
+  const { client } = await requireStaff();
+  const file = fd.get('file');
+  const result = await replaceProductModel(client, code, file instanceof File ? file : new File([], ''));
+  revalidateProductMedia(code);
+  redirect(`/admin/products/${code}?media=${result.ok ? 'modelUpdated' : `error-${result.error}`}`);
+}
+
+/** Removes a product's 3D model — any staff member. */
+export async function removeProductModelAction(code: string) {
+  const { client } = await requireStaff();
+  await removeProductModel(client, code);
+  revalidateProductMedia(code);
+  redirect(`/admin/products/${code}?media=modelRemoved`);
 }
 
 /** Saves one piece of marketing copy (e.g. the homepage hero) — any staff member. A field left blank reverts to the shipped copy. */

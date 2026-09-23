@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  countInquiries,
   decideAccess,
   getInquiryDetail,
   listInquiries,
@@ -119,6 +120,25 @@ describe('listInquiries', () => {
     const rows = await listInquiries(client as never, { status: 'new' });
     expect(rows.map((r) => r.id)).toEqual(['a']);
     expect(calls).toContainEqual(['order', 'inquiries', 'created_at', { ascending: false }]);
+  });
+});
+
+describe('countInquiries', () => {
+  it('counts all inquiries and, separately, those still new', async () => {
+    const rows = [{ status: 'new' }, { status: 'new' }, { status: 'handled' }, { status: 'archived' }];
+    const client = {
+      from: () => ({
+        select: (_cols: string, opts: { count: string; head: boolean }) => {
+          const builder = {
+            eq: (_col: string, value: string) =>
+              Promise.resolve({ count: rows.filter((r) => r.status === value).length, error: null }),
+            then: (resolve: (v: unknown) => void) => resolve({ count: opts.count ? rows.length : null, error: null })
+          };
+          return builder;
+        }
+      })
+    };
+    expect(await countInquiries(client as never)).toEqual({ total: 4, new: 2 });
   });
 });
 

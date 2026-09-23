@@ -17,6 +17,7 @@ const builtIn: Product[] = [
 const dbRow: DbProductRow = {
   code: 'A-1',
   sort: 0,
+  model_3d_url: null,
   category: { slug: 'podium' },
   sub: null,
   product_translations: [

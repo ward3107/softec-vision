@@ -16,13 +16,18 @@ Supabase (Postgres + Auth + Storage) · Vercel.
   spam protection and privacy consent, stored in Supabase and (optionally) emailed. WhatsApp
   stays available as a fast secondary contact route everywhere.
 - **Owner admin** (`/admin`, Supabase Auth + Row Level Security — see `supabase/migrations/`):
-  - **Inquiries** — review, filter by status, reply shortcuts, permanent erasure for privacy
-    requests.
+  - **Dashboard** (`/admin`) — at-a-glance overview: open inquiries, catalog completeness, how
+    much site content has been customized, linking into each section below.
+  - **Inquiries** (`/admin/inquiries`) — review, filter by status, reply shortcuts, permanent
+    erasure for privacy requests.
   - **Products** — edit name/description/alt text/specs (bilingual) and publish status; one-time
     import of the built-in catalog into the database.
   - **Product photos** — replace or remove a product's primary image, add/remove gallery images.
     Uploaded photos (Supabase Storage, bucket `product-media`) take priority over the built-in
     seed image; with nothing uploaded, the site keeps showing the built-in photo.
+  - **3D model** — upload a glTF Binary (`.glb`, up to 20MB) per product (Supabase Storage,
+    bucket `product-models`). When present, the product page shows a Photos/3D tab; the model is
+    only fetched (and the viewer library only loaded) if a visitor opens the 3D tab.
   - **Site content** (`/admin/content`) — edit the homepage hero and capability labels,
     bilingually, without a code change. A field left blank falls back to the shipped copy — not a
     blank section on the live site.
@@ -83,9 +88,9 @@ overrides) — useful for local UI work with zero setup.
 Migrations live in `supabase/migrations/`, applied in order via the Supabase CLI or the SQL
 editor. They set up the catalog/CMS schema, Row Level Security (public reads published content
 only; any signed-in staff member manages it; erasure is admin-only), the quote-request tables and
-its private attachments bucket, and the public `product-media` Storage bucket the admin's photo
-uploads use. Re-running a migration is safe — every statement is idempotent
-(`create ... if not exists`, `on conflict do nothing/update`).
+its private attachments bucket, and the public `product-media`/`product-models` Storage buckets
+the admin's photo and 3D-model uploads use. Re-running a migration is safe — every statement is
+idempotent (`create ... if not exists`, `on conflict do nothing/update`).
 
 ## Deploy (Vercel)
 

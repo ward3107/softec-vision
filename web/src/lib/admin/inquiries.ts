@@ -70,6 +70,17 @@ export interface InquiryRow {
 
 const LIST_COLUMNS = 'id, created_at, name, company, country, product_code_snapshot, status';
 
+/** Total inquiries, and how many are still 'new' — for the dashboard. */
+export async function countInquiries(client: SupabaseClient): Promise<{ total: number; new: number }> {
+  const [total, fresh] = await Promise.all([
+    client.from('inquiries').select('id', { count: 'exact', head: true }),
+    client.from('inquiries').select('id', { count: 'exact', head: true }).eq('status', 'new')
+  ]);
+  if (total.error) throw new Error(total.error.message);
+  if (fresh.error) throw new Error(fresh.error.message);
+  return { total: total.count ?? 0, new: fresh.count ?? 0 };
+}
+
 /** Newest first; RLS limits this to staff. */
 export async function listInquiries(
   client: SupabaseClient,

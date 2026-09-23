@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
@@ -17,6 +16,7 @@ import { CATEGORIES } from '@/lib/catalog/seed';
 import { pageMetadata, SITE_URL, BRAND } from '@/lib/seo';
 import CompareButton from '@/components/catalog/CompareButton';
 import ProductCard from '@/components/catalog/ProductCard';
+import ProductMediaSwitch from '@/components/catalog/ProductMediaSwitch';
 import ProductViewTracker from '@/components/catalog/ProductViewTracker';
 import ProductWhatsAppButton from '@/components/catalog/ProductWhatsAppButton';
 import ShareButton from '@/components/widgets/ShareButton';
@@ -108,36 +108,13 @@ export default async function ProductPage({
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2">
         <div className="reveal reveal-left">
-          <div className="aspect-[4/3] overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface">
-            <Image
-              src={product.image}
-              alt={primaryAlt}
-              width={900}
-              height={675}
-              priority
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="h-full w-full object-contain"
-            />
-          </div>
-          {gallery.length > 0 && (
-            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {gallery.map((item) => (
-                <div
-                  key={item.src}
-                  className="aspect-[4/3] overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface"
-                >
-                  <Image
-                    src={item.src}
-                    alt={localized(item.alt, l)}
-                    width={480}
-                    height={360}
-                    sizes="(min-width: 1024px) 16vw, 33vw"
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          <ProductMediaSwitch
+            image={product.image}
+            alt={primaryAlt}
+            gallery={gallery.map((item) => ({ src: item.src, alt: localized(item.alt, l) }))}
+            model3d={product.model3d}
+            labels={{ photos: t('viewPhotos'), model: t('view3D'), hint: t('media3dHint') }}
+          />
         </div>
 
         <div className="reveal reveal-right">

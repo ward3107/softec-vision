@@ -1,118 +1,97 @@
 import Link from 'next/link';
-import { INQUIRY_STATUSES, listInquiries, type InquiryStatus } from '@/lib/admin/inquiries';
+import { countInquiries } from '@/lib/admin/inquiries';
+import { isCatalogManaged, listAdminProducts } from '@/lib/admin/products';
+import { listAdminContentBlocks } from '@/lib/admin/content';
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
-import { shortReference } from '@/lib/inquiry/reference';
 import AdminShell from './AdminShell';
-import { statusBadge } from './statusBadge';
 
 export const dynamic = 'force-dynamic';
 
-const dateFormat = new Intl.DateTimeFormat('he-IL', {
-  dateStyle: 'short',
-  timeStyle: 'short',
-  timeZone: 'Asia/Jerusalem'
-});
-
-export default async function AdminInquiriesPage({
-  searchParams
+function Card({
+  href,
+  title,
+  children
 }: {
-  searchParams: Promise<{ status?: string; erased?: string; error?: string }>;
+  href: string;
+  title: string;
+  children: React.ReactNode;
 }) {
-  const { status: raw, erased, error } = await searchParams;
-  const status = (INQUIRY_STATUSES as readonly string[]).includes(raw ?? '') ? (raw as InquiryStatus) : undefined;
-  const { client, user } = await requireStaff();
-  const rows = await listInquiries(client, { status });
-
-  const filter = (value: InquiryStatus | undefined, label: string) => (
+  return (
     <Link
-      href={value ? `/admin?status=${value}` : '/admin'}
-      aria-current={status === value ? 'page' : undefined}
-      className={`inline-flex min-h-[44px] items-center rounded border px-3 text-sm font-semibold ${
-        status === value
-          ? 'border-blueprint bg-pure text-blueprint dark:border-skyline dark:bg-surface dark:text-skyline'
-          : 'border-line hover:border-machine dark:border-white/10 dark:hover:border-white/25'
-      }`}
+      href={href}
+      className="block rounded border border-line bg-pure p-5 hover:border-blueprint dark:border-white/10 dark:bg-surface dark:hover:border-skyline"
     >
-      {label}
+      <h2 className="text-sm font-bold uppercase tracking-[0.06em] text-machine dark:text-fog">{title}</h2>
+      <div className="mt-2">{children}</div>
+      <p className="mt-3 text-sm font-semibold text-blueprint dark:text-skyline">{S.dashboard.goTo}</p>
     </Link>
   );
+}
+
+export default async function AdminDashboardPage({
+  searchParams
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
+  const { client, user } = await requireStaff();
+
+  const [inquiries, products, managed, contentBlocks] = await Promise.all([
+    countInquiries(client),
+    listAdminProducts(client),
+    isCatalogManaged(client),
+    listAdminContentBlocks(client)
+  ]);
+
+  const missingSpecCount = products.filter((p) => p.missing.length > 0).length;
+  const editedBlockCount = contentBlocks.filter((b) =>
+    Object.values(b.values.he).some((v) => v.trim()) || Object.values(b.values.en).some((v) => v.trim())
+  ).length;
 
   return (
-    <AdminShell email={user?.email} active="inquiries">
-      <h1 className="text-2xl font-extrabold">{S.inquiries.title}</h1>
-      {erased && (
-        <p role="status" className="mt-3 rounded border border-line bg-pure p-3 text-sm dark:border-white/10 dark:bg-surface">
-          ✓ {S.detail.erased}
-        </p>
-      )}
+    <AdminShell email={user?.email} active="dashboard">
+      <h1 className="text-2xl font-extrabold">{S.dashboard.title}</h1>
+      <p className="mt-1 text-machine dark:text-fog">{S.dashboard.welcome}</p>
+
       {error === 'admin-only' && (
         <p
           role="alert"
-          className="mt-3 rounded border-2 border-red-700 bg-pure p-3 text-sm font-semibold text-red-700 dark:border-red-400 dark:bg-surface dark:text-red-400"
+          className="mt-4 rounded border-2 border-red-700 bg-pure p-3 text-sm font-semibold text-red-700 dark:border-red-400 dark:bg-surface dark:text-red-400"
         >
           {S.errors['admin-only']}
         </p>
       )}
-      <nav aria-label={S.inquiries.status} className="mt-4 flex flex-wrap gap-2">
-        {filter(undefined, S.statuses.all)}
-        {INQUIRY_STATUSES.map((s) => filter(s, S.statuses[s]))}
-      </nav>
 
-      {rows.length === 0 ? (
-        <p className="mt-8 text-machine dark:text-fog">{S.inquiries.empty}</p>
-      ) : (
-        <div
-          className="mt-6 overflow-x-auto rounded border border-line bg-pure dark:border-white/10 dark:bg-surface"
-          tabIndex={0}
-          role="region"
-          aria-label={S.inquiries.title}
-        >
-          <table className="w-full min-w-[640px] border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-line text-start dark:border-white/10">
-                {[S.inquiries.date, S.inquiries.name, S.inquiries.company, S.inquiries.country, S.inquiries.product, S.inquiries.status].map(
-                  (h) => (
-                    <th key={h} scope="col" className="px-3 py-3 text-start font-semibold text-machine dark:text-fog">
-                      {h}
-                    </th>
-                  )
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.id} className="border-b border-line last:border-b-0 hover:bg-paper dark:border-white/10 dark:hover:bg-canvas">
-                  <td className="whitespace-nowrap px-3 py-3">
-                    <bdi>{dateFormat.format(new Date(row.created_at))}</bdi>
-                  </td>
-                  <td className="px-3 py-3 font-semibold">
-                    <Link
-                      href={`/admin/inquiries/${row.id}`}
-                      className="text-blueprint underline-offset-2 hover:underline dark:text-skyline"
-                    >
-                      {row.name}
-                    </Link>
-                    <span className="ms-2 text-xs text-machine dark:text-fog">
-                      <bdi>{shortReference(row.id)}</bdi>
-                    </span>
-                  </td>
-                  <td className="px-3 py-3">{row.company ?? '—'}</td>
-                  <td className="px-3 py-3">{row.country ?? '—'}</td>
-                  <td className="px-3 py-3">
-                    <bdi>{row.product_code_snapshot ?? '—'}</bdi>
-                  </td>
-                  <td className="px-3 py-3">
-                    <span className={`inline-block rounded px-2 py-0.5 text-xs font-bold ${statusBadge[row.status]}`}>
-                      {S.statuses[row.status]}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <Card href="/admin/inquiries" title={S.dashboard.inquiriesCard}>
+          {inquiries.total === 0 ? (
+            <p className="text-machine dark:text-fog">{S.dashboard.noInquiries}</p>
+          ) : (
+            <>
+              <p className="text-3xl font-extrabold">{S.dashboard.newInquiries(inquiries.new)}</p>
+              <p className="text-sm text-machine dark:text-fog">{S.dashboard.totalInquiries(inquiries.total)}</p>
+            </>
+          )}
+        </Card>
+
+        <Card href="/admin/products" title={S.dashboard.productsCard}>
+          <p className="text-3xl font-extrabold">{S.dashboard.totalProducts(products.length)}</p>
+          <p className="text-sm text-machine dark:text-fog">
+            {missingSpecCount > 0 ? S.dashboard.missingSpecs(missingSpecCount) : S.dashboard.completeSpecs}
+          </p>
+          <p className="mt-1 text-xs text-machine dark:text-fog">
+            {managed ? S.dashboard.catalogManaged : S.dashboard.catalogNotManaged}
+          </p>
+        </Card>
+
+        <Card href="/admin/content" title={S.dashboard.contentCard}>
+          <p className="text-3xl font-extrabold">
+            {editedBlockCount}/{contentBlocks.length}
+          </p>
+          <p className="text-sm text-machine dark:text-fog">{S.dashboard.contentEdited(editedBlockCount, contentBlocks.length)}</p>
+        </Card>
+      </div>
     </AdminShell>
   );
 }

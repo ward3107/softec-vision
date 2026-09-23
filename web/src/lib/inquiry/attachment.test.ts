@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkAttachment, MAX_ATTACHMENT_BYTES, safeFilename, sniffType } from './attachment';
+import { checkAttachment, isGlb, MAX_ATTACHMENT_BYTES, safeFilename, sniffType } from './attachment';
 
 const bytes = (...values: number[]) => new Uint8Array(values);
 const ascii = (s: string) => Array.from(s, (c) => c.charCodeAt(0));
@@ -48,6 +48,20 @@ describe('checkAttachment', () => {
 
   it('keeps the limit under the hosting platform request cap', () => {
     expect(MAX_ATTACHMENT_BYTES).toBeLessThanOrEqual(4 * 1024 * 1024);
+  });
+});
+
+describe('isGlb', () => {
+  const GLB = bytes(...ascii('glTF'), 2, 0, 0, 0, 0, 0, 0, 0);
+
+  it('recognises a valid glTF Binary header (magic + version 2)', () => {
+    expect(isGlb(GLB)).toBe(true);
+  });
+
+  it('rejects other version numbers and non-glb content', () => {
+    expect(isGlb(bytes(...ascii('glTF'), 1, 0, 0, 0))).toBe(false);
+    expect(isGlb(JPEG)).toBe(false);
+    expect(isGlb(bytes())).toBe(false);
   });
 });
 

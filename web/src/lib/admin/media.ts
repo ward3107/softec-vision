@@ -1,11 +1,14 @@
 import 'server-only';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { sanitizeCodeForPath } from '@/lib/catalog/media';
-import { sniffType } from '@/lib/inquiry/attachment';
+import { isGlb, sniffType } from '@/lib/inquiry/attachment';
 
 const BUCKET = 'product-media';
 const MAX_BYTES = 6 * 1024 * 1024;
 const EXT: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+
+const MODEL_BUCKET = 'product-models';
+const MAX_MODEL_BYTES = 20 * 1024 * 1024;
 
 export type MediaUploadError = 'noFile' | 'tooLarge' | 'badType' | 'unknownProduct';
 
@@ -133,6 +136,74 @@ export async function removeGalleryImage(client: SupabaseClient, mediaId: string
   const row = data as { storage_path: string } | null;
   if (!row) return;
   await removeMediaRows(client, [mediaId], [row.storage_path]);
+}
+
+async function readAndCheckModel(file: File): Promise<{ ok: true; bytes: Uint8Array } | { ok: false; error: MediaUploadError }> {
+  if (!file || file.size === 0) return { ok: false, error: 'noFile' };
+  if (file.size > MAX_MODEL_BYTES) return { ok: false, error: 'tooLarge' };
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  if (!isGlb(bytes)) return { ok: false, error: 'badType' };
+  return { ok: true, bytes };
+}
+
+/** Replaces the product's 3D model (glTF Binary, .glb; there is at most one). RLS: any staff member. */
+export async function replaceProductModel(
+  client: SupabaseClient,
+  code: string,
+  file: File
+): Promise<{ ok: true } | { ok: false; error: MediaUploadError }> {
+  const checked = await readAndCheckModel(file);
+  if (!checked.ok) return checked;
+
+  const productId = await findProductId(client, code);
+  if (!productId) return { ok: false, error: 'unknownProduct' };
+
+  const { data: existing, error: existingError } = await client
+    .from('products')
+    .select('model_3d_url')
+    .eq('id', productId)
+    .maybeSingle();
+  if (existingError) throw new Error(existingError.message);
+  const oldPath = (existing as { model_3d_url: string | null } | null)?.model_3d_url ?? null;
+
+  const path = `${sanitizeCodeForPath(code)}/model-${Date.now()}.glb`;
+  const uploaded = await client.storage.from(MODEL_BUCKET).upload(path, checked.bytes, {
+    contentType: 'model/gltf-binary',
+    upsert: false
+  });
+  if (uploaded.error) throw new Error(uploaded.error.message);
+
+  const { error: updateError } = await client.from('products').update({ model_3d_url: path }).eq('id', productId);
+  if (updateError) throw new Error(updateError.message);
+
+  if (oldPath) {
+    const removed = await client.storage.from(MODEL_BUCKET).remove([oldPath]);
+    if (removed.error) throw new Error(removed.error.message);
+  }
+  return { ok: true };
+}
+
+/** Removes a product's 3D model. RLS: any staff member. */
+export async function removeProductModel(client: SupabaseClient, code: string): Promise<void> {
+  const productId = await findProductId(client, code);
+  if (!productId) return;
+  const { data, error } = await client.from('products').select('model_3d_url').eq('id', productId).maybeSingle();
+  if (error) throw new Error(error.message);
+  const path = (data as { model_3d_url: string | null } | null)?.model_3d_url ?? null;
+  if (!path) return;
+  const { error: updateError } = await client.from('products').update({ model_3d_url: null }).eq('id', productId);
+  if (updateError) throw new Error(updateError.message);
+  const removed = await client.storage.from(MODEL_BUCKET).remove([path]);
+  if (removed.error) throw new Error(removed.error.message);
+}
+
+/** A product's current 3D model path, for the admin edit page. */
+export async function getProductModel(client: SupabaseClient, code: string): Promise<string | null> {
+  const productId = await findProductId(client, code);
+  if (!productId) return null;
+  const { data, error } = await client.from('products').select('model_3d_url').eq('id', productId).maybeSingle();
+  if (error) throw new Error(error.message);
+  return (data as { model_3d_url: string | null } | null)?.model_3d_url ?? null;
 }
 
 /** A product's current photos, for the admin edit page. */

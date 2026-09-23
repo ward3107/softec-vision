@@ -62,7 +62,10 @@
     "related": "Related products",
     "backToCatalog": "Back to catalog",
     "notSpecified": "Not specified",
-    "detailsOnRequest": "For dimensions, technical drawings or configuration options for your project, contact us."
+    "detailsOnRequest": "For dimensions, technical drawings or configuration options for your project, contact us.",
+    "viewPhotos": "Photos",
+    "view3D": "3D view",
+    "media3dHint": "Drag to rotate, scroll to zoom."
   },
   "compare": {
     "title": "Compare Products",

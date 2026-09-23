@@ -17,7 +17,24 @@ export const S = {
     notConfigured: 'אזור הניהול יופעל לאחר חיבור מסד הנתונים (Supabase).',
     saveFailed: 'השמירה נכשלה. נסו שוב.'
   },
-  nav: { inquiries: 'פניות', products: 'מוצרים', content: 'תוכן האתר', site: 'לאתר' },
+  nav: { dashboard: 'לוח בקרה', inquiries: 'פניות', products: 'מוצרים', content: 'תוכן האתר', site: 'לאתר' },
+  dashboard: {
+    title: 'לוח בקרה',
+    welcome: 'סקירה כללית של האתר.',
+    inquiriesCard: 'פניות להצעת מחיר',
+    newInquiries: (n: number) => `${n} חדשות`,
+    totalInquiries: (n: number) => `מתוך ${n} סה"כ`,
+    noInquiries: 'אין פניות עדיין.',
+    productsCard: 'קטלוג המוצרים',
+    totalProducts: (n: number) => `${n} מוצרים`,
+    missingSpecs: (n: number) => `${n} עם מפרט חסר`,
+    completeSpecs: 'המפרט מלא בכולם',
+    catalogManaged: 'הקטלוג מנוהל דרך מסד הנתונים',
+    catalogNotManaged: 'הקטלוג עדיין לא יובא למסד הנתונים',
+    contentCard: 'תוכן האתר',
+    contentEdited: (n: number, total: number) => `${n} מתוך ${total} סעיפים הותאמו אישית`,
+    goTo: 'מעבר →'
+  },
   theme: { toLight: 'מעבר למצב בהיר', toDark: 'מעבר למצב כהה' },
   inquiries: {
     title: 'פניות להצעת מחיר',
@@ -122,6 +139,23 @@ export const S = {
         tooLarge: 'הקובץ גדול מדי (מקסימום 6MB).',
         badType: 'סוג קובץ לא נתמך — יש להעלות JPG, PNG או WebP.',
         unknownProduct: 'יש לייבא את הקטלוג לפני העלאת תמונות למוצר זה.'
+      }
+    },
+    model3d: {
+      section: 'דגם תלת-ממד',
+      help: 'קובץ glTF Binary (.glb) המוצג בעמוד המוצר לצפייה אינטראקטיבית. אופציונלי — עד 20MB.',
+      current: 'דגם תלת-ממד הועלה',
+      none: 'לא הועלה דגם תלת-ממד.',
+      upload: 'העלאה',
+      replace: 'החלפת דגם',
+      remove: 'הסרת הדגם',
+      updated: 'הדגם התלת-ממדי עודכן.',
+      removed: 'הדגם התלת-ממדי הוסר.',
+      errors: {
+        noFile: 'יש לבחור קובץ.',
+        tooLarge: 'הקובץ גדול מדי (מקסימום 20MB).',
+        badType: 'סוג קובץ לא נתמך — יש להעלות קובץ glTF Binary (‎.glb).',
+        unknownProduct: 'יש לייבא את הקטלוג לפני העלאת דגם למוצר זה.'
       }
     }
   },
