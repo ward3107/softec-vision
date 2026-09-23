@@ -6,6 +6,25 @@ Softec Vision Ltd, with a Supabase-backed owner admin. Live at `softecvision.ver
 **Stack:** Next.js 15 (App Router, RSC) · TypeScript · Tailwind CSS · next-intl (he/en, RTL/LTR) ·
 Supabase (Postgres + Auth + Storage) · Vercel.
 
+## Screenshots
+
+| Home | Catalog |
+| --- | --- |
+| [![Home page](docs/screenshots/home-desktop.png)](docs/screenshots/home-desktop.png) | [![Product catalog](docs/screenshots/catalog-desktop.png)](docs/screenshots/catalog-desktop.png) |
+
+| Product | Contact |
+| --- | --- |
+| [![Product page](docs/screenshots/product-desktop.png)](docs/screenshots/product-desktop.png) | [![Contact form](docs/screenshots/contact-desktop.png)](docs/screenshots/contact-desktop.png) |
+
+<p align="center">
+  <img src="docs/screenshots/catalog-mobile.png" alt="Catalog on mobile" width="300" />
+  <br />
+  <em>Catalog on mobile — each family leads with a photo; product rows swipe horizontally.</em>
+</p>
+
+Screenshots show the Hebrew (RTL) site in light mode. Regenerate them with
+`node docs/screenshots/shoot.mjs` against a local `npm run start` (see the script header).
+
 ## What's here
 
 - **Public catalog** — categories/subcategories, product pages (specs, gallery, optional 3D
