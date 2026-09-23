@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
@@ -8,6 +9,19 @@ import {
   publicSpecs,
   type Localized
 } from '@/lib/catalog';
+import { pageMetadata } from '@/lib/seo';
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const c = await getTranslations({ locale, namespace: 'compare' });
+  // The selected products vary by query string; every combination canonicalizes
+  // to the clean /compare path so it is never treated as duplicate content.
+  return pageMetadata({ locale: locale as AppLocale, path: '/compare', title: c('title'), description: c('instructions') });
+}
 
 export default async function ComparePage({
   params,
