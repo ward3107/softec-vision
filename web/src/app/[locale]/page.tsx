@@ -23,16 +23,26 @@ export default async function HomePage({
   const tcat = await getTranslations('catalog');
   const tcustom = await getTranslations('custom');
   const tcontact = await getTranslations('contact');
+  const tprocess = await getTranslations('process');
+  const tabout = await getTranslations('about');
   const tnav = await getTranslations('nav');
   const heroProof = t.raw('proof') as string[];
 
   const sections = [
     { id: 'top', label: tnav('home') },
     { id: 'families', label: tnav('products') },
-    { id: 'featured', label: tcat('featured') },
-    { id: 'custom', label: tcustom('eyebrow') },
+    { id: 'how', label: tnav('process') },
+    { id: 'why', label: tnav('about') },
     { id: 'contact', label: tnav('contact') }
   ];
+
+  const processSteps = [
+    { n: '01', t: tprocess('s1t'), b: tprocess('s1b') },
+    { n: '02', t: tprocess('s2t'), b: tprocess('s2b') },
+    { n: '03', t: tprocess('s3t'), b: tprocess('s3b') },
+    { n: '04', t: tprocess('s4t'), b: tprocess('s4b') }
+  ];
+  const whyPoints = [tabout('why1'), tabout('why2'), tabout('why3'), tabout('why4')];
 
   const blocks = await loadContentBlocks();
   const hero = {
@@ -198,6 +208,33 @@ export default async function HomePage({
         </div>
       </section>
 
+      {/* How it works */}
+      <section id="how" aria-labelledby="how-title" className="bg-pure dark:bg-surface">
+        <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
+          <div className="reveal reveal-left">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-blueprint dark:text-skyline">
+              {tprocess('eyebrow')}
+            </p>
+            <h2 id="how-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
+              {tprocess('title')}
+            </h2>
+            <p className="mt-2 max-w-2xl text-machine dark:text-fog">{tprocess('body')}</p>
+          </div>
+          <ol className="reveal reveal-up mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {processSteps.map((step) => (
+              <li key={step.n} className="rounded border border-line bg-paper p-5 dark:border-white/10 dark:bg-canvas">
+                <span className="text-2xl font-extrabold text-blueprint dark:text-skyline">{step.n}</span>
+                <h3 className="mt-2 text-base font-bold">{step.t}</h3>
+                <p className="mt-1 text-sm text-machine dark:text-fog">{step.b}</p>
+              </li>
+            ))}
+          </ol>
+          <Link href="/process" className="reveal reveal-up mt-6 inline-flex font-bold text-blueprint hover:underline dark:text-skyline">
+            {tnav('process')} →
+          </Link>
+        </div>
+      </section>
+
       {/* Custom manufacturing story */}
       <section id="custom" aria-labelledby="custom-title" className="bg-graphite text-paper">
         <div className="mx-auto grid max-w-shell gap-10 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,6vw,88px)] lg:grid-cols-2">
@@ -220,6 +257,37 @@ export default async function HomePage({
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* Why Softec Vision */}
+      <section id="why" aria-labelledby="why-title" className="bg-pure dark:bg-surface">
+        <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
+          <h2 id="why-title" className="reveal reveal-left text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
+            {tabout('whyTitle')}
+          </h2>
+          <ul className="reveal reveal-up mt-8 grid gap-5 sm:grid-cols-2">
+            {whyPoints.map((point) => (
+              <li key={point} className="flex items-start gap-3 rounded border border-line bg-paper p-5 dark:border-white/10 dark:bg-canvas">
+                <svg
+                  className="mt-0.5 h-5 w-5 flex-none text-softec"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                <p className="font-semibold leading-snug">{point}</p>
+              </li>
+            ))}
+          </ul>
+          <Link href="/about" className="reveal reveal-up mt-6 inline-flex font-bold text-blueprint hover:underline dark:text-skyline">
+            {tnav('about')} →
+          </Link>
         </div>
       </section>
 
