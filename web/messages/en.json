@@ -73,9 +73,9 @@
     "close": "Close",
     "previous": "Previous image",
     "next": "Next image",
-    "zoomIn": "View full size",
-    "zoomOut": "Fit to screen",
-    "zoomHint": "Click the image for full size"
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "zoomHint": "Click or scroll to zoom, drag to pan"
   },
   "compare": {
     "title": "Compare Products",
