@@ -3,8 +3,9 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import type { AppLocale } from '@/i18n/routing';
 import { filterProducts, getVisibleCategories, localized } from '@/lib/catalog';
-import { resolveText } from '@/lib/content/blocks';
+import { FAQ_COUNT, resolveText } from '@/lib/content/blocks';
 import { loadContentBlocks } from '@/lib/content/source';
+import JsonLd, { faqSchema } from '@/components/JsonLd';
 import ProductCard from '@/components/catalog/ProductCard';
 import TypedText from '@/components/TypedText';
 import SectionIndicator from '@/components/SectionIndicator';
@@ -25,6 +26,7 @@ export default async function HomePage({
   const tcontact = await getTranslations('contact');
   const tprocess = await getTranslations('process');
   const tabout = await getTranslations('about');
+  const tfaq = await getTranslations('faq');
   const tnav = await getTranslations('nav');
   const heroProof = t.raw('proof') as string[];
 
@@ -33,6 +35,7 @@ export default async function HomePage({
     { id: 'families', label: tnav('products') },
     { id: 'how', label: tnav('process') },
     { id: 'why', label: tnav('about') },
+    { id: 'faq', label: tnav('faq') },
     { id: 'contact', label: tnav('contact') }
   ];
 
@@ -55,6 +58,11 @@ export default async function HomePage({
     { key: 'av', label: resolveText(blocks, 'home.capabilities', l, 'av', c('av')) },
     { key: 'accessible', label: resolveText(blocks, 'home.capabilities', l, 'accessible', c('accessible')) }
   ];
+  const faqItems = Array.from({ length: FAQ_COUNT }, (_, i) => {
+    const q = `q${i + 1}`;
+    const a = `a${i + 1}`;
+    return { q: resolveText(blocks, 'home.faq', l, q, tfaq(q)), a: resolveText(blocks, 'home.faq', l, a, tfaq(a)) };
+  });
 
   const allProducts = await filterProducts({ lang: l, cat: 'all' });
   const featured = allProducts.slice(0, 3);
@@ -291,8 +299,45 @@ export default async function HomePage({
         </div>
       </section>
 
+      {/* FAQ — native <details>, so it works without JS; the same pairs feed the FAQPage schema */}
+      <section id="faq" aria-labelledby="faq-title" className="bg-paper dark:bg-canvas">
+        <JsonLd data={faqSchema(faqItems)} />
+        <div className="mx-auto grid max-w-shell gap-8 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)] lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
+          <div className="reveal reveal-left">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-blueprint dark:text-skyline">
+              {tfaq('eyebrow')}
+            </p>
+            <h2 id="faq-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
+              {tfaq('title')}
+            </h2>
+            <p className="mt-2 max-w-md text-machine dark:text-fog">{tfaq('body')}</p>
+          </div>
+          <div className="reveal reveal-up divide-y divide-line border-y border-line dark:divide-white/10 dark:border-white/10">
+            {faqItems.map((item, i) => (
+              <details key={i} open={i === 0} className="group">
+                <summary className="flex min-h-[56px] cursor-pointer list-none items-center justify-between gap-4 py-4 hover:text-blueprint dark:hover:text-skyline [&::-webkit-details-marker]:hidden">
+                  <h3 className="text-lg font-bold leading-snug">{item.q}</h3>
+                  <svg
+                    className="h-5 w-5 flex-none text-blueprint transition-transform duration-200 group-open:rotate-45 dark:text-skyline"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                </summary>
+                <p className="max-w-[62ch] pb-5 pe-9 leading-relaxed text-machine dark:text-fog">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Contact CTA */}
-      <section id="contact" className="bg-paper dark:bg-canvas">
+      <section id="contact" className="bg-pure dark:bg-surface">
         <div className="reveal reveal-up mx-auto flex max-w-shell flex-wrap items-center justify-between gap-6 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,72px)]">
           <div>
             <h2 className="max-w-[22ch] text-[clamp(1.7rem,3vw,2.4rem)] font-extrabold tracking-tight">

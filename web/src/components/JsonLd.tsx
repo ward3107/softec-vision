@@ -47,6 +47,19 @@ export function organizationSchema(locale: AppLocale) {
   ];
 }
 
+/** FAQPage from the question/answer pairs visible on the page (must match what is shown). */
+export function faqSchema(items: { q: string; a: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a }
+    }))
+  };
+}
+
 /** BreadcrumbList from an ordered list of {name, path}. */
 export function breadcrumbSchema(locale: AppLocale, items: { name: string; path: string }[]) {
   return {

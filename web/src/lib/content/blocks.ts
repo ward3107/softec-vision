@@ -10,10 +10,14 @@
  */
 import type { AppLocale } from '@/i18n/routing';
 
+/** Question/answer pairs in the home-page FAQ (fields q1/a1 … q8/a8). */
+export const FAQ_COUNT = 8;
+
 /** Every editable block and the fields it exposes, in display order. */
 export const CONTENT_BLOCKS = {
   'home.hero': ['eyebrow', 'title', 'body'],
-  'home.capabilities': ['custom', 'av', 'accessible']
+  'home.capabilities': ['custom', 'av', 'accessible'],
+  'home.faq': ['q1', 'a1', 'q2', 'a2', 'q3', 'a3', 'q4', 'a4', 'q5', 'a5', 'q6', 'a6', 'q7', 'a7', 'q8', 'a8']
 } as const;
 
 export type ContentBlockKey = keyof typeof CONTENT_BLOCKS;
