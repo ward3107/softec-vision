@@ -287,14 +287,14 @@ export default async function HomePage({
       </section>
 
       {/* Why Softec Vision */}
-      <section id="why" aria-labelledby="why-title" className="bg-pure dark:bg-surface">
+      <section id="why" aria-labelledby="why-title" className="bg-[#E6F2FA] dark:bg-[#0D1C27]">
         <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
           <h2 id="why-title" className="reveal reveal-left text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
             {tabout('whyTitle')}
           </h2>
           <ul className="reveal reveal-up mt-8 grid gap-5 sm:grid-cols-2">
             {whyPoints.map((point) => (
-              <li key={point} className="flex items-start gap-3 rounded border border-line bg-paper p-5 dark:border-white/10 dark:bg-canvas">
+              <li key={point} className="flex items-start gap-3 rounded border border-[#CFE3F1] bg-pure p-5 shadow-sm dark:border-white/10 dark:bg-surface">
                 <svg
                   className="mt-0.5 h-5 w-5 flex-none text-softec"
                   viewBox="0 0 24 24"
@@ -318,7 +318,7 @@ export default async function HomePage({
       </section>
 
       {/* FAQ — native <details>, so it works without JS; the same pairs feed the FAQPage schema */}
-      <section id="faq" aria-labelledby="faq-title" className="bg-paper dark:bg-canvas">
+      <section id="faq" aria-labelledby="faq-title" className="bg-[#E3E9EE] dark:bg-canvas">
         <JsonLd data={faqSchema(faqItems)} />
         <div className="mx-auto grid max-w-shell gap-8 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)] lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
           <div className="reveal reveal-left">
@@ -328,9 +328,10 @@ export default async function HomePage({
             <h2 id="faq-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
               {tfaq('title')}
             </h2>
-            <p className="mt-2 max-w-md text-machine dark:text-fog">{tfaq('body')}</p>
+            {/* darker than text-machine: machine grey is below AA contrast on this section's tint */}
+            <p className="mt-2 max-w-md text-[#4A5259] dark:text-fog">{tfaq('body')}</p>
           </div>
-          <div className="reveal reveal-up divide-y divide-line border-y border-line dark:divide-white/10 dark:border-white/10">
+          <div className="reveal reveal-up divide-y divide-line rounded-md border border-line bg-pure px-5 shadow-sm sm:px-7 dark:divide-white/10 dark:border-white/10 dark:bg-surface">
             {faqItems.map((item, i) => (
               <details key={i} open={i === 0} className="group">
                 <summary className="flex min-h-[56px] cursor-pointer list-none items-center justify-between gap-4 py-4 hover:text-blueprint dark:hover:text-skyline [&::-webkit-details-marker]:hidden">

@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
-import { Assistant } from 'next/font/google';
+import { Assistant, Playfair_Display } from 'next/font/google';
 import { routing, localeDir, type AppLocale } from '@/i18n/routing';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -44,6 +44,16 @@ const assistant = Assistant({
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
   variable: '--font-assistant'
+});
+
+// Formal serif for the footer's creator signature only. Latin-only and not
+// preloaded: it sits below the fold, so it shouldn't compete with the page.
+const signature = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['500', '700'],
+  display: 'swap',
+  preload: false,
+  variable: '--font-signature'
 });
 
 export function generateStaticParams() {
@@ -96,7 +106,7 @@ export default async function LocaleLayout({
   const dir = localeDir[locale as AppLocale];
 
   return (
-    <html lang={locale} dir={dir} className={assistant.variable} suppressHydrationWarning>
+    <html lang={locale} dir={dir} className={`${assistant.variable} ${signature.variable}`} suppressHydrationWarning>
       <body
         className="min-h-screen bg-paper font-sans text-graphite antialiased dark:bg-canvas dark:text-ink"
         suppressHydrationWarning

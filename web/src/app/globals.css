@@ -224,11 +224,10 @@ body.brand-splash-open {
   align-items: baseline;
   min-height: 34px;
   color: #e8f4fc;
-  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+  font-family: var(--font-signature), Georgia, 'Times New Roman', serif;
   font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-  font-style: italic;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   text-shadow: 0 1px 8px rgba(22, 131, 199, 0.35);
 }
 .creator-signature__character {
