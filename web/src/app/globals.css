@@ -59,6 +59,47 @@ body.brand-splash-open {
 .brand-splash-seen .brand-splash {
   display: none;
 }
+
+/* Creator credit: handwritten-style, letter-by-letter reveal. */
+.creator-signature {
+  display: inline-flex;
+  align-items: baseline;
+  min-height: 28px;
+  color: #cfe6f6;
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  font-style: italic;
+  letter-spacing: 0.015em;
+}
+.creator-signature__character {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: signatureWrite 0.24s ease forwards;
+}
+.creator-signature__cursor {
+  width: 2px;
+  height: 1.15em;
+  margin-inline-start: 3px;
+  background: #3eb6df;
+  animation: signatureCursor 0.75s steps(1, end) infinite;
+}
+@keyframes signatureWrite {
+  to { opacity: 1; transform: none; }
+}
+@keyframes signatureCursor {
+  50% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .creator-signature__character {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+  }
+  .creator-signature__cursor {
+    display: none;
+  }
+}
 .brand-splash__card {
   width: min(760px, 92vw);
   overflow: hidden;

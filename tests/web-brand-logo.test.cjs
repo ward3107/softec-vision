@@ -38,3 +38,15 @@ test('first-visit splash persists its completed state and respects reduced motio
   assert.match(layout, /brand-splash-seen/);
   assert.match(css, /\.brand-splash-seen \.brand-splash/);
 });
+
+test('footer renders the saved creator signature letter by letter', () => {
+  const signature = read('web', 'src', 'components', 'CreatorSignature.tsx');
+  const footer = read('web', 'src', 'components', 'Footer.tsx');
+  const css = read('web', 'src', 'app', 'globals.css');
+
+  assert.match(signature, /Made with love by Was/);
+  assert.match(signature, /creator-signature__character/);
+  assert.match(footer, /<CreatorSignature/);
+  assert.match(css, /@keyframes signatureWrite/);
+  assert.match(css, /prefers-reduced-motion/);
+});
