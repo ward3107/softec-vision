@@ -15,8 +15,8 @@ export default async function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-pure">
-      <div className="mx-auto flex min-h-[88px] max-w-shell items-center gap-6 px-[clamp(20px,4.5vw,72px)] py-4">
-        <Link href="/" className="w-[150px] flex-none sm:w-[190px]" aria-label={t('brand')}>
+      <div className="mx-auto flex min-h-[88px] max-w-shell items-center gap-3 px-[clamp(16px,4.5vw,72px)] py-4 sm:gap-6">
+        <Link href="/" className="w-[116px] flex-none sm:w-[190px]" aria-label={t('brand')}>
           <BrandLogo priority />
         </Link>
 
@@ -32,7 +32,7 @@ export default async function Header() {
           <LanguageSwitcher />
           <Link
             href="/contact"
-            className="inline-flex min-h-[48px] items-center justify-center rounded bg-blueprint px-6 font-bold text-pure hover:bg-graphite"
+            className="hidden min-h-[48px] items-center justify-center rounded bg-blueprint px-6 font-bold text-pure hover:bg-graphite sm:inline-flex"
           >
             {t('quote')}
           </Link>

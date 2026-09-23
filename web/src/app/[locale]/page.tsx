@@ -19,6 +19,7 @@ export default async function HomePage({
   const tcat = await getTranslations('catalog');
   const tcustom = await getTranslations('custom');
   const tcontact = await getTranslations('contact');
+  const heroProof = t.raw('proof') as string[];
 
   const featured = (await filterProducts({ lang: l, cat: 'all' })).slice(0, 3);
   const stages = [
@@ -26,69 +27,49 @@ export default async function HomePage({
     { n: '02', t: tcustom('s2t'), b: tcustom('s2b') },
     { n: '03', t: tcustom('s3t'), b: tcustom('s3b') }
   ];
-  // Hero story arc: Need → Engineering → Result, in short.
-  const arc = [
-    { n: '01', t: tcustom('s1t'), b: t('s1') },
-    { n: '02', t: tcustom('s2t'), b: t('s2') },
-    { n: '03', t: tcustom('s3t'), b: t('s3') }
-  ];
-
   return (
     <>
-      {/* Hero — storytelling */}
-      <section className="bg-paper">
-        <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,76px)]">
-          <div className="grid items-center gap-8 lg:grid-cols-2">
-            <div className="reveal reveal-left">
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
-              <h1 className="text-[clamp(2.25rem,4.5vw,3.6rem)] font-extrabold leading-[1.08] tracking-tight">
+      <section className="home-hero overflow-hidden bg-pure">
+        <div className="home-hero__blueprint" aria-hidden="true" />
+        <div className="relative mx-auto grid min-h-[min(790px,calc(100svh-88px))] max-w-shell items-center gap-8 px-[clamp(20px,4.5vw,72px)] py-[clamp(48px,7vw,104px)] lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative z-10 max-w-[670px]">
+              <p className="home-hero__eyebrow mb-5 text-sm font-bold text-blueprint">{t('eyebrow')}</p>
+              <h1 className="max-w-[15ch] text-[clamp(2.7rem,5.4vw,5.25rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-graphite">
                 {t('title')}
               </h1>
-              <p className="mt-5 max-w-[48ch] text-lg leading-relaxed text-machine">{t('body')}</p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Link href="/contact" className="inline-flex min-h-[48px] items-center justify-center rounded bg-blueprint px-6 font-bold text-pure hover:bg-graphite">
+              <p className="mt-7 max-w-[56ch] text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.7] text-machine">{t('body')}</p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/contact" className="home-hero__primary inline-flex min-h-[52px] items-center justify-center rounded bg-blueprint px-7 font-bold text-pure">
                   {t('quote')}
                 </Link>
-                <Link href="/catalog" className="inline-flex min-h-[48px] items-center justify-center rounded border border-line px-6 font-bold text-graphite hover:border-machine hover:bg-pure">
+                <Link href="/catalog" className="inline-flex min-h-[52px] items-center justify-center rounded border border-line bg-pure/80 px-7 font-bold text-graphite hover:border-blueprint hover:text-blueprint">
                   {t('explore')}
                 </Link>
               </div>
-            </div>
-
-            <div className="reveal reveal-right rounded border border-line bg-pure p-4">
-              <div className="aspect-[4/3] overflow-hidden rounded bg-paper">
-                <Image
-                  src="/products/LS-1000LPT.jpg"
-                  alt={`${t('model')} (LS-1000LPT)`}
-                  width={900}
-                  height={675}
-                  priority
-                  className="h-full w-full object-contain"
-                />
-              </div>
-              <p className="mt-3 flex items-center justify-between px-1 text-sm">
-                <span dir="ltr" className="font-bold text-graphite">LS-1000LPT</span>
-                <span className="text-machine">{t('model')}</span>
-              </p>
-            </div>
+              <ul className="mt-9 grid max-w-[650px] gap-3 border-t border-line pt-5 sm:grid-cols-3">
+                {heroProof.map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm font-semibold leading-snug text-graphite">
+                    <span className="mt-[0.45em] h-2 w-2 flex-none rounded-full bg-softec" aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
           </div>
 
-          {/* Story arc: Need → Engineering → Result */}
-          <div className="reveal reveal-up mt-12">
-            <p className="text-sm font-semibold text-machine">{t('storyLead')}</p>
-            <ol className="mt-3 grid gap-px overflow-hidden rounded border border-line bg-line sm:grid-cols-3">
-              {arc.map((step) => (
-                <li key={step.n} className="bg-paper p-5">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-sm font-extrabold text-softec" dir="ltr">
-                      {step.n}
-                    </span>
-                    <h2 className="text-lg font-bold tracking-tight">{step.t}</h2>
-                  </div>
-                  <p className="mt-1 text-sm leading-relaxed text-machine">{step.b}</p>
-                </li>
-              ))}
-            </ol>
+          <div className="home-hero__visual relative min-h-[390px] lg:min-h-[620px]">
+            <div className="home-hero__orbit" aria-hidden="true" />
+            <Image
+              src="/products/RAV-500-transparent.webp"
+              alt={`${t('model')} (RAV-500)`}
+              width={1200}
+              height={924}
+              priority
+              sizes="(max-width: 1023px) 92vw, 55vw"
+              className="home-hero__product absolute inset-0 h-full w-full object-contain object-center"
+            />
+            <p className="home-hero__delivery absolute bottom-2 end-0 max-w-[250px] border-s-2 border-softec bg-pure/90 py-2 ps-4 text-sm font-semibold leading-relaxed text-machine backdrop-blur">
+              {t('delivery')}
+            </p>
           </div>
         </div>
       </section>

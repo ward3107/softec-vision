@@ -20,6 +20,7 @@
   body {
     background: var(--paper);
     color: var(--graphite);
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
   }
   :focus-visible {
@@ -38,6 +39,99 @@
   *::after {
     transition: none !important;
     animation: none !important;
+  }
+}
+
+/* Homepage hero: the product emerges from a restrained engineering drawing. */
+.home-hero {
+  position: relative;
+  isolation: isolate;
+  border-bottom: 1px solid var(--line);
+}
+.home-hero__blueprint {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.42;
+  background-image:
+    linear-gradient(rgb(12 94 145 / 7%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(12 94 145 / 7%) 1px, transparent 1px),
+    linear-gradient(rgb(12 94 145 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(12 94 145 / 3%) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 38%, #000 100%);
+}
+html[dir='rtl'] .home-hero__blueprint {
+  mask-image: linear-gradient(270deg, transparent 0%, #000 38%, #000 100%);
+}
+.home-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.home-hero__eyebrow::before {
+  width: 38px;
+  height: 2px;
+  background: var(--softec);
+  content: '';
+}
+.home-hero__primary {
+  box-shadow: 0 14px 34px rgb(12 94 145 / 22%);
+  transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+.home-hero__primary:hover {
+  background: var(--graphite);
+  box-shadow: 0 18px 42px rgb(21 23 25 / 22%);
+  transform: translateY(-2px);
+}
+.home-hero__visual::before {
+  position: absolute;
+  inset: 8% 5% 9%;
+  border: 1px solid rgb(22 131 199 / 22%);
+  border-radius: 50%;
+  content: '';
+  transform: rotate(-8deg);
+}
+.home-hero__orbit {
+  position: absolute;
+  inset: 18% 11%;
+  border: 1px dashed rgb(12 94 145 / 30%);
+  border-radius: 50%;
+  transform: rotate(13deg);
+}
+.home-hero__product {
+  z-index: 1;
+  filter: drop-shadow(0 30px 28px rgb(12 32 48 / 18%));
+  animation: heroProductSettle 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.home-hero__delivery {
+  z-index: 2;
+}
+@keyframes heroProductSettle {
+  from { opacity: 0; transform: translate3d(0, 28px, 0) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@media (max-width: 1023px) {
+  .home-hero__blueprint,
+  html[dir='rtl'] .home-hero__blueprint {
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 44%, #000 100%);
+  }
+  .home-hero__visual {
+    margin-top: -12px;
+  }
+}
+@media (max-width: 639px) {
+  .home-hero__delivery {
+    inset-inline: 10px;
+    max-width: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__product {
+    animation: none;
+  }
+  .home-hero__primary:hover {
+    transform: none;
   }
 }
 

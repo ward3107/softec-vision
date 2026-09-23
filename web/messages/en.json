@@ -16,12 +16,14 @@
     "switchTo": "מעבר לעברית"
   },
   "hero": {
-    "eyebrow": "Design · Engineering · Manufacturing",
-    "title": "Technology furniture engineered around your space",
-    "body": "We design and manufacture lecturer, control and display stations with integrated AV and complete cable management.",
+    "eyebrow": "Engineered in Israel. Built for every space.",
+    "title": "The room’s technology, engineered into one precise station",
+    "body": "Softec Vision designs and manufactures lecturer, control and display stations that unite ergonomics, AV integration and industrial-grade finishing — around your space, equipment and workflow.",
     "quote": "Request a quote",
     "explore": "Explore products",
-    "model": "Compact lecturer station",
+    "model": "Accessible lecturer and control station",
+    "delivery": "From design and engineering to manufacturing, integration and on-site installation.",
+    "proof": ["Purpose-built manufacturing", "Complete AV integration", "Accessibility by design"],
     "storyLead": "Every station follows the same path",
     "s1": "Your room, workflow and equipment.",
     "s2": "Translated into a steel design and built.",
