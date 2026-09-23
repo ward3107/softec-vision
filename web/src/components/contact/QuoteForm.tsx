@@ -233,8 +233,8 @@ export default function QuoteForm({
     [hint ? `qf-${field}-hint` : '', errors[field] ? errorId(field) : ''].filter(Boolean).join(' ') || undefined;
 
   const input =
-    'mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 text-graphite focus-visible:border-blueprint aria-[invalid=true]:border-red-700';
-  const labelClass = 'block text-sm font-semibold text-graphite';
+    'mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 text-graphite focus-visible:border-blueprint aria-[invalid=true]:border-red-700 dark:border-white/10 dark:bg-surface dark:text-ink dark:focus-visible:border-skyline dark:aria-[invalid=true]:border-red-400';
+  const labelClass = 'block text-sm font-semibold text-graphite dark:text-ink';
 
   /** Label, hint, control and error for one field. A plain function (not a component) so inputs keep focus. */
   const row = (field: Field, control: ReactNode, { required = false, hint }: { required?: boolean; hint?: string } = {}) => (
@@ -242,21 +242,21 @@ export default function QuoteForm({
       <label className={labelClass} htmlFor={`qf-${field}`}>
         {label(field)}{' '}
         {required ? (
-          <span className="text-red-700" aria-hidden="true">
+          <span className="text-red-700 dark:text-red-400" aria-hidden="true">
             *
           </span>
         ) : (
-          <span className="font-normal text-machine">({t('optional')})</span>
+          <span className="font-normal text-machine dark:text-fog">({t('optional')})</span>
         )}
       </label>
       {hint && (
-        <p id={`qf-${field}-hint`} className="mt-0.5 text-xs text-machine">
+        <p id={`qf-${field}-hint`} className="mt-0.5 text-xs text-machine dark:text-fog">
           {hint}
         </p>
       )}
       {control}
       {errors[field] && (
-        <p id={errorId(field)} className="mt-1 text-sm font-medium text-red-700">
+        <p id={errorId(field)} className="mt-1 text-sm font-medium text-red-700 dark:text-red-400">
           {t(`errors.${errors[field]}`)}
         </p>
       )}
@@ -270,25 +270,25 @@ export default function QuoteForm({
 
   if (status === 'success') {
     return (
-      <div ref={resultRef} tabIndex={-1} role="status" className="rounded border border-line bg-pure p-6">
+      <div ref={resultRef} tabIndex={-1} role="status" className="rounded border border-line bg-pure p-6 dark:border-white/10 dark:bg-surface">
         <h3 className="text-xl font-extrabold">{t('successTitle')}</h3>
-        <p className="mt-2 text-machine">{t('successBody')}</p>
+        <p className="mt-2 text-machine dark:text-fog">{t('successBody')}</p>
         {reference && <p className="mt-3 font-semibold">{t('successReference', { reference })}</p>}
-        <p className="mt-3 text-sm text-machine">{t('successNext')}</p>
+        <p className="mt-3 text-sm text-machine dark:text-fog">{t('successNext')}</p>
         <div className="mt-5 flex flex-wrap gap-3">
           <a
             href={`https://wa.me/${waNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => track('whatsapp_clicked', { source: 'quote_form_success' })}
-            className="inline-flex min-h-[44px] items-center rounded border border-line px-4 text-sm font-bold text-graphite hover:border-machine"
+            className="inline-flex min-h-[44px] items-center rounded border border-line px-4 text-sm font-bold text-graphite hover:border-machine dark:border-white/10 dark:text-ink dark:hover:border-white/25"
           >
             {t('whatsappLink')}
           </a>
           <button
             type="button"
             onClick={reset}
-            className="inline-flex min-h-[44px] items-center rounded px-4 text-sm font-bold text-blueprint hover:underline"
+            className="inline-flex min-h-[44px] items-center rounded px-4 text-sm font-bold text-blueprint hover:underline dark:text-skyline"
           >
             {t('sendAnother')}
           </button>
@@ -306,7 +306,7 @@ export default function QuoteForm({
       className="grid gap-5"
       aria-describedby="qf-required-note"
     >
-      <p id="qf-required-note" className="text-sm text-machine">
+      <p id="qf-required-note" className="text-sm text-machine dark:text-fog">
         {t('requiredNote')}
       </p>
 
@@ -316,15 +316,15 @@ export default function QuoteForm({
           tabIndex={-1}
           role="alert"
           aria-labelledby="qf-summary-title"
-          className="rounded border-2 border-red-700 bg-pure p-4"
+          className="rounded border-2 border-red-700 bg-pure p-4 dark:border-red-400 dark:bg-surface"
         >
-          <h3 id="qf-summary-title" className="font-bold text-red-700">
+          <h3 id="qf-summary-title" className="font-bold text-red-700 dark:text-red-400">
             {t('errorSummary')}
           </h3>
           <ul className="mt-2 list-disc ps-5 text-sm">
             {FIELD_ORDER.filter((f) => errors[f]).map((f) => (
               <li key={f}>
-                <a href={`#qf-${f}`} className="font-semibold text-red-700 underline underline-offset-2">
+                <a href={`#qf-${f}`} className="font-semibold text-red-700 underline underline-offset-2 dark:text-red-400">
                   {label(f)}: {t(`errors.${errors[f]}`)}
                 </a>
               </li>
@@ -424,12 +424,12 @@ export default function QuoteForm({
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             aria-invalid={Boolean(errors.attachment)}
             aria-describedby={describedBy('attachment', true)}
-            className="mt-1 block w-full text-sm file:me-3 file:min-h-[44px] file:rounded file:border file:border-line file:bg-pure file:px-4 file:font-semibold file:text-graphite"
+            className="mt-1 block w-full text-sm file:me-3 file:min-h-[44px] file:rounded file:border file:border-line file:bg-pure file:px-4 file:font-semibold file:text-graphite dark:file:border-white/10 dark:file:bg-surface dark:file:text-ink"
           />,
           { hint: t('attachmentHint') }
         )
       ) : (
-        <p className="text-sm text-machine">{t('attachmentOffline')}</p>
+        <p className="text-sm text-machine dark:text-fog">{t('attachmentOffline')}</p>
       )}
 
       {/* Honeypot: hidden from people and assistive technology; bots fill it. */}
@@ -452,21 +452,21 @@ export default function QuoteForm({
             className="mt-0.5 h-5 w-5 flex-none accent-blueprint"
             {...invalid('consent')}
           />
-          <label htmlFor="qf-consent" className="text-sm text-graphite">
+          <label htmlFor="qf-consent" className="text-sm text-graphite dark:text-ink">
             {t.rich('consent', {
               link: (chunks) => (
-                <Link href="/legal/privacy" className="font-semibold text-blueprint underline underline-offset-2">
+                <Link href="/legal/privacy" className="font-semibold text-blueprint underline underline-offset-2 dark:text-skyline">
                   {chunks}
                 </Link>
               )
             })}{' '}
-            <span className="text-red-700" aria-hidden="true">
+            <span className="text-red-700 dark:text-red-400" aria-hidden="true">
               *
             </span>
           </label>
         </div>
         {errors.consent && (
-          <p id={errorId('consent')} className="mt-1 text-sm font-medium text-red-700">
+          <p id={errorId('consent')} className="mt-1 text-sm font-medium text-red-700 dark:text-red-400">
             {t(`errors.${errors.consent}`)}
           </p>
         )}
@@ -477,11 +477,11 @@ export default function QuoteForm({
           ref={resultRef}
           tabIndex={-1}
           role={status === 'error' ? 'alert' : 'status'}
-          className={`rounded bg-pure p-4 ${status === 'error' ? 'border-2 border-red-700' : 'border border-line'}`}
+          className={`rounded bg-pure p-4 dark:bg-surface ${status === 'error' ? 'border-2 border-red-700 dark:border-red-400' : 'border border-line dark:border-white/10'}`}
         >
           {status === 'error' ? (
             <>
-              <h3 className="font-bold text-red-700">{t('errorTitle')}</h3>
+              <h3 className="font-bold text-red-700 dark:text-red-400">{t('errorTitle')}</h3>
               <p className="mt-1 text-sm">
                 {t(serverError === 'rateLimited' ? 'errorRateLimited' : serverError === 'network' ? 'errorNetwork' : 'errorFailed')}
               </p>
@@ -516,14 +516,14 @@ export default function QuoteForm({
           {status === 'submitting' ? t('sending') : onlineEnabled ? t('send') : t('sendWhatsapp')}
         </button>
         {onlineEnabled && (
-          <p className="text-sm text-machine">
+          <p className="text-sm text-machine dark:text-fog">
             {t('whatsappAlt')}{' '}
             <a
               href={`https://wa.me/${waNumber}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => track('whatsapp_clicked', { source: 'quote_form_alt' })}
-              className="font-semibold text-blueprint underline underline-offset-2"
+              className="font-semibold text-blueprint underline underline-offset-2 dark:text-skyline"
             >
               {t('whatsappLink')}
             </a>

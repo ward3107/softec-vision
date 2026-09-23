@@ -15,7 +15,7 @@ export default function CompareTray() {
     <div
       role="region"
       aria-label={t('title')}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-graphite text-paper"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-graphite text-paper dark:border-white/10"
     >
       <div className="mx-auto flex max-w-shell flex-wrap items-center justify-between gap-3 px-[clamp(20px,4.5vw,72px)] py-3">
         <ul className="flex flex-wrap gap-2">

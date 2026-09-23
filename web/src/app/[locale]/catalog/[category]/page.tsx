@@ -52,24 +52,24 @@ export default async function CategoryPage({
 
   const subs = cat.subs ?? [];
   const subLinkClass = (active: boolean) =>
-    `inline-flex min-h-[40px] items-center rounded border px-4 text-sm font-semibold hover:bg-paper ${
-      active ? 'border-blueprint bg-paper' : 'border-line'
+    `inline-flex min-h-[40px] items-center rounded border px-4 text-sm font-semibold hover:bg-paper dark:hover:bg-canvas ${
+      active ? 'border-blueprint bg-paper dark:border-skyline dark:bg-canvas' : 'border-line dark:border-white/10'
     }`;
 
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)] pb-28">
-      <nav className="text-sm text-machine">
-        <Link href="/catalog" className="hover:text-blueprint">
+      <nav className="text-sm text-machine dark:text-fog">
+        <Link href="/catalog" className="hover:text-blueprint dark:hover:text-skyline">
           {t('title')}
         </Link>
         <span className="px-2">/</span>
-        <span className="text-graphite">{localized(cat.label, l)}</span>
+        <span className="text-graphite dark:text-ink">{localized(cat.label, l)}</span>
       </nav>
 
       <h1 className="mt-3 text-[clamp(1.8rem,3.2vw,2.6rem)] font-extrabold tracking-tight">
         {localized(cat.label, l)}
       </h1>
-      <p className="mt-2 max-w-2xl text-machine">{localized(cat.description, l)}</p>
+      <p className="mt-2 max-w-2xl text-machine dark:text-fog">{localized(cat.description, l)}</p>
 
       {subs.length > 0 && (
         <ul className="mt-6 flex flex-wrap gap-2">
@@ -98,7 +98,7 @@ export default async function CategoryPage({
 
       {products.length > 0 ? (
         <>
-          <p className="mt-8 text-sm font-semibold text-machine">
+          <p className="mt-8 text-sm font-semibold text-machine dark:text-fog">
             {products.length} {t('statusCount')}
           </p>
           <div className="mt-4 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -108,11 +108,11 @@ export default async function CategoryPage({
           </div>
         </>
       ) : (
-        <div className="mt-8 rounded border border-line bg-paper p-8">
+        <div className="mt-8 rounded border border-line bg-paper p-8 dark:border-white/10 dark:bg-canvas">
           <p className="text-lg font-bold">{t('emptyTitle')}</p>
-          <p className="mt-1 text-machine">
+          <p className="mt-1 text-machine dark:text-fog">
             {t('emptyBody')}{' '}
-            <Link href="/contact" className="font-bold text-blueprint hover:underline">
+            <Link href="/contact" className="font-bold text-blueprint hover:underline dark:text-skyline">
               {t('customAction')}
             </Link>
           </p>

@@ -35,7 +35,7 @@ export default function FloatingDock({ waNumber }: { waNumber: string }) {
             type="button"
             onClick={toTop}
             aria-label={t('backToTop')}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-pure text-graphite shadow-md hover:border-blueprint hover:bg-paper"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-pure text-graphite shadow-md hover:border-blueprint hover:bg-paper dark:border-white/10 dark:bg-surface dark:text-ink dark:hover:border-skyline dark:hover:bg-white/5"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 19V6m0 0l-6 6m6-6l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

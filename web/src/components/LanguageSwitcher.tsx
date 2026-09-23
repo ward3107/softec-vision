@@ -22,7 +22,7 @@ export default function LanguageSwitcher() {
       lang={other}
       aria-label={t('switchTo')}
       onClick={() => track('language_switched', { from: locale, to: other })}
-      className="inline-flex h-11 min-w-[44px] items-center justify-center rounded border border-line px-3 font-bold text-graphite hover:border-machine"
+      className="inline-flex h-11 min-w-[44px] items-center justify-center rounded border border-line px-3 font-bold text-graphite hover:border-machine dark:border-white/10 dark:text-ink dark:hover:border-white/25"
     >
       {locale === 'he' ? 'EN' : 'עב'}
     </Link>

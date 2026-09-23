@@ -11,6 +11,19 @@
   --softec: #1683C7;
   --blueprint: #0C5E91;
   --line: color-mix(in srgb, var(--machine) 24%, transparent);
+  color-scheme: light;
+}
+
+/* Dark theme: only the two shared CSS custom properties whose sole raw
+   (non-Tailwind-class) uses want to flip — the focus ring and the legal-doc
+   link color (--blueprint), and the hairline border derived from --machine.
+   --graphite/--pure are deliberately left untouched here: both are reused
+   elsewhere (button hovers, the skip link, the footer) as permanent-dark
+   accents that must stay the same in both themes. */
+html.dark {
+  color-scheme: dark;
+  --machine: #9BA3AB;
+  --blueprint: #7CC4EE;
 }
 
 @layer base {
@@ -421,6 +434,9 @@ body.a11y-nomotion .reveal {
   color: #3f4448;
   line-height: 1.75;
 }
+html.dark .legal-prose p {
+  color: #C9CDD1;
+}
 .legal-prose ul {
   margin: 0 0 16px;
   padding-inline-start: 24px;
@@ -442,6 +458,10 @@ body.a11y-nomotion .reveal {
   border-radius: 8px;
   padding: 16px 18px;
   margin: 16px 0;
+}
+html.dark .legal-prose .note,
+html.dark .legal-prose .contact-block {
+  background: #16191C;
 }
 .legal-prose .note {
   border-inline-start: 3px solid var(--softec);

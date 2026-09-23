@@ -196,7 +196,7 @@ export default function AccessibilityWidget() {
   );
 
   const sizeBtn =
-    'flex h-9 w-9 items-center justify-center rounded border border-line bg-pure text-base font-bold text-graphite hover:border-blueprint hover:bg-paper';
+    'flex h-9 w-9 items-center justify-center rounded border border-line bg-pure text-base font-bold text-graphite hover:border-blueprint hover:bg-paper dark:border-white/10 dark:bg-surface dark:text-ink dark:hover:border-skyline dark:hover:bg-white/5';
 
   const renderToggle = (key: ToggleKey) => (
     <button
@@ -205,13 +205,13 @@ export default function AccessibilityWidget() {
       role="switch"
       aria-checked={toggles[key]}
       onClick={() => applyToggle(key, !toggles[key])}
-      className="flex min-h-[44px] w-full items-center justify-between gap-3 border-t border-line py-2 text-start text-sm font-medium"
+      className="flex min-h-[44px] w-full items-center justify-between gap-3 border-t border-line py-2 text-start text-sm font-medium dark:border-white/10"
     >
       <span>{t(key)}</span>
       <span
         aria-hidden="true"
         className={`relative h-6 w-10 flex-none rounded-full transition-colors ${
-          toggles[key] ? 'bg-softec' : 'bg-line'
+          toggles[key] ? 'bg-softec' : 'bg-line dark:bg-white/15'
         }`}
       >
         <span
@@ -231,10 +231,10 @@ export default function AccessibilityWidget() {
           role="dialog"
           aria-modal="true"
           aria-label={t('title')}
-          className="absolute bottom-14 right-0 max-h-[min(74vh,600px)] w-[min(20rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain rounded-lg border border-line bg-pure p-5 text-graphite shadow-[0_24px_60px_-18px_rgba(0,0,0,0.42)]"
+          className="absolute bottom-14 right-0 max-h-[min(74vh,600px)] w-[min(20rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain rounded-lg border border-line bg-pure p-5 text-graphite shadow-[0_24px_60px_-18px_rgba(0,0,0,0.42)] dark:border-white/10 dark:bg-surface dark:text-ink"
         >
           <h2 className="text-base font-bold">{t('heading')}</h2>
-          <p className="mb-4 mt-0.5 text-xs text-machine">{t('body')}</p>
+          <p className="mb-4 mt-0.5 text-xs text-machine dark:text-fog">{t('body')}</p>
 
           <div className="flex items-center justify-between gap-2">
             <span className="text-sm font-medium">{t('textSize')}</span>
@@ -253,7 +253,7 @@ export default function AccessibilityWidget() {
 
           {groups.map((group) => (
             <section key={group.label} className="mt-4">
-              <h3 className="text-[0.7rem] font-bold uppercase tracking-[0.1em] text-machine">{group.label}</h3>
+              <h3 className="text-[0.7rem] font-bold uppercase tracking-[0.1em] text-machine dark:text-fog">{group.label}</h3>
               <div className="mt-1">{group.keys.map(renderToggle)}</div>
             </section>
           ))}
@@ -261,13 +261,13 @@ export default function AccessibilityWidget() {
           <button
             type="button"
             onClick={reset}
-            className="mt-4 min-h-[44px] w-full rounded border border-line text-sm font-semibold text-blueprint hover:bg-paper"
+            className="mt-4 min-h-[44px] w-full rounded border border-line text-sm font-semibold text-blueprint hover:bg-paper dark:border-white/10 dark:text-skyline dark:hover:bg-white/5"
           >
             {t('reset')}
           </button>
           <Link
             href="/legal/accessibility"
-            className="mt-1 block min-h-[44px] py-2 text-center text-sm font-semibold text-blueprint underline underline-offset-2"
+            className="mt-1 block min-h-[44px] py-2 text-center text-sm font-semibold text-blueprint underline underline-offset-2 dark:text-skyline"
             onClick={() => setOpen(false)}
           >
             {t('statement')}

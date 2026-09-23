@@ -22,11 +22,15 @@ export default function LoginForm({ initialError }: { initialError?: string }) {
   const errorKey = state.error ?? initialError;
   const message = errorKey ? S.errors[errorKey as keyof typeof S.errors] : null;
 
-  const input = 'mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 focus-visible:border-blueprint';
+  const input =
+    'mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 focus-visible:border-blueprint dark:border-white/10 dark:bg-surface dark:focus-visible:border-skyline';
   return (
     <form action={action} className="grid gap-4" noValidate>
       {message && (
-        <p role="alert" className="rounded border-2 border-red-700 bg-pure p-3 text-sm font-semibold text-red-700">
+        <p
+          role="alert"
+          className="rounded border-2 border-red-700 bg-pure p-3 text-sm font-semibold text-red-700 dark:border-red-400 dark:bg-surface dark:text-red-400"
+        >
           {message}
         </p>
       )}

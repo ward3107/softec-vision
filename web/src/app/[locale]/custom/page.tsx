@@ -66,7 +66,7 @@ export default async function CustomPage({
         </h2>
         <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {customizable.map((item) => (
-            <li key={item} className="flex items-start gap-3 rounded border border-line bg-pure px-4 py-3 text-graphite">
+            <li key={item} className="flex items-start gap-3 rounded border border-line bg-pure px-4 py-3 text-graphite dark:border-white/10 dark:bg-surface dark:text-ink">
               <span className="mt-[0.5em] h-2 w-2 flex-none rounded-full bg-softec" aria-hidden="true" />
               {item}
             </li>

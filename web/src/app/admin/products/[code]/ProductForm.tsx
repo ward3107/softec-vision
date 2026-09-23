@@ -8,7 +8,8 @@ import { S } from '@/lib/admin/strings';
 import type { Localized } from '@/lib/catalog/types';
 import type { SaveProductState } from '../../actions';
 
-const input = 'mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 focus-visible:border-blueprint';
+const input =
+  'mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 focus-visible:border-blueprint dark:border-white/10 dark:bg-surface dark:focus-visible:border-skyline';
 const textarea = `${input} min-h-[7rem]`;
 
 function fieldError(errors: Record<string, string> | undefined, key: string) {
@@ -55,7 +56,7 @@ function Field({
         className={multiline ? textarea : input}
       />
       {message && (
-        <p id={`${id}-error`} role="alert" className="mt-1 text-sm font-semibold text-red-700">
+        <p id={`${id}-error`} role="alert" className="mt-1 text-sm font-semibold text-red-700 dark:text-red-400">
           {message}
         </p>
       )}
@@ -124,7 +125,7 @@ export default function ProductForm({
           ref={savedRef}
           tabIndex={-1}
           role="status"
-          className="rounded border border-line bg-[#e6f4ea] p-3 text-sm font-semibold text-[#14532d] focus:outline-none"
+          className="rounded border border-line bg-[#e6f4ea] p-3 text-sm font-semibold text-[#14532d] focus:outline-none dark:border-white/10"
         >
           ✓ {S.products.saved}
         </p>
@@ -147,10 +148,10 @@ export default function ProductForm({
             </option>
           ))}
         </select>
-        <p className="mt-1 text-sm text-machine">{S.products.statusHelp}</p>
+        <p className="mt-1 text-sm text-machine dark:text-fog">{S.products.statusHelp}</p>
       </div>
 
-      <fieldset className="grid gap-4 rounded border border-line p-4">
+      <fieldset className="grid gap-4 rounded border border-line p-4 dark:border-white/10">
         <legend className="px-1 text-sm font-bold">{S.products.nameSection}</legend>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
@@ -196,7 +197,7 @@ export default function ProductForm({
         </div>
         <div>
           <p className="text-sm font-semibold">{S.products.alt}</p>
-          <p className="text-sm text-machine">{S.products.altHelp}</p>
+          <p className="text-sm text-machine dark:text-fog">{S.products.altHelp}</p>
           <div className="mt-2 grid gap-4 sm:grid-cols-2">
             <Field
               id="f-alt-he"
@@ -220,11 +221,11 @@ export default function ProductForm({
         </div>
       </fieldset>
 
-      <fieldset className="grid gap-4 rounded border border-line p-4">
+      <fieldset className="grid gap-4 rounded border border-line p-4 dark:border-white/10">
         <legend className="px-1 text-sm font-bold">{S.products.specsSection}</legend>
-        <p className="text-sm text-machine">{S.products.specsHelp}</p>
+        <p className="text-sm text-machine dark:text-fog">{S.products.specsHelp}</p>
         {specFields.map(({ key, label }) => (
-          <div key={key} className="grid gap-4 border-t border-line pt-4 first:border-t-0 first:pt-0 sm:grid-cols-2">
+          <div key={key} className="grid gap-4 border-t border-line pt-4 first:border-t-0 first:pt-0 sm:grid-cols-2 dark:border-white/10">
             <Field
               id={`f-spec-${key}-he`}
               label={`${label.he} (${S.products.hebrew})`}

@@ -25,6 +25,10 @@ import '../globals.css';
  */
 const BOOT_SCRIPT = `(function(){try{
   var d=document.documentElement;d.classList.add('js');
+  var theme=localStorage.getItem('softec-theme');
+  if(theme==='dark'||(theme!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){
+    d.classList.add('dark');
+  }
   if(localStorage.getItem('softec-brand-intro-seen')==='1'){d.classList.add('brand-splash-seen');}
   var f=parseInt(localStorage.getItem('a11y-font')||'0',10);
   if(f){d.style.fontSize=(100+f*8)+'%';}
@@ -91,7 +95,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} dir={dir} className={assistant.variable} suppressHydrationWarning>
-      <body className="min-h-screen bg-paper font-sans text-graphite antialiased" suppressHydrationWarning>
+      <body
+        className="min-h-screen bg-paper font-sans text-graphite antialiased dark:bg-canvas dark:text-ink"
+        suppressHydrationWarning
+      >
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
         <JsonLd data={organizationSchema(locale as AppLocale)} />
         <BrandSplash />

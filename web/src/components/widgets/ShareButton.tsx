@@ -39,7 +39,7 @@ export default function ShareButton({ title, text }: { title: string; text?: str
       type="button"
       onClick={onShare}
       aria-label={canShare ? t('share') : t('copy')}
-      className="inline-flex min-h-[48px] items-center gap-2 rounded border border-line px-4 font-bold text-graphite hover:border-machine hover:bg-pure"
+      className="inline-flex min-h-[48px] items-center gap-2 rounded border border-line px-4 font-bold text-graphite hover:border-machine hover:bg-pure dark:border-white/10 dark:text-ink dark:hover:border-white/25 dark:hover:bg-surface"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path

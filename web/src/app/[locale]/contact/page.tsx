@@ -42,40 +42,40 @@ export default async function ContactPage({
 
   return (
     <section className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)]">
-      <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blueprint">{t('eyebrow')}</p>
+      <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blueprint dark:text-skyline">{t('eyebrow')}</p>
       <h1 className="max-w-[20ch] text-[clamp(2rem,3.5vw,3rem)] font-extrabold tracking-tight">{t('title')}</h1>
-      <p className="mt-4 max-w-[52ch] text-lg text-machine">{t('body')}</p>
+      <p className="mt-4 max-w-[52ch] text-lg text-machine dark:text-fog">{t('body')}</p>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
         {/* Quote request form */}
         <div>
           <h2 className="text-lg font-bold">{tf('title')}</h2>
-          <p className="mb-5 mt-1 text-sm text-machine">{tf(onlineEnabled ? 'intro' : 'introOffline')}</p>
+          <p className="mb-5 mt-1 text-sm text-machine dark:text-fog">{tf(onlineEnabled ? 'intro' : 'introOffline')}</p>
           <QuoteForm waNumber={WA_NUMBER} products={products} onlineEnabled={onlineEnabled} />
         </div>
 
         {/* Contact details */}
-        <div className="rounded border border-line bg-pure p-6 lg:sticky lg:top-24 lg:self-start">
+        <div className="rounded border border-line bg-pure p-6 dark:border-white/10 dark:bg-surface lg:sticky lg:top-24 lg:self-start">
           <h2 className="text-lg font-bold">{t('detailsTitle')}</h2>
           <dl className="mt-4 space-y-3 text-sm">
-            <div className="flex justify-between gap-4 border-b border-line pb-3">
-              <dt className="text-machine">{t('phone')}</dt>
+            <div className="flex justify-between gap-4 border-b border-line pb-3 dark:border-white/10">
+              <dt className="text-machine dark:text-fog">{t('phone')}</dt>
               <dd>
-                <a href="tel:+97236968777" className="font-semibold text-blueprint" dir="ltr">
+                <a href="tel:+97236968777" className="font-semibold text-blueprint dark:text-skyline" dir="ltr">
                   {PHONE}
                 </a>
               </dd>
             </div>
-            <div className="flex justify-between gap-4 border-b border-line pb-3">
-              <dt className="text-machine">{t('email')}</dt>
+            <div className="flex justify-between gap-4 border-b border-line pb-3 dark:border-white/10">
+              <dt className="text-machine dark:text-fog">{t('email')}</dt>
               <dd>
-                <a href={`mailto:${EMAIL}`} className="font-semibold text-blueprint" dir="ltr">
+                <a href={`mailto:${EMAIL}`} className="font-semibold text-blueprint dark:text-skyline" dir="ltr">
                   {EMAIL}
                 </a>
               </dd>
             </div>
             <div className="flex justify-between gap-4">
-              <dt className="text-machine">WhatsApp</dt>
+              <dt className="text-machine dark:text-fog">WhatsApp</dt>
               <dd>
                 <ContactWhatsAppLink href={whatsapp}>+972-54-474-2520</ContactWhatsAppLink>
               </dd>

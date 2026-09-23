@@ -21,7 +21,7 @@ export default async function AdminProductEditPage({ params }: { params: Promise
     return (
       <AdminShell email={user?.email} active="products">
         <p>{S.products.notFound}</p>
-        <Link href="/admin/products" className="mt-4 inline-block font-semibold text-blueprint hover:underline">
+        <Link href="/admin/products" className="mt-4 inline-block font-semibold text-blueprint hover:underline dark:text-skyline">
           {S.products.back}
         </Link>
       </AdminShell>
@@ -32,7 +32,7 @@ export default async function AdminProductEditPage({ params }: { params: Promise
 
   return (
     <AdminShell email={user?.email} active="products">
-      <Link href="/admin/products" className="text-sm font-semibold text-blueprint hover:underline">
+      <Link href="/admin/products" className="text-sm font-semibold text-blueprint hover:underline dark:text-skyline">
         ← {S.products.back}
       </Link>
       <h1 className="mt-3 text-2xl font-extrabold" dir="ltr">
