@@ -3,6 +3,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import type { AppLocale } from '@/i18n/routing';
 import { filterProducts } from '@/lib/catalog';
+import { resolveText } from '@/lib/content/blocks';
+import { loadContentBlocks } from '@/lib/content/source';
 import ProductCard from '@/components/catalog/ProductCard';
 
 export default async function HomePage({
@@ -21,6 +23,18 @@ export default async function HomePage({
   const tcontact = await getTranslations('contact');
   const heroProof = t.raw('proof') as string[];
 
+  const blocks = await loadContentBlocks();
+  const hero = {
+    eyebrow: resolveText(blocks, 'home.hero', l, 'eyebrow', t('eyebrow')),
+    title: resolveText(blocks, 'home.hero', l, 'title', t('title')),
+    body: resolveText(blocks, 'home.hero', l, 'body', t('body'))
+  };
+  const capabilities = [
+    { key: 'custom', label: resolveText(blocks, 'home.capabilities', l, 'custom', c('custom')) },
+    { key: 'av', label: resolveText(blocks, 'home.capabilities', l, 'av', c('av')) },
+    { key: 'accessible', label: resolveText(blocks, 'home.capabilities', l, 'accessible', c('accessible')) }
+  ];
+
   const featured = (await filterProducts({ lang: l, cat: 'all' })).slice(0, 3);
   const stages = [
     { n: '01', t: tcustom('s1t'), b: tcustom('s1b') },
@@ -33,11 +47,11 @@ export default async function HomePage({
         <div className="home-hero__blueprint" aria-hidden="true" />
         <div className="relative mx-auto grid min-h-[min(790px,calc(100svh-88px))] max-w-shell items-center gap-8 px-[clamp(20px,4.5vw,72px)] py-[clamp(48px,7vw,104px)] lg:grid-cols-[0.9fr_1.1fr]">
           <div className="relative z-10 max-w-[670px]">
-              <p className="home-hero__eyebrow mb-5 text-sm font-bold text-blueprint dark:text-skyline">{t('eyebrow')}</p>
+              <p className="home-hero__eyebrow mb-5 text-sm font-bold text-blueprint dark:text-skyline">{hero.eyebrow}</p>
               <h1 className="max-w-[15ch] text-[clamp(2.7rem,5.4vw,5.25rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-graphite dark:text-ink">
-                {t('title')}
+                {hero.title}
               </h1>
-              <p className="mt-7 max-w-[56ch] text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.7] text-machine dark:text-fog">{t('body')}</p>
+              <p className="mt-7 max-w-[56ch] text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.7] text-machine dark:text-fog">{hero.body}</p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href="/contact" className="home-hero__primary inline-flex min-h-[52px] items-center justify-center rounded bg-blueprint px-7 font-bold text-pure">
                   {t('quote')}
@@ -80,8 +94,8 @@ export default async function HomePage({
       {/* Capabilities */}
       <section aria-label="Capabilities" className="border-y border-line bg-pure dark:border-white/10 dark:bg-surface">
         <div className="mx-auto grid max-w-shell gap-4 px-[clamp(20px,4.5vw,72px)] py-8 sm:grid-cols-3">
-          {[c('custom'), c('av'), c('accessible')].map((label, i) => (
-            <p key={label} className={`reveal reveal-up reveal-d${i + 1} border-s-2 border-softec ps-4 text-lg font-semibold`}>
+          {capabilities.map(({ key, label }, i) => (
+            <p key={key} className={`reveal reveal-up reveal-d${i + 1} border-s-2 border-softec ps-4 text-lg font-semibold`}>
               {label}
             </p>
           ))}

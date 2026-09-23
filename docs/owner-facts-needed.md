@@ -10,8 +10,9 @@ _Last updated: Stage 7 — trust and operational info._
 
 The quote form is live. Until step A or B below is done it opens WhatsApp with
 the visitor's details (nothing is lost). The owner admin area (`/admin` — review
-quote requests, edit products) needs step B and is built and tested; it shows
-"not yet enabled" until then.
+quote requests, edit products and their photos, edit the homepage's main
+text) needs step B and is built and tested; it shows "not yet enabled" until
+then.
 
 **A. Email every request to visionsoftec5@gmail.com (5 minutes).**
 1. Sign in to visionsoftec5@gmail.com and open https://myaccount.google.com/security
@@ -28,7 +29,7 @@ quote requests, edit products) needs step B and is built and tested; it shows
    (eu-central-1)** region, in a Softec-owned organisation (not another
    company's).
 2. Apply the database migrations: in the Supabase dashboard's **SQL Editor**,
-   run each file in `web/supabase/migrations/` in order (0001 through 0005),
+   run each file in `web/supabase/migrations/` in order (0001 through 0006),
    or give the developer access to run them for you.
 3. In Vercel → project **softecvision** → Settings → Environment Variables, add
    `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and
