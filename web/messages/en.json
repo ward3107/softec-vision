@@ -48,6 +48,9 @@
   "catalog": {
     "title": "Product Families",
     "body": "Choose a family to find a station suited to your working environment.",
+    "modelCount": "{count, plural, one {# model} other {# models}}",
+    "exploreViewAll": "View the whole family",
+    "exploreEmpty": "We haven't added models in this family to the site yet — tell us what you need and we'll get back to you.",
     "all": "All",
     "allDescription": "Explore models across every product family.",
     "featured": "Selected Products",

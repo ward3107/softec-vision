@@ -6,6 +6,7 @@ import { filterProducts, getVisibleCategories, localized } from '@/lib/catalog';
 import { FAQ_COUNT, resolveText } from '@/lib/content/blocks';
 import { loadContentBlocks } from '@/lib/content/source';
 import JsonLd, { faqSchema } from '@/components/JsonLd';
+import CategoryExplorer, { type ExplorerCategory, type ExplorerItem } from '@/components/catalog/CategoryExplorer';
 import ProductCard from '@/components/catalog/ProductCard';
 import TypedText from '@/components/TypedText';
 import SectionIndicator from '@/components/SectionIndicator';
@@ -67,7 +68,32 @@ export default async function HomePage({
   const allProducts = await filterProducts({ lang: l, cat: 'all' });
   const featured = allProducts.slice(0, 3);
   const categories = await getVisibleCategories(l);
-  const categoryImage = (key: string) => allProducts.find((p) => p.cat === key)?.image;
+  // One tile per family. Families with subcategories open onto them (those that
+  // have products), the rest onto their products.
+  const explorer: ExplorerCategory[] = categories.map((category) => {
+    const inFamily = allProducts.filter((p) => p.cat === category.key);
+    const items: ExplorerItem[] = category.subs?.length
+      ? category.subs.flatMap((s) => {
+          const inSub = inFamily.filter((p) => p.sub === s.key);
+          if (inSub.length === 0) return [];
+          return [{
+            key: s.key,
+            label: localized(s.label, l),
+            meta: tcat('modelCount', { count: inSub.length }),
+            image: inSub[0].image,
+            alt: '',
+            href: `/catalog/${category.key}?sub=${s.key}`
+          }];
+        })
+      : inFamily.map((p) => ({ key: p.code, label: localized(p.name, l), meta: p.code, image: p.image, alt: '', href: `/product/${p.code}` }));
+    return {
+      key: category.key,
+      label: localized(category.label, l),
+      description: localized(category.description, l),
+      image: inFamily[0]?.image,
+      items
+    };
+  });
   const stages = [
     { n: '01', t: tcustom('s1t'), b: tcustom('s1b') },
     { n: '02', t: tcustom('s2t'), b: tcustom('s2b') },
@@ -138,7 +164,7 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* Product families — browse all categories and subcategories from home */}
+      {/* Product families — a tile per family; opening one shows its subcategories (or products) as pictures */}
       <section id="families" aria-labelledby="families-title" className="bg-pure dark:bg-surface">
         <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
           <div className="reveal reveal-left">
@@ -147,53 +173,12 @@ export default async function HomePage({
             </h2>
             <p className="mt-2 max-w-2xl text-machine dark:text-fog">{tcat('body')}</p>
           </div>
-          <ul className="reveal reveal-up mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {categories.map((category) => {
-              const image = categoryImage(category.key);
-              return (
-                <li
-                  key={category.key}
-                  className="flex h-full flex-col overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface"
-                >
-                  <Link href={`/catalog/${category.key}`} className="group block" aria-label={localized(category.label, l)}>
-                    <div className="aspect-[16/10] overflow-hidden border-b border-line bg-paper dark:border-white/10 dark:bg-canvas">
-                      {image ? (
-                        <Image
-                          src={image}
-                          alt=""
-                          width={520}
-                          height={325}
-                          quality={90}
-                          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
-                        />
-                      ) : null}
-                    </div>
-                  </Link>
-                  <div className="flex flex-1 flex-col gap-2 p-5">
-                    <Link href={`/catalog/${category.key}`} className="text-lg font-bold hover:text-blueprint dark:hover:text-skyline">
-                      {localized(category.label, l)}
-                    </Link>
-                    <p className="text-sm text-machine dark:text-fog">{localized(category.description, l)}</p>
-                    {category.subs?.length ? (
-                      <ul className="mt-auto flex flex-wrap gap-2 pt-2">
-                        {category.subs.map((s) => (
-                          <li key={s.key}>
-                            <Link
-                              href={`/catalog/${category.key}?sub=${s.key}`}
-                              className="inline-flex rounded border border-line px-2.5 py-1 text-xs font-semibold hover:border-blueprint hover:text-blueprint dark:border-white/10 dark:hover:border-skyline dark:hover:text-skyline"
-                            >
-                              {localized(s.label, l)}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="reveal reveal-up">
+            <CategoryExplorer
+              categories={explorer}
+              labels={{ viewAll: tcat('exploreViewAll'), empty: tcat('exploreEmpty'), contact: t('quote') }}
+            />
+          </div>
         </div>
       </section>
 
