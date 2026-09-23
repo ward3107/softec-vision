@@ -1,10 +1,33 @@
-# Facts needed from Softec Vision
+# Facts and setup needed from Softec Vision
 
 The website publishes only facts the business has confirmed. Anything below is
 **not shown** on the site until the owner supplies it. Fill in the blanks (or
 reply with the values) and they will be added.
 
-_Last updated: Stage 1 — product information._
+_Last updated: Stage 2 — quote requests._
+
+## 0. Setup steps (turn on online quote requests)
+
+The quote form is live. Until one of the steps below is done it opens WhatsApp
+with the visitor's details (nothing is lost). After either step, requests are
+submitted on the site, with an optional photo/PDF attachment.
+
+**A. Email every request to visionsoftec5@gmail.com (5 minutes).**
+1. Sign in to visionsoftec5@gmail.com and open https://myaccount.google.com/security
+   — turn on **2-Step Verification**.
+2. Open https://myaccount.google.com/apppasswords, create an app password named
+   "Softec website", and copy the 16-character code.
+3. In Vercel → project **softecvision** → Settings → Environment Variables, add
+   `GMAIL_APP_PASSWORD` = that code (Production and Preview), then redeploy.
+   Do not send the code by chat or email.
+
+**B. Also save requests in a database (Supabase, EU region).** Needed for the
+owner admin area (reviewing requests, editing products). Create a free Supabase
+project named "softec-vision" in the **Frankfurt (eu-central-1)** region — in a
+Softec-owned organisation, not in another company's — and either give the
+developer access to it or add `NEXT_PUBLIC_SUPABASE_URL`,
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` in Vercel.
+The database migrations are ready and tested.
 
 ## 1. Product specifications
 

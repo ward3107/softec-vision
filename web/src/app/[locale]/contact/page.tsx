@@ -4,7 +4,8 @@ import type { AppLocale } from '@/i18n/routing';
 import { buildInquiryUrl, filterProducts, localized } from '@/lib/catalog';
 import { WA_NUMBER } from '@/lib/catalog/seed';
 import { pageMetadata } from '@/lib/seo';
-import ContactForm from '@/components/contact/ContactForm';
+import { getInquiryConfig } from '@/lib/inquiry/config';
+import QuoteForm from '@/components/contact/QuoteForm';
 
 const PHONE = '03-6968777';
 const EMAIL = 'Alon@softec.co.il';
@@ -21,15 +22,14 @@ export async function generateMetadata({
 }
 
 export default async function ContactPage({
-  params,
-  searchParams
+  params
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ product?: string }>;
 }) {
   const { locale } = await params;
-  const { product } = await searchParams;
   setRequestLocale(locale);
+  // Server-only check; the browser learns only whether online submission is on.
+  const onlineEnabled = getInquiryConfig().onlineEnabled;
   const l = locale as AppLocale;
   const t = await getTranslations('contact');
   const tf = await getTranslations('form');
@@ -49,8 +49,8 @@ export default async function ContactPage({
         {/* Quote request form */}
         <div>
           <h2 className="text-lg font-bold">{tf('title')}</h2>
-          <p className="mt-1 mb-5 text-sm text-machine">{tf('intro')}</p>
-          <ContactForm waNumber={WA_NUMBER} products={products} defaultProduct={product} />
+          <p className="mb-5 mt-1 text-sm text-machine">{tf(onlineEnabled ? 'intro' : 'introOffline')}</p>
+          <QuoteForm waNumber={WA_NUMBER} products={products} onlineEnabled={onlineEnabled} />
         </div>
 
         {/* Contact details */}
