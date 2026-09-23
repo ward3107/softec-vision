@@ -79,7 +79,19 @@
     "education": "Lecture halls and classrooms",
     "display": "Conference and exhibition spaces",
     "control": "Control and operations rooms",
-    "industry": "Industrial and testing facilities"
+    "industry": "Industrial and testing facilities",
+    "capabilitiesTitle": "Capabilities",
+    "howTitle": "How We Build",
+    "howBody": "Every station starts as steel — cut, bent and welded to size, then finished with a durable powder coat — before its displays, controls and equipment are fitted. Cable runs stay inside the body, from a concealed access point to a clean work surface.",
+    "avTitle": "AV Integration",
+    "avBody": "Displays, control panels, microphones and computing equipment are built into the station itself, with cable routing and access points designed in from the start rather than added on site.",
+    "accessTitle": "Accessibility",
+    "accessBody": "Where a project calls for it, we design stations at an accessible working height, with controls, microphone and connections placed within reach.",
+    "whyTitle": "Why Softec Vision",
+    "why1": "We design and manufacture every station ourselves — from steel fabrication to full AV integration.",
+    "why2": "Every station is engineered around your room, equipment and workflow.",
+    "why3": "Accessibility built into the design, not added afterwards.",
+    "why4": "Concealed cable management and an industrial-grade finish on every unit."
   },
   "process": {
     "eyebrow": "Our Process",
@@ -104,7 +116,15 @@
     "s2t": "Engineering",
     "s2b": "We translate the need into technical and ergonomic requirements, then engineer and manufacture the station around the project.",
     "s3t": "Result",
-    "s3b": "An integrated, durable and accessible working environment, installed on site and ready for daily use."
+    "s3b": "An integrated, durable and accessible working environment, installed on site and ready for daily use.",
+    "customizeTitle": "What Can Be Customized",
+    "c1": "Displays and AV equipment",
+    "c2": "Dimensions and working height",
+    "c3": "Finish and colour",
+    "c4": "Cable management and access points",
+    "c5": "Mobility — fixed base or locking casters",
+    "c6": "Lockable storage",
+    "c7": "Accessibility requirements"
   },
   "contact": {
     "eyebrow": "Contact",
