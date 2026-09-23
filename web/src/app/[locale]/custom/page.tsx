@@ -35,7 +35,7 @@ export default async function CustomPage({
       <section className="bg-graphite text-paper">
         <div className="mx-auto grid max-w-shell gap-10 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,6vw,88px)] lg:grid-cols-2">
           <div className="reveal reveal-left">
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#7CC4EE]">{t('eyebrow')}</p>
             <h1 className="max-w-[19ch] text-[clamp(2rem,3.5vw,3rem)] font-extrabold tracking-tight text-pure">
               {t('title')}
             </h1>

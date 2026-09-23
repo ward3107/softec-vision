@@ -2,7 +2,6 @@ const PREFIX = 'Made with ';
 const HEART = '❤️';
 const CONNECTOR = ' by ';
 const NAME = 'Was';
-const SIGNATURE = `${PREFIX}${HEART}${CONNECTOR}${NAME}`;
 
 function SignatureCharacters({ text, startIndex }: { text: string; startIndex: number }) {
   return [...text].map((character, index) => (
@@ -18,7 +17,11 @@ function SignatureCharacters({ text, startIndex }: { text: string; startIndex: n
 
 export default function CreatorSignature() {
   return (
-    <p className="creator-signature" aria-label={SIGNATURE} dir="ltr">
+    // `aria-label` isn't valid on a <p>, and a real link must never sit inside
+    // an aria-hidden ancestor (still focusable, but invisible to assistive
+    // tech). The animated glyphs stay decorative and hidden; the link carries
+    // its own name and is never wrapped by aria-hidden.
+    <p className="creator-signature" dir="ltr">
       <span aria-hidden="true">
         <SignatureCharacters text={PREFIX} startIndex={0} />
         <span
@@ -28,16 +31,18 @@ export default function CreatorSignature() {
           {HEART}
         </span>
         <SignatureCharacters text={CONNECTOR} startIndex={PREFIX.length + 1} />
-        <a
-          href="https://waseemp.vercel.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="creator-signature__link"
-          aria-label="Was — open creator website"
-        >
-          <SignatureCharacters text={NAME} startIndex={PREFIX.length + CONNECTOR.length + 1} />
-        </a>
       </span>
+      <a
+        href="https://waseemp.vercel.app/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="creator-signature__link"
+        aria-label="Was — open creator website"
+      >
+        <span aria-hidden="true">
+          <SignatureCharacters text={NAME} startIndex={PREFIX.length + CONNECTOR.length + 1} />
+        </span>
+      </a>
       <span className="creator-signature__cursor" aria-hidden="true" />
     </p>
   );

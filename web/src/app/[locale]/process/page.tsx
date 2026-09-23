@@ -31,7 +31,7 @@ export default async function ProcessPage({
 
   return (
     <section className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)]">
-      <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
+      <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blueprint">{t('eyebrow')}</p>
       <h1 className="max-w-2xl text-[clamp(2rem,3.5vw,3rem)] font-extrabold tracking-tight">{t('title')}</h1>
       <p className="mt-3 max-w-2xl text-lg text-machine">{t('body')}</p>
 

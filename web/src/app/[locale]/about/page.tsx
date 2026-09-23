@@ -34,7 +34,7 @@ export default async function AboutPage({
   return (
     <>
       <section className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)]">
-        <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-softec">{t('eyebrow')}</p>
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blueprint">{t('eyebrow')}</p>
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-24">
           <div className="reveal reveal-left">
             <h1>

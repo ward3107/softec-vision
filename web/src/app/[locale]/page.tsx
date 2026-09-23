@@ -111,7 +111,7 @@ export default async function HomePage({
       <section aria-labelledby="custom-title" className="bg-graphite text-paper">
         <div className="mx-auto grid max-w-shell gap-10 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,6vw,88px)] lg:grid-cols-2">
           <div className="reveal reveal-left">
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-softec">{tcustom('eyebrow')}</p>
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#7CC4EE]">{tcustom('eyebrow')}</p>
             <h2 id="custom-title" className="max-w-[19ch] text-[clamp(1.9rem,3.2vw,2.8rem)] font-extrabold tracking-tight text-pure">
               {tcustom('title')}
             </h2>

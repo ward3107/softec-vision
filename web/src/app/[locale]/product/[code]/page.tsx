@@ -170,7 +170,7 @@ export default async function ProductPage({
               href={buildInquiryUrl(product, l)}
               target="_blank"
               rel="noopener"
-              className="inline-flex min-h-[48px] items-center rounded bg-[#25D366] px-5 font-bold text-white hover:brightness-95"
+              className="inline-flex min-h-[48px] items-center rounded bg-[#15803d] px-5 font-bold text-white hover:bg-[#166534]"
             >
               {t('inquiry')}
             </a>
