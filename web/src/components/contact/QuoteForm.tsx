@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { useConsent } from '@/components/consent/ConsentProvider';
-import { ACCEPT_ATTRIBUTE, ACCEPTED_TYPES, MAX_ATTACHMENT_BYTES } from '@/lib/inquiry/attachment';
 import { MAX_REQUIREMENTS, PROJECT_TYPES, validateInquiry, type InquiryErrors } from '@/lib/inquiry/schema';
 
 type ProductOption = { code: string; name: string };
@@ -19,11 +18,10 @@ const EMPTY = {
   country: '',
   projectType: '',
   product: '',
-  roomDimensions: '',
   requirements: ''
 };
 type Values = typeof EMPTY;
-type Field = keyof Values | 'consent' | 'attachment';
+type Field = keyof Values | 'consent';
 
 const FIELD_ORDER: Field[] = [
   'name',
@@ -33,12 +31,9 @@ const FIELD_ORDER: Field[] = [
   'country',
   'projectType',
   'product',
-  'roomDimensions',
   'requirements',
-  'attachment',
   'consent'
 ];
-const EXTENSIONS = /\.(jpe?g|png|webp|heic|heif|pdf)$/i;
 /** White text on this green passes WCAG AA (≈5:1); WhatsApp's own #25D366 does not. */
 const WHATSAPP_BUTTON = 'bg-[#15803d] text-white hover:bg-[#166534]';
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -67,7 +62,6 @@ export default function QuoteForm({
 
   const [values, setValues] = useState<Values>({ ...EMPTY, product: known(defaultProduct) ? defaultProduct! : '' });
   const [consent, setConsent] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<InquiryErrors>({});
   const [status, setStatus] = useState<Status>('idle');
   const [serverError, setServerError] = useState<ServerError | null>(null);
@@ -131,7 +125,6 @@ export default function QuoteForm({
       [t('country'), values.country],
       [t('projectType'), values.projectType ? t(`projectTypes.${values.projectType}`) : ''],
       [t('product'), values.product ? `${productName} (${values.product})` : ''],
-      [t('roomDimensions'), values.roomDimensions],
       [t('requirements'), values.requirements]
     ];
     const lines = [t('whatsappIntro'), '', ...pairs.filter(([, v]) => v.trim()).map(([k, v]) => `${k}: ${v.trim()}`)];
@@ -140,12 +133,7 @@ export default function QuoteForm({
 
   function validate(): InquiryErrors {
     const result = validateInquiry({ ...values, consent, locale });
-    const found: InquiryErrors = result.ok ? {} : { ...result.errors };
-    if (onlineEnabled && file) {
-      if (file.size > MAX_ATTACHMENT_BYTES) found.attachment = 'tooLarge';
-      else if (!(file.type in ACCEPTED_TYPES) && !EXTENSIONS.test(file.name)) found.attachment = 'badType';
-    }
-    return found;
+    return result.ok ? {} : { ...result.errors };
   }
 
   async function post(retry = true): Promise<void> {
@@ -153,7 +141,6 @@ export default function QuoteForm({
     const fd = new FormData(formRef.current!);
     fd.set('locale', locale);
     fd.set('token', token ?? '');
-    if (!file) fd.delete('attachment');
 
     let response: Response;
     try {
@@ -217,7 +204,6 @@ export default function QuoteForm({
   function reset() {
     setValues({ ...EMPTY });
     setConsent(false);
-    setFile(null);
     setErrors({});
     setAttempt(0);
     setReference(undefined);
@@ -226,8 +212,7 @@ export default function QuoteForm({
     tokenRef.current = null;
   }
 
-  const label = (field: Field) =>
-    field === 'attachment' ? t('attachment') : field === 'consent' ? t('consentShort') : t(field);
+  const label = (field: Field) => (field === 'consent' ? t('consentShort') : t(field));
   const errorId = (field: Field) => `qf-${field}-error`;
   const describedBy = (field: Field, hint?: boolean) =>
     [hint ? `qf-${field}-hint` : '', errors[field] ? errorId(field) : ''].filter(Boolean).join(' ') || undefined;
@@ -380,20 +365,6 @@ export default function QuoteForm({
             ))}
           </select>
         )}
-        {row(
-          'roomDimensions',
-          <input
-            id="qf-roomDimensions"
-            name="roomDimensions"
-            className={input}
-            value={values.roomDimensions}
-            onChange={set('roomDimensions')}
-            maxLength={200}
-            aria-invalid={Boolean(errors.roomDimensions)}
-            aria-describedby={describedBy('roomDimensions', true)}
-          />,
-          { hint: t('roomDimensionsHint') }
-        )}
       </div>
 
       {row(
@@ -411,25 +382,6 @@ export default function QuoteForm({
           aria-describedby={describedBy('requirements', true)}
         />,
         { required: true, hint: t('requirementsHint') }
-      )}
-
-      {onlineEnabled ? (
-        row(
-          'attachment',
-          <input
-            id="qf-attachment"
-            name="attachment"
-            type="file"
-            accept={ACCEPT_ATTRIBUTE}
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            aria-invalid={Boolean(errors.attachment)}
-            aria-describedby={describedBy('attachment', true)}
-            className="mt-1 block w-full text-sm file:me-3 file:min-h-[44px] file:rounded file:border file:border-line file:bg-pure file:px-4 file:font-semibold file:text-graphite dark:file:border-white/10 dark:file:bg-surface dark:file:text-ink"
-          />,
-          { hint: t('attachmentHint') }
-        )
-      ) : (
-        <p className="text-sm text-machine dark:text-fog">{t('attachmentOffline')}</p>
       )}
 
       {/* Honeypot: hidden from people and assistive technology; bots fill it. */}

@@ -26,7 +26,7 @@ import '../globals.css';
 const BOOT_SCRIPT = `(function(){try{
   var d=document.documentElement;d.classList.add('js');
   var theme=localStorage.getItem('softec-theme');
-  if(theme==='dark'||(theme!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){
+  if(theme==='dark'){
     d.classList.add('dark');
   }
   if(localStorage.getItem('softec-brand-intro-seen')==='1'){d.classList.add('brand-splash-seen');}

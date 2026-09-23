@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 const BOOT_SCRIPT = `(function(){try{
   var theme=localStorage.getItem('softec-theme');
-  if(theme==='dark'||(theme!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){
+  if(theme==='dark'){
     document.documentElement.classList.add('dark');
   }
 }catch(e){}})();`;

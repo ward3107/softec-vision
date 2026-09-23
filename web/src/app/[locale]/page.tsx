@@ -6,6 +6,7 @@ import { filterProducts } from '@/lib/catalog';
 import { resolveText } from '@/lib/content/blocks';
 import { loadContentBlocks } from '@/lib/content/source';
 import ProductCard from '@/components/catalog/ProductCard';
+import TypedText from '@/components/TypedText';
 
 export default async function HomePage({
   params
@@ -51,7 +52,10 @@ export default async function HomePage({
               <h1 className="max-w-[15ch] text-[clamp(2.7rem,5.4vw,5.25rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-graphite dark:text-ink">
                 {hero.title}
               </h1>
-              <p className="mt-7 max-w-[56ch] text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.7] text-machine dark:text-fog">{hero.body}</p>
+              <TypedText
+                text={hero.body}
+                className="mt-7 max-w-[56ch] text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.7] text-machine dark:text-fog"
+              />
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href="/contact" className="home-hero__primary inline-flex min-h-[52px] items-center justify-center rounded bg-blueprint px-7 font-bold text-pure">
                   {t('quote')}

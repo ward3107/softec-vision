@@ -34,8 +34,9 @@ export default function ProductMediaSwitch({
         <Image
           src={image}
           alt={alt}
-          width={900}
-          height={675}
+          width={1200}
+          height={900}
+          quality={92}
           priority
           sizes="(min-width: 1024px) 50vw, 100vw"
           className="h-full w-full object-contain"
