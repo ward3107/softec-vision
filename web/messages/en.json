@@ -82,7 +82,8 @@
     "next": "Next image",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
-    "zoomHint": "Click or scroll to zoom, drag to pan"
+    "zoomHint": "Click or scroll to zoom, drag to pan",
+    "zoomHintTouch": "Pinch to zoom, drag to move"
   },
   "compare": {
     "title": "Compare Products",

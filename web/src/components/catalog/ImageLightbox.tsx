@@ -11,6 +11,8 @@ export type LightboxLabels = {
   zoomIn: string;
   zoomOut: string;
   hint: string;
+  /** Shown instead of `hint` on touch devices, where there are no zoom buttons. */
+  hintTouch: string;
 };
 
 const MIN = 1;
@@ -22,10 +24,12 @@ const ctrl =
 
 /**
  * Full-screen product-photo viewer with zoom and pan: the image fits the
- * screen at 1×, and the +/− buttons, the mouse wheel, or a click magnify it up
- * to 4× so fine detail can be inspected; drag to pan when zoomed. A plain <img>
- * shows the original file (no resized copy). Escape closes; arrows page through
- * the set when not zoomed.
+ * screen at 1× and magnifies up to 4× so fine detail can be inspected. On a
+ * mouse it zooms with the +/− buttons, the wheel or a click; on a touch screen
+ * with a two-finger pinch (the buttons are hidden there) or a tap. Drag — or,
+ * mid-pinch, the fingers' midpoint — pans when zoomed. A plain <img> shows the
+ * original file (no resized copy). Escape closes; arrows page through the set
+ * when not zoomed.
  */
 export default function ImageLightbox({
   images,
@@ -44,7 +48,10 @@ export default function ImageLightbox({
   const [scale, setScale] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const drag = useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
-  // Survives pointerup so the click the browser fires right after a drag doesn't also zoom.
+  // Every pointer currently on the image, so two of them can drive a pinch.
+  const pointers = useRef<Map<number, { x: number; y: number }>>(new Map());
+  const pinch = useRef<{ dist: number; scale: number; ox: number; oy: number; mx: number; my: number } | null>(null);
+  // Survives pointerup so the click the browser fires right after a drag/pinch doesn't also zoom.
   const dragged = useRef(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const restoreRef = useRef<Element | null>(null);
@@ -113,21 +120,52 @@ export default function ImageLightbox({
 
   const onWheel = (e: React.WheelEvent) => zoomTo(scale + (e.deltaY < 0 ? STEP : -STEP));
 
+  const twoPoints = () => [...pointers.current.values()] as [{ x: number; y: number }, { x: number; y: number }];
+  const gap = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.hypot(a.x - b.x, a.y - b.y);
+
   const onPointerDown = (e: React.PointerEvent) => {
     dragged.current = false;
-    if (scale <= 1) return;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    drag.current = { x: e.clientX, y: e.clientY, ox: pan.x, oy: pan.y };
+    try {
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    } catch {
+      // A stray pointerId (e.g. the element just re-rendered) — capture is a nicety, not required.
+    }
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.current.size === 2) {
+      // Two fingers down → start a pinch (works from 1× too, so fingers alone zoom in).
+      const [a, b] = twoPoints();
+      pinch.current = { dist: gap(a, b), scale, ox: pan.x, oy: pan.y, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
+      drag.current = null;
+    } else if (pointers.current.size === 1 && scale > 1) {
+      drag.current = { x: e.clientX, y: e.clientY, ox: pan.x, oy: pan.y };
+    }
   };
   const onPointerMove = (e: React.PointerEvent) => {
+    if (!pointers.current.has(e.pointerId)) return;
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pinch.current && pointers.current.size >= 2) {
+      const [a, b] = twoPoints();
+      const next = Math.min(MAX, Math.max(MIN, (pinch.current.scale * gap(a, b)) / pinch.current.dist));
+      // Follow the fingers' midpoint so the pinch also nudges the pan.
+      const dmx = (a.x + b.x) / 2 - pinch.current.mx;
+      const dmy = (a.y + b.y) / 2 - pinch.current.my;
+      dragged.current = true;
+      setScale(next);
+      setPan(clampPan(pinch.current.ox + dmx, pinch.current.oy + dmy, next));
+      return;
+    }
     if (!drag.current) return;
     const dx = e.clientX - drag.current.x;
     const dy = e.clientY - drag.current.y;
     if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragged.current = true;
     setPan(clampPan(drag.current.ox + dx, drag.current.oy + dy, scale));
   };
-  const onPointerUp = () => {
-    drag.current = null;
+  const onPointerUp = (e: React.PointerEvent) => {
+    pointers.current.delete(e.pointerId);
+    if (pointers.current.size < 2) pinch.current = null;
+    // Lifting one finger of a pinch → keep panning smoothly with the one that remains.
+    const [only] = twoPoints();
+    drag.current = pointers.current.size === 1 && scale > 1 && only ? { x: only.x, y: only.y, ox: pan.x, oy: pan.y } : null;
   };
   const onImageClick = () => {
     if (dragged.current) {
@@ -159,7 +197,7 @@ export default function ImageLightbox({
         }}
         disabled={scale >= MAX}
         aria-label={labels.zoomIn}
-        className={`${ctrl} start-4 top-4 text-lg`}
+        className={`${ctrl} start-4 top-4 text-lg [@media(pointer:coarse)]:hidden`}
       >
         +
       </button>
@@ -171,7 +209,7 @@ export default function ImageLightbox({
         }}
         disabled={scale <= MIN}
         aria-label={labels.zoomOut}
-        className={`${ctrl} start-4 top-[4.5rem] text-lg`}
+        className={`${ctrl} start-4 top-[4.5rem] text-lg [@media(pointer:coarse)]:hidden`}
       >
         −
       </button>
@@ -212,14 +250,22 @@ export default function ImageLightbox({
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
         draggable={false}
         style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${scale})` }}
-        className={`max-h-[92vh] max-w-[94vw] touch-none object-contain transition-transform duration-150 ${
-          scale === 1 ? 'cursor-zoom-in' : drag.current ? 'cursor-grabbing' : 'cursor-grab'
-        }`}
+        className={`max-h-[92vh] max-w-[94vw] touch-none object-contain ${
+          drag.current || pinch.current ? '' : 'transition-transform duration-150'
+        } ${scale === 1 ? 'cursor-zoom-in' : drag.current ? 'cursor-grabbing' : 'cursor-grab'}`}
       />
       <p className="pointer-events-none absolute bottom-4 start-0 end-0 text-center text-xs text-white/70">
-        {scale > 1 ? `${Math.round(scale * 100)}%` : labels.hint}
+        {scale > 1 ? (
+          `${Math.round(scale * 100)}%`
+        ) : (
+          <>
+            <span className="[@media(pointer:coarse)]:hidden">{labels.hint}</span>
+            <span className="hidden [@media(pointer:coarse)]:inline">{labels.hintTouch}</span>
+          </>
+        )}
       </p>
     </div>,
     document.body
