@@ -5,6 +5,7 @@ import { buildInquiryUrl, filterProducts, localized } from '@/lib/catalog';
 import { WA_NUMBER } from '@/lib/catalog/seed';
 import { pageMetadata } from '@/lib/seo';
 import { getInquiryConfig } from '@/lib/inquiry/config';
+import ContactWhatsAppLink from '@/components/contact/ContactWhatsAppLink';
 import QuoteForm from '@/components/contact/QuoteForm';
 
 const PHONE = '03-6968777';
@@ -76,9 +77,7 @@ export default async function ContactPage({
             <div className="flex justify-between gap-4">
               <dt className="text-machine">WhatsApp</dt>
               <dd>
-                <a href={whatsapp} target="_blank" rel="noopener" className="font-semibold text-blueprint" dir="ltr">
-                  +972-54-474-2520
-                </a>
+                <ContactWhatsAppLink href={whatsapp}>+972-54-474-2520</ContactWhatsAppLink>
               </dd>
             </div>
           </dl>

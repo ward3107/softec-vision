@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode
 } from 'react';
+import { useConsent } from '@/components/consent/ConsentProvider';
 
 export const COMPARE_MAX = 3;
 const STORAGE_KEY = 'softec-compare';
@@ -24,6 +25,7 @@ const CompareContext = createContext<CompareContextValue | null>(null);
 
 export function CompareProvider({ children }: { children: ReactNode }) {
   const [codes, setCodes] = useState<string[]>([]);
+  const { track } = useConsent();
 
   // Restore selection (per-browser convenience; tolerate blocked storage).
   useEffect(() => {
@@ -43,15 +45,17 @@ export function CompareProvider({ children }: { children: ReactNode }) {
     }
   }, [codes]);
 
-  const toggle = useCallback((code: string) => {
-    setCodes((prev) =>
-      prev.includes(code)
-        ? prev.filter((c) => c !== code)
-        : prev.length >= COMPARE_MAX
-          ? prev
-          : [...prev, code]
-    );
-  }, []);
+  const toggle = useCallback(
+    (code: string) => {
+      setCodes((prev) => {
+        if (prev.includes(code)) return prev.filter((c) => c !== code);
+        if (prev.length >= COMPARE_MAX) return prev;
+        track('comparison_used', { product: code });
+        return [...prev, code];
+      });
+    },
+    [track]
+  );
 
   const clear = useCallback(() => setCodes([]), []);
   const has = useCallback((code: string) => codes.includes(code), [codes]);

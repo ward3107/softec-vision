@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import BrandLogo from './BrandLogo';
+import CookiePreferencesLink from './consent/CookiePreferencesLink';
 import CreatorSignature from './CreatorSignature';
 
 export default async function Footer() {
@@ -28,6 +29,7 @@ export default async function Footer() {
                 {link.label}
               </Link>
             ))}
+            <CookiePreferencesLink label={t('cookiePreferences')} />
           </nav>
         </div>
         <div className="mt-7 border-t border-white/15 pt-5">

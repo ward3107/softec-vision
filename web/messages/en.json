@@ -244,6 +244,13 @@
     "rights": "© 2026 All rights reserved",
     "privacy": "Privacy Policy",
     "accessibility": "Accessibility Statement",
-    "terms": "Terms of Use"
+    "terms": "Terms of Use",
+    "cookiePreferences": "Cookie settings"
+  },
+  "consentBanner": {
+    "title": "Cookie and analytics preferences",
+    "message": "We'd like to use optional analytics cookies to understand how visitors use this site. They load only if you agree — see our <link>Privacy Policy</link>.",
+    "accept": "Accept analytics",
+    "reject": "Continue without analytics"
   }
 }

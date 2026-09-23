@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import AccessibilityWidget from '@/components/a11y/AccessibilityWidget';
+import { useConsent } from '@/components/consent/ConsentProvider';
 
 /**
  * Fixed controls split across the physical screen edges: WhatsApp and the
@@ -11,6 +12,7 @@ import AccessibilityWidget from '@/components/a11y/AccessibilityWidget';
  */
 export default function FloatingDock({ waNumber }: { waNumber: string }) {
   const t = useTranslations('dock');
+  const { track } = useConsent();
   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export default function FloatingDock({ waNumber }: { waNumber: string }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={t('whatsapp')}
+          onClick={() => track('whatsapp_clicked', { source: 'dock' })}
           className="flex h-12 w-12 items-center justify-center rounded-full bg-[#15803d] text-white shadow-lg ring-1 ring-black/5 hover:bg-[#166534]"
         >
           <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

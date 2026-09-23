@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
+import { useConsent } from '@/components/consent/ConsentProvider';
 import { ACCEPT_ATTRIBUTE, ACCEPTED_TYPES, MAX_ATTACHMENT_BYTES } from '@/lib/inquiry/attachment';
 import { MAX_REQUIREMENTS, PROJECT_TYPES, validateInquiry, type InquiryErrors } from '@/lib/inquiry/schema';
 
@@ -61,6 +62,7 @@ export default function QuoteForm({
 }) {
   const t = useTranslations('form');
   const locale = useLocale() as 'he' | 'en';
+  const { track } = useConsent();
   const known = (code?: string | null) => Boolean(code && products.some((p) => p.code === code));
 
   const [values, setValues] = useState<Values>({ ...EMPTY, product: known(defaultProduct) ? defaultProduct! : '' });
@@ -76,6 +78,7 @@ export default function QuoteForm({
   const summaryRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const tokenRef = useRef<Promise<string | null> | null>(null);
+  const startedRef = useRef(false);
 
   // The page is pre-rendered, so read a ?product= preselection in the browser.
   useEffect(() => {
@@ -103,6 +106,15 @@ export default function QuoteForm({
     if (!onlineEnabled) return null;
     if (!tokenRef.current) tokenRef.current = fetchToken();
     return tokenRef.current;
+  };
+
+  /** Marks the form as started the first time it's touched — once per visit. */
+  const onFirstInteraction = () => {
+    if (!startedRef.current) {
+      startedRef.current = true;
+      track('quote_started');
+    }
+    void ensureToken();
   };
 
   const set = (key: keyof Values) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -161,6 +173,7 @@ export default function QuoteForm({
     if (response.ok && body.ok) {
       setReference(body.reference);
       setStatus('success');
+      track('quote_completed');
       return;
     }
     if ((response.status === 422 || response.status === 413) && body.errors) {
@@ -191,6 +204,7 @@ export default function QuoteForm({
     }
 
     if (!onlineEnabled) {
+      track('whatsapp_clicked', { source: 'quote_form_offline' });
       window.open(whatsappUrl(), '_blank', 'noopener');
       setStatus('whatsapp');
       return;
@@ -266,6 +280,7 @@ export default function QuoteForm({
             href={`https://wa.me/${waNumber}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track('whatsapp_clicked', { source: 'quote_form_success' })}
             className="inline-flex min-h-[44px] items-center rounded border border-line px-4 text-sm font-bold text-graphite hover:border-machine"
           >
             {t('whatsappLink')}
@@ -286,7 +301,7 @@ export default function QuoteForm({
     <form
       ref={formRef}
       onSubmit={onSubmit}
-      onFocusCapture={() => void ensureToken()}
+      onFocusCapture={onFirstInteraction}
       noValidate
       className="grid gap-5"
       aria-describedby="qf-required-note"
@@ -478,6 +493,7 @@ export default function QuoteForm({
             href={whatsappUrl()}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track('whatsapp_clicked', { source: 'quote_form_retry' })}
             className={`mt-3 inline-flex min-h-[44px] items-center rounded px-4 text-sm font-bold ${WHATSAPP_BUTTON}`}
           >
             {t('tryWhatsapp')}
@@ -506,6 +522,7 @@ export default function QuoteForm({
               href={`https://wa.me/${waNumber}`}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track('whatsapp_clicked', { source: 'quote_form_alt' })}
               className="font-semibold text-blueprint underline underline-offset-2"
             >
               {t('whatsappLink')}

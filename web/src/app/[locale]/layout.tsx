@@ -12,6 +12,8 @@ import RevealController from '@/components/motion/RevealController';
 import FloatingDock from '@/components/widgets/FloatingDock';
 import BrandSplash from '@/components/BrandSplash';
 import JsonLd, { organizationSchema } from '@/components/JsonLd';
+import ConsentBanner from '@/components/consent/ConsentBanner';
+import { ConsentProvider } from '@/components/consent/ConsentProvider';
 import { WA_NUMBER } from '@/lib/catalog/seed';
 import { SITE_URL, BRAND, OG_LOCALE, localeUrl, metaAlternates } from '@/lib/seo';
 import '../globals.css';
@@ -94,22 +96,25 @@ export default async function LocaleLayout({
         <JsonLd data={organizationSchema(locale as AppLocale)} />
         <BrandSplash />
         <NextIntlClientProvider messages={messages}>
-          <CompareProvider>
-            <a href="#main" className="skip-link">
-              {t('skip')}
-            </a>
-            {/* Colour-filter aids apply here; the dock and reading overlays sit outside. */}
-            <div id="a11y-content">
-              <Header />
-              <main id="main" tabIndex={-1}>
-                {children}
-              </main>
-              <Footer />
-            </div>
-            <CompareTray />
-            <FloatingDock waNumber={WA_NUMBER} />
-            <RevealController />
-          </CompareProvider>
+          <ConsentProvider gaId={process.env.NEXT_PUBLIC_GA4_ID ?? ''}>
+            <CompareProvider>
+              <a href="#main" className="skip-link">
+                {t('skip')}
+              </a>
+              {/* Colour-filter aids apply here; the dock and reading overlays sit outside. */}
+              <div id="a11y-content">
+                <Header />
+                <main id="main" tabIndex={-1}>
+                  {children}
+                </main>
+                <Footer />
+              </div>
+              <CompareTray />
+              <FloatingDock waNumber={WA_NUMBER} />
+              <RevealController />
+              <ConsentBanner />
+            </CompareProvider>
+          </ConsentProvider>
         </NextIntlClientProvider>
       </body>
     </html>

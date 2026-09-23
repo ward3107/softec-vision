@@ -17,6 +17,8 @@ import { CATEGORIES } from '@/lib/catalog/seed';
 import { pageMetadata, SITE_URL, BRAND } from '@/lib/seo';
 import CompareButton from '@/components/catalog/CompareButton';
 import ProductCard from '@/components/catalog/ProductCard';
+import ProductViewTracker from '@/components/catalog/ProductViewTracker';
+import ProductWhatsAppButton from '@/components/catalog/ProductWhatsAppButton';
 import ShareButton from '@/components/widgets/ShareButton';
 import JsonLd, { breadcrumbSchema } from '@/components/JsonLd';
 
@@ -93,6 +95,7 @@ export default async function ProductPage({
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(28px,4vw,56px)] pb-28">
       <JsonLd data={[productLd, breadcrumbLd]} />
+      <ProductViewTracker code={product.code} />
       <nav className="text-sm text-machine">
         <Link href="/catalog" className="hover:text-blueprint">
           {t('backToCatalog')}
@@ -166,14 +169,7 @@ export default async function ProductPage({
           <p className="mt-3 text-sm text-machine">{t('detailsOnRequest')}</p>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <a
-              href={buildInquiryUrl(product, l)}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex min-h-[48px] items-center rounded bg-[#15803d] px-5 font-bold text-white hover:bg-[#166534]"
-            >
-              {t('inquiry')}
-            </a>
+            <ProductWhatsAppButton href={buildInquiryUrl(product, l)} label={t('inquiry')} code={product.code} />
             <Link
               href={`/contact?product=${product.code}`}
               className="inline-flex min-h-[48px] items-center rounded bg-blueprint px-5 font-bold text-pure hover:bg-graphite"
