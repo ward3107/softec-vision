@@ -31,9 +31,10 @@ Screenshots show the Hebrew (RTL) site in light mode. Regenerate them with
   model), a 2–3 product comparison, related products. Text and specs are editable from the admin
   (Supabase); product photos too (see below). Falls back to the built-in catalog seed if Supabase
   isn't configured or is unreachable, so the site is never taken down by a database outage.
-- **Quote-request workflow** — a validated multi-field form with an optional file attachment,
-  spam protection and privacy consent, stored in Supabase and (optionally) emailed. WhatsApp
-  stays available as a fast secondary contact route everywhere.
+- **Contact workflow** — a validated contact form (name, email, phone, project type, product and
+  a free-text message), with spam protection and privacy consent, stored in Supabase and
+  (optionally) emailed. Photos and plans go over WhatsApp, which stays available as a fast
+  secondary contact route everywhere.
 - **Owner admin** (`/admin`, Supabase Auth + Row Level Security — see `supabase/migrations/`):
   - **Dashboard** (`/admin`) — at-a-glance overview: open inquiries, catalog completeness, how
     much site content has been customized, linking into each section below.
@@ -50,8 +51,8 @@ Screenshots show the Hebrew (RTL) site in light mode. Regenerate them with
   - **Site content** (`/admin/content`) — edit the homepage hero and capability labels,
     bilingually, without a code change. A field left blank falls back to the shipped copy — not a
     blank section on the live site.
-- **Light/dark theme**, a toggle in the header and admin, defaulting to the visitor's OS
-  preference and persisted per visitor.
+- **Light/dark theme**, a toggle in the header and admin, defaulting to light and persisting the
+  visitor's choice.
 - **Accessibility** — a floating widget (text size, contrast, motion, reading aids, and more) as
   a genuine aid on top of a site built to WCAG 2.2 AA; mobile nav, focus management, keyboard and
   reduced-motion support throughout.

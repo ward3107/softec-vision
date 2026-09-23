@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { useConsent } from '@/components/consent/ConsentProvider';
+import { countryOptions } from '@/lib/inquiry/countries';
 import { MAX_REQUIREMENTS, PROJECT_TYPES, validateInquiry, type InquiryErrors } from '@/lib/inquiry/schema';
 
 type ProductOption = { code: string; name: string };
@@ -58,6 +59,7 @@ export default function QuoteForm({
   const t = useTranslations('form');
   const locale = useLocale() as 'he' | 'en';
   const { track } = useConsent();
+  const countries = useMemo(() => countryOptions(locale), [locale]);
   const known = (code?: string | null) => Boolean(code && products.some((p) => p.code === code));
 
   const [values, setValues] = useState<Values>({ ...EMPTY, product: known(defaultProduct) ? defaultProduct! : '' });
@@ -340,7 +342,14 @@ export default function QuoteForm({
         )}
         {row(
           'country',
-          <input id="qf-country" name="country" className={input} value={values.country} onChange={set('country')} required autoComplete="country-name" maxLength={80} {...invalid('country')} />,
+          <select id="qf-country" name="country" className={input} value={values.country} onChange={set('country')} required autoComplete="country-name" {...invalid('country')}>
+            <option value="">{t('countryNone')}</option>
+            {countries.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
+          </select>,
           { required: true }
         )}
         {row(

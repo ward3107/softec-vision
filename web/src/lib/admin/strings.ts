@@ -9,6 +9,7 @@ export const S = {
   signingIn: 'נכנס…',
   signOut: 'יציאה',
   signedInAs: 'מחובר/ת כ-',
+  backToSite: 'חזרה לאתר',
   errors: {
     missing: 'נא להזין דוא"ל וסיסמה.',
     invalid: 'הדוא"ל או הסיסמה שגויים.',

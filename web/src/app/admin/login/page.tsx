@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getAdminContext, isSupabaseConfigured } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
@@ -26,6 +27,12 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
           </p>
         )}
       </div>
+      <Link
+        href="/he"
+        className="mt-6 justify-self-center text-sm font-semibold text-blueprint hover:underline dark:text-skyline"
+      >
+        ← {S.backToSite}
+      </Link>
     </main>
   );
 }

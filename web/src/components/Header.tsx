@@ -33,15 +33,8 @@ export default async function Header() {
         <div className="ms-auto flex flex-none items-center gap-3 lg:ms-0">
           <ThemeToggle toLightLabel={t('themeToLight')} toDarkLabel={t('themeToDark')} />
           <LanguageSwitcher />
-          <Link
-            href="/contact"
-            className="hidden min-h-[48px] items-center justify-center rounded bg-blueprint px-6 font-bold text-pure hover:bg-graphite sm:inline-flex"
-          >
-            {t('quote')}
-          </Link>
           <MobileNav
             links={links}
-            quoteLabel={t('quote')}
             primaryLabel={t('primary')}
             openLabel={t('menuOpen')}
             closeLabel={t('menuClose')}

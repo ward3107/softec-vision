@@ -2,11 +2,12 @@ import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import type { AppLocale } from '@/i18n/routing';
-import { filterProducts } from '@/lib/catalog';
+import { filterProducts, getVisibleCategories, localized } from '@/lib/catalog';
 import { resolveText } from '@/lib/content/blocks';
 import { loadContentBlocks } from '@/lib/content/source';
 import ProductCard from '@/components/catalog/ProductCard';
 import TypedText from '@/components/TypedText';
+import SectionIndicator from '@/components/SectionIndicator';
 
 export default async function HomePage({
   params
@@ -22,7 +23,16 @@ export default async function HomePage({
   const tcat = await getTranslations('catalog');
   const tcustom = await getTranslations('custom');
   const tcontact = await getTranslations('contact');
+  const tnav = await getTranslations('nav');
   const heroProof = t.raw('proof') as string[];
+
+  const sections = [
+    { id: 'top', label: tnav('home') },
+    { id: 'families', label: tnav('products') },
+    { id: 'featured', label: tcat('featured') },
+    { id: 'custom', label: tcustom('eyebrow') },
+    { id: 'contact', label: tnav('contact') }
+  ];
 
   const blocks = await loadContentBlocks();
   const hero = {
@@ -36,7 +46,10 @@ export default async function HomePage({
     { key: 'accessible', label: resolveText(blocks, 'home.capabilities', l, 'accessible', c('accessible')) }
   ];
 
-  const featured = (await filterProducts({ lang: l, cat: 'all' })).slice(0, 3);
+  const allProducts = await filterProducts({ lang: l, cat: 'all' });
+  const featured = allProducts.slice(0, 3);
+  const categories = await getVisibleCategories(l);
+  const categoryImage = (key: string) => allProducts.find((p) => p.cat === key)?.image;
   const stages = [
     { n: '01', t: tcustom('s1t'), b: tcustom('s1b') },
     { n: '02', t: tcustom('s2t'), b: tcustom('s2b') },
@@ -44,7 +57,8 @@ export default async function HomePage({
   ];
   return (
     <>
-      <section className="home-hero overflow-hidden bg-pure dark:bg-surface">
+      <SectionIndicator sections={sections} label={tnav('sections')} />
+      <section id="top" className="home-hero overflow-hidden bg-pure dark:bg-surface">
         <div className="home-hero__blueprint" aria-hidden="true" />
         <div className="relative mx-auto grid min-h-[min(790px,calc(100svh-88px))] max-w-shell items-center gap-8 px-[clamp(20px,4.5vw,72px)] py-[clamp(48px,7vw,104px)] lg:grid-cols-[0.9fr_1.1fr]">
           <div className="relative z-10 max-w-[670px]">
@@ -106,16 +120,72 @@ export default async function HomePage({
         </div>
       </section>
 
+      {/* Product families — browse all categories and subcategories from home */}
+      <section id="families" aria-labelledby="families-title" className="bg-pure dark:bg-surface">
+        <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
+          <div className="reveal reveal-left">
+            <h2 id="families-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
+              {tcat('title')}
+            </h2>
+            <p className="mt-2 max-w-2xl text-machine dark:text-fog">{tcat('body')}</p>
+          </div>
+          <ul className="reveal reveal-up mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {categories.map((category) => {
+              const image = categoryImage(category.key);
+              return (
+                <li
+                  key={category.key}
+                  className="flex h-full flex-col overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface"
+                >
+                  <Link href={`/catalog/${category.key}`} className="group block" aria-label={localized(category.label, l)}>
+                    <div className="aspect-[16/10] overflow-hidden border-b border-line bg-paper dark:border-white/10 dark:bg-canvas">
+                      {image ? (
+                        <Image
+                          src={image}
+                          alt=""
+                          width={520}
+                          height={325}
+                          quality={90}
+                          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                        />
+                      ) : null}
+                    </div>
+                  </Link>
+                  <div className="flex flex-1 flex-col gap-2 p-5">
+                    <Link href={`/catalog/${category.key}`} className="text-lg font-bold hover:text-blueprint dark:hover:text-skyline">
+                      {localized(category.label, l)}
+                    </Link>
+                    <p className="text-sm text-machine dark:text-fog">{localized(category.description, l)}</p>
+                    {category.subs?.length ? (
+                      <ul className="mt-auto flex flex-wrap gap-2 pt-2">
+                        {category.subs.map((s) => (
+                          <li key={s.key}>
+                            <Link
+                              href={`/catalog/${category.key}?sub=${s.key}`}
+                              className="inline-flex rounded border border-line px-2.5 py-1 text-xs font-semibold hover:border-blueprint hover:text-blueprint dark:border-white/10 dark:hover:border-skyline dark:hover:text-skyline"
+                            >
+                              {localized(s.label, l)}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+
       {/* Featured products */}
-      <section aria-labelledby="featured-title" className="bg-paper dark:bg-canvas">
+      <section id="featured" aria-labelledby="featured-title" className="bg-paper dark:bg-canvas">
         <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
           <div className="reveal reveal-left flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <h2 id="featured-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
-                {tcat('title')}
-              </h2>
-              <p className="mt-2 text-machine dark:text-fog">{tcat('body')}</p>
-            </div>
+            <h2 id="featured-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
+              {tcat('featured')}
+            </h2>
             <Link href="/catalog" className="font-bold text-blueprint hover:underline dark:text-skyline">
               {t('explore')} →
             </Link>
@@ -129,7 +199,7 @@ export default async function HomePage({
       </section>
 
       {/* Custom manufacturing story */}
-      <section aria-labelledby="custom-title" className="bg-graphite text-paper">
+      <section id="custom" aria-labelledby="custom-title" className="bg-graphite text-paper">
         <div className="mx-auto grid max-w-shell gap-10 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,6vw,88px)] lg:grid-cols-2">
           <div className="reveal reveal-left">
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#7CC4EE]">{tcustom('eyebrow')}</p>
@@ -154,7 +224,7 @@ export default async function HomePage({
       </section>
 
       {/* Contact CTA */}
-      <section className="bg-paper dark:bg-canvas">
+      <section id="contact" className="bg-paper dark:bg-canvas">
         <div className="reveal reveal-up mx-auto flex max-w-shell flex-wrap items-center justify-between gap-6 px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,72px)]">
           <div>
             <h2 className="max-w-[22ch] text-[clamp(1.7rem,3vw,2.4rem)] font-extrabold tracking-tight">
