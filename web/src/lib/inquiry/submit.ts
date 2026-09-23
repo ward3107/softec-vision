@@ -1,5 +1,6 @@
 import 'server-only';
 import { checkAttachment, safeFilename } from './attachment';
+import { shortReference } from './reference';
 import { inquiryFromFormData, validateInquiry, type InquiryErrors } from './schema';
 import { checkFormToken, hashIp, type RateLimiter } from './spam';
 import type { InquiryAttachment, InquiryNotifier, InquiryRecord, InquiryStore } from './types';
@@ -27,9 +28,6 @@ const HOUR_MS = 60 * 60 * 1000;
 
 const isFile = (value: FormDataEntryValue | null): value is File =>
   typeof value === 'object' && value !== null && 'arrayBuffer' in value;
-
-/** Short, human-friendly reference shown to the customer. */
-const shortReference = (id: string) => id.replace(/-/g, '').slice(0, 8).toUpperCase();
 
 /**
  * Handle one quote request end to end: spam checks, validation, attachment
