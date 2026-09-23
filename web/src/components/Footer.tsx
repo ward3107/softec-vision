@@ -15,7 +15,11 @@ export default async function Footer() {
 
   return (
     <footer className="bg-graphite text-paper">
-      <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-8 text-sm">
+      {/* pb-36 keeps the last row clear of the floating WhatsApp/back-to-top/
+          accessibility dock (fixed, up to ~124px tall at the bottom-5 corner)
+          when the page is scrolled all the way down — otherwise it covers
+          the creator signature. */}
+      <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] pb-36 pt-8 text-sm">
         <div className="flex flex-wrap items-center justify-between gap-6">
           <div className="flex flex-wrap items-center gap-4">
             <span className="w-[150px] overflow-hidden rounded-sm bg-white p-1.5">
