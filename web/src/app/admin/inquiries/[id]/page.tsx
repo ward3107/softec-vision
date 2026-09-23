@@ -23,7 +23,7 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
     return (
       <AdminShell email={user?.email} active="inquiries">
         <p>{S.detail.notFound}</p>
-        <Link href="/admin" className="mt-4 inline-block font-semibold text-blueprint hover:underline dark:text-skyline">
+        <Link href="/admin/inquiries" className="mt-4 inline-block font-semibold text-blueprint hover:underline dark:text-skyline">
           {S.detail.back}
         </Link>
       </AdminShell>
@@ -62,7 +62,7 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
 
   return (
     <AdminShell email={user?.email} active="inquiries">
-      <Link href="/admin" className="text-sm font-semibold text-blueprint hover:underline dark:text-skyline">
+      <Link href="/admin/inquiries" className="text-sm font-semibold text-blueprint hover:underline dark:text-skyline">
         ← {S.detail.back}
       </Link>
       <div className="mt-3 flex flex-wrap items-center gap-3">

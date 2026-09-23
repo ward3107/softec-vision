@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { publicMediaUrl, sanitizeCodeForPath } from './media';
+import { publicMediaUrl, publicModelUrl, sanitizeCodeForPath } from './media';
 
 describe('publicMediaUrl', () => {
   it('builds the public storage URL for a path', () => {
@@ -11,6 +11,20 @@ describe('publicMediaUrl', () => {
   it('tolerates a trailing slash on the project URL', () => {
     expect(publicMediaUrl('https://proj.supabase.co/', 'X-1/image-1.webp')).toBe(
       'https://proj.supabase.co/storage/v1/object/public/product-media/X-1/image-1.webp'
+    );
+  });
+});
+
+describe('publicModelUrl', () => {
+  it('builds the public storage URL for a path in the models bucket', () => {
+    expect(publicModelUrl('https://proj.supabase.co', 'X-1/model-1.glb')).toBe(
+      'https://proj.supabase.co/storage/v1/object/public/product-models/X-1/model-1.glb'
+    );
+  });
+
+  it('tolerates a trailing slash on the project URL', () => {
+    expect(publicModelUrl('https://proj.supabase.co/', 'X-1/model-1.glb')).toBe(
+      'https://proj.supabase.co/storage/v1/object/public/product-models/X-1/model-1.glb'
     );
   });
 });

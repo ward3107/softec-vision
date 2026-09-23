@@ -10,10 +10,10 @@ export default function AdminShell({
   children
 }: {
   email?: string | null;
-  active: 'inquiries' | 'products' | 'content';
+  active: 'dashboard' | 'inquiries' | 'products' | 'content';
   children: React.ReactNode;
 }) {
-  const tab = (key: 'inquiries' | 'products' | 'content', href: string) => (
+  const tab = (key: 'dashboard' | 'inquiries' | 'products' | 'content', href: string) => (
     <Link
       href={href}
       aria-current={active === key ? 'page' : undefined}
@@ -34,7 +34,8 @@ export default function AdminShell({
             {S.brand} <span className="font-semibold text-machine dark:text-fog">— {S.appTitle}</span>
           </p>
           <nav aria-label={S.appTitle} className="flex gap-4">
-            {tab('inquiries', '/admin')}
+            {tab('dashboard', '/admin')}
+            {tab('inquiries', '/admin/inquiries')}
             {tab('products', '/admin/products')}
             {tab('content', '/admin/content')}
           </nav>

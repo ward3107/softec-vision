@@ -35,6 +35,16 @@ export function sniffType(bytes: Uint8Array): string | null {
   return null;
 }
 
+const GLB_MAGIC = ascii('glTF');
+
+/** True for a glTF Binary (.glb) file: magic bytes, then a version-2 header. Used for product 3D-model uploads, the same content-sniffing approach as sniffType(). */
+export function isGlb(bytes: Uint8Array): boolean {
+  if (!startsWith(bytes, GLB_MAGIC)) return false;
+  if (bytes.length < 8) return false;
+  const version = bytes[4] | (bytes[5] << 8) | (bytes[6] << 16) | (bytes[7] << 24);
+  return version === 2;
+}
+
 export type AttachmentCheck = { ok: true; mime: string; ext: string } | { ok: false; error: 'tooLarge' | 'badType' };
 
 export function checkAttachment(file: { name: string; size: number; bytes: Uint8Array }): AttachmentCheck {

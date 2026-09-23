@@ -4,7 +4,9 @@ import {
   addGalleryImageAction,
   removeGalleryImageAction,
   removeProductImageAction,
-  uploadProductImageAction
+  removeProductModelAction,
+  uploadProductImageAction,
+  uploadProductModelAction
 } from '../../actions';
 
 const fileInput =
@@ -13,20 +15,25 @@ const removeButton =
   'inline-flex min-h-[36px] items-center rounded border border-line px-3 text-sm font-semibold hover:border-machine dark:border-white/10 dark:hover:border-white/25';
 
 const M = S.products.media;
+const M3 = S.products.model3d;
 
 export default function ProductMediaForm({
   code,
   image,
-  gallery
+  gallery,
+  model
 }: {
   code: string;
   image: { url: string; isBuiltIn: boolean };
   gallery: Array<{ id: string; url: string }>;
+  model: { hasModel: boolean };
 }) {
   const upload = uploadProductImageAction.bind(null, code);
   const remove = removeProductImageAction.bind(null, code);
   const addGallery = addGalleryImageAction.bind(null, code);
   const removeGallery = removeGalleryImageAction.bind(null, code);
+  const uploadModel = uploadProductModelAction.bind(null, code);
+  const removeModel = removeProductModelAction.bind(null, code);
 
   return (
     <fieldset className="grid gap-6 rounded border border-line p-4 dark:border-white/10">
@@ -97,6 +104,30 @@ export default function ProductMediaForm({
             {M.addToGallery}
           </button>
         </form>
+      </div>
+
+      <div>
+        <p className="text-sm font-semibold">{M3.section}</p>
+        <p className="text-sm text-machine dark:text-fog">{M3.help}</p>
+        <p className="mt-2 text-sm">{model.hasModel ? M3.current : M3.none}</p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <form action={uploadModel} className="flex flex-wrap items-center gap-2">
+            <input type="file" name="file" accept=".glb,model/gltf-binary" required className={fileInput} />
+            <button
+              type="submit"
+              className="inline-flex min-h-[44px] items-center rounded border border-line px-4 text-sm font-bold hover:border-machine dark:border-white/10 dark:hover:border-white/25"
+            >
+              {model.hasModel ? M3.replace : M3.upload}
+            </button>
+          </form>
+          {model.hasModel && (
+            <form action={removeModel}>
+              <button type="submit" className={removeButton}>
+                {M3.remove}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </fieldset>
   );

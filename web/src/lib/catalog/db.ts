@@ -1,4 +1,4 @@
-import { publicMediaUrl } from './media';
+import { publicMediaUrl, publicModelUrl } from './media';
 import { SPEC_LABELS } from './seed';
 import { isPlaceholder, type Category, type Localized, type Product, type SpecEntry } from './types';
 
@@ -15,6 +15,7 @@ import { isPlaceholder, type Category, type Localized, type Product, type SpecEn
 export const PRODUCT_SELECT = [
   'code',
   'sort',
+  'model_3d_url',
   'category:categories!products_category_id_fkey(slug)',
   'sub:categories!products_subcategory_id_fkey(slug)',
   'product_translations(locale, name, description, alt_text)',
@@ -32,6 +33,7 @@ export interface DbProductMediaRow {
 export interface DbProductRow {
   code: string;
   sort: number;
+  model_3d_url: string | null;
   category: { slug: string } | null;
   sub: { slug: string } | null;
   product_translations: Array<{ locale: string; name: string; description: string; alt_text: string }>;
@@ -105,7 +107,8 @@ export function rowsToProducts(
       imageAlt: alt.he || alt.en ? alt : undefined,
       gallery,
       specs,
-      model3d: base.model3d
+      // An owner-uploaded model (via /admin/products/[code]) replaces the built-in one, same as the photos above.
+      model3d: supabaseUrl && row.model_3d_url ? publicModelUrl(supabaseUrl, row.model_3d_url) : base.model3d
     });
   }
   return products;

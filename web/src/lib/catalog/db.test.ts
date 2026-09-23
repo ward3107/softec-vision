@@ -19,6 +19,7 @@ const base: Product = {
 const row = (overrides: Partial<DbProductRow> = {}): DbProductRow => ({
   code: 'X-1',
   sort: 0,
+  model_3d_url: null,
   category: { slug: 'podium' },
   sub: { slug: 'smart' },
   product_translations: [
@@ -147,6 +148,21 @@ describe('rowsToProducts', () => {
     const [product] = rowsToProducts([row()], [base], undefined, 'https://proj.supabase.co');
     expect(product.image).toBe(base.image);
     expect(product.gallery).toEqual(base.gallery);
+  });
+
+  it('prefers an owner-uploaded 3D model over the built-in one', () => {
+    const [product] = rowsToProducts([row({ model_3d_url: 'X-1/model-1.glb' })], [base], undefined, 'https://proj.supabase.co');
+    expect(product.model3d).toBe('https://proj.supabase.co/storage/v1/object/public/product-models/X-1/model-1.glb');
+  });
+
+  it('keeps the built-in model when none was uploaded, even with a supabase URL', () => {
+    const [product] = rowsToProducts([row()], [base], undefined, 'https://proj.supabase.co');
+    expect(product.model3d).toBe(base.model3d);
+  });
+
+  it('keeps the built-in model when a model was uploaded but no supabase URL is given', () => {
+    const [product] = rowsToProducts([row({ model_3d_url: 'X-1/model-1.glb' })], [base]);
+    expect(product.model3d).toBe(base.model3d);
   });
 });
 

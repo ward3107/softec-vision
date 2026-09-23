@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CANONICAL_SPEC_KEYS, getAdminProduct } from '@/lib/admin/products';
-import { getProductMedia } from '@/lib/admin/media';
+import { getProductMedia, getProductModel } from '@/lib/admin/media';
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
 import { publicMediaUrl } from '@/lib/catalog/media';
@@ -16,10 +16,13 @@ export const dynamic = 'force-dynamic';
 const specFields = CANONICAL_SPEC_KEYS.map((key) => ({ key, label: SPEC_LABELS[key] }));
 
 const M = S.products.media;
+const M3 = S.products.model3d;
 const MEDIA_BANNER: Record<string, string> = {
   updated: M.updated,
   added: M.added,
   removed: M.removed,
+  modelUpdated: M3.updated,
+  modelRemoved: M3.removed,
   'error-noFile': M.errors.noFile,
   'error-tooLarge': M.errors.tooLarge,
   'error-badType': M.errors.badType,
@@ -60,6 +63,8 @@ export default async function AdminProductEditPage({
   const gallery = supabaseUrl
     ? currentMedia.gallery.map((item) => ({ id: item.id, url: publicMediaUrl(supabaseUrl, item.path) }))
     : [];
+  const modelPath = await getProductModel(client, code);
+  const model = { hasModel: modelPath !== null };
   const banner = media ? MEDIA_BANNER[media] : undefined;
   const bannerIsError = media?.startsWith('error-') ?? false;
 
@@ -84,7 +89,7 @@ export default async function AdminProductEditPage({
             {banner}
           </p>
         )}
-        <ProductMediaForm code={code} image={image} gallery={gallery} />
+        <ProductMediaForm code={code} image={image} gallery={gallery} model={model} />
         <ProductForm product={product} specFields={specFields} action={action} />
       </div>
     </AdminShell>

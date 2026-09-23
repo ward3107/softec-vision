@@ -29,7 +29,7 @@ then.
    (eu-central-1)** region, in a Softec-owned organisation (not another
    company's).
 2. Apply the database migrations: in the Supabase dashboard's **SQL Editor**,
-   run each file in `web/supabase/migrations/` in order (0001 through 0006),
+   run each file in `web/supabase/migrations/` in order (0001 through 0007),
    or give the developer access to run them for you.
 3. In Vercel → project **softecvision** → Settings → Environment Variables, add
    `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and
