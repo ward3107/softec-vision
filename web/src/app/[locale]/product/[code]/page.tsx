@@ -124,7 +124,8 @@ export default async function ProductPage({
                 next: t('next'),
                 zoomIn: t('zoomIn'),
                 zoomOut: t('zoomOut'),
-                hint: t('zoomHint')
+                hint: t('zoomHint'),
+                hintTouch: t('zoomHintTouch')
               }
             }}
           />
