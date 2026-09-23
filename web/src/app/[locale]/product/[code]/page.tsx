@@ -7,12 +7,13 @@ import { routing } from '@/i18n/routing';
 import type { AppLocale } from '@/i18n/routing';
 import {
   buildInquiryUrl,
+  getAllProducts,
   getProduct,
   getRelatedProducts,
   localized,
   publicSpecs
 } from '@/lib/catalog';
-import { PRODUCTS, CATEGORIES } from '@/lib/catalog/seed';
+import { CATEGORIES } from '@/lib/catalog/seed';
 import { pageMetadata, SITE_URL, BRAND } from '@/lib/seo';
 import CompareButton from '@/components/catalog/CompareButton';
 import ProductCard from '@/components/catalog/ProductCard';
@@ -21,8 +22,9 @@ import JsonLd, { breadcrumbSchema } from '@/components/JsonLd';
 
 const absoluteImage = (src: string) => (src.startsWith('http') ? src : `${SITE_URL}${src.startsWith('/') ? '' : '/'}${src}`);
 
-export function generateStaticParams() {
-  return routing.locales.flatMap((locale) => PRODUCTS.map((p) => ({ locale, code: p.code })));
+export async function generateStaticParams() {
+  const products = await getAllProducts();
+  return routing.locales.flatMap((locale) => products.map((p) => ({ locale, code: p.code })));
 }
 
 export async function generateMetadata({

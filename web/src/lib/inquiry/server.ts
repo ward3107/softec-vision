@@ -1,8 +1,7 @@
 import 'server-only';
 import { createTransport } from 'nodemailer';
 import { createServiceClient } from '@/lib/supabase/server';
-import { localized } from '@/lib/catalog/types';
-import { PRODUCTS } from '@/lib/catalog/seed';
+import { getProduct, localized } from '@/lib/catalog';
 import legalContent from '@/lib/legal/content.json';
 import type { InquiryConfig } from './config';
 import { createResendNotifier, createSmtpNotifier } from './notify';
@@ -16,8 +15,8 @@ export const PRIVACY_VERSION = (legalContent as { privacy: { lastUpdated: { en: 
 // Per-instance first line of defence; the store adds a durable per-address limit.
 const limiter = createRateLimiter({ limit: 8, windowMs: 10 * 60 * 1000 });
 
-const productName: SubmitDeps['productName'] = (code, locale) => {
-  const product = PRODUCTS.find((p) => p.code === code);
+const productName: SubmitDeps['productName'] = async (code, locale) => {
+  const product = await getProduct(code);
   return product ? localized(product.name, locale) : undefined;
 };
 

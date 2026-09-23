@@ -72,7 +72,8 @@ export const CATEGORIES: Category[] = [
   }
 ];
 
-const SPEC_LABELS: Record<string, Localized> = {
+/** Canonical spec fields, in display order. */
+export const SPEC_LABELS: Record<string, Localized> = {
   displays: { he: 'מסכים', en: 'Displays' },
   finish: { he: 'גימור', en: 'Finish' },
   dimensions: { he: 'מידות (ג×ר×ע)', en: 'Dimensions (H×W×D)' },

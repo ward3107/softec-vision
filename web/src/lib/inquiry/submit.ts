@@ -12,7 +12,7 @@ export interface SubmitDeps {
   secret: string;
   limiter: RateLimiter;
   /** Localized product name for a catalog code, or undefined if unknown. */
-  productName: (code: string, locale: 'he' | 'en') => string | undefined;
+  productName: (code: string, locale: 'he' | 'en') => string | undefined | Promise<string | undefined>;
 }
 
 export type SubmitResult =
@@ -76,7 +76,7 @@ export async function submitInquiry(
     }
   }
 
-  const productName = data.product ? deps.productName(data.product, data.locale) : undefined;
+  const productName = data.product ? await deps.productName(data.product, data.locale) : undefined;
   const record: InquiryRecord = {
     ...data,
     product: productName ? data.product : '',

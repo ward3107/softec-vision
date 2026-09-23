@@ -1,5 +1,6 @@
 import type { AppLocale } from '@/i18n/routing';
-import { CATEGORIES, PRODUCTS, WA_NUMBER } from './seed';
+import { CATEGORIES, WA_NUMBER } from './seed';
+import { loadProducts } from './source';
 import {
   isPlaceholder,
   localized,
@@ -12,9 +13,9 @@ import {
 export * from './types';
 
 /*
- * Catalog data access. Backed by the in-repo seed today; the same async surface
- * will be served from Supabase (RLS-filtered, published only) in a later phase
- * without changing any page.
+ * Catalog data access. Categories are defined in code; products come from
+ * Supabase (published only, edited in the owner admin) once the catalog has
+ * been imported, and from the built-in catalog until then.
  */
 
 export async function getVisibleCategories(locale: AppLocale): Promise<Category[]> {
@@ -41,7 +42,7 @@ export async function filterProducts(input: Partial<CatalogState>): Promise<Prod
   const visibleKeys = new Set(
     CATEGORIES.filter((category) => category.visibleIn.includes(lang)).map((category) => category.key)
   );
-  return PRODUCTS.filter(
+  return (await loadProducts()).filter(
     (product) =>
       visibleKeys.has(product.cat) &&
       (cat === 'all' || product.cat === cat) &&
@@ -49,13 +50,19 @@ export async function filterProducts(input: Partial<CatalogState>): Promise<Prod
   );
 }
 
+/** Every published product, whatever its category's languages. */
+export async function getAllProducts(): Promise<Product[]> {
+  return loadProducts();
+}
+
 export async function getProduct(code: string): Promise<Product | undefined> {
-  return PRODUCTS.find((product) => product.code === code);
+  return (await loadProducts()).find((product) => product.code === code);
 }
 
 export async function getProductsByCodes(codes: string[]): Promise<Product[]> {
+  const products = await loadProducts();
   return codes
-    .map((code) => PRODUCTS.find((product) => product.code === code))
+    .map((code) => products.find((product) => product.code === code))
     .filter((product): product is Product => Boolean(product));
 }
 
@@ -93,7 +100,8 @@ export async function getRelatedProducts(
     if (candidate.cat === product.cat) return 1;
     return 2;
   };
-  return PRODUCTS.filter((candidate) => candidate.code !== product.code && visibleKeys.has(candidate.cat))
+  return (await loadProducts())
+    .filter((candidate) => candidate.code !== product.code && visibleKeys.has(candidate.cat))
     .map((candidate, index) => ({ candidate, index, score: rank(candidate) }))
     .sort((a, b) => a.score - b.score || a.index - b.index)
     .slice(0, limit)

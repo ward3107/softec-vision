@@ -1,7 +1,8 @@
 import type { MetadataRoute } from 'next';
 import { routing, type AppLocale } from '@/i18n/routing';
 import { localeUrl } from '@/lib/seo';
-import { CATEGORIES, PRODUCTS } from '@/lib/catalog/seed';
+import { getAllProducts } from '@/lib/catalog';
+import { CATEGORIES } from '@/lib/catalog/seed';
 
 /** Static routes present in every locale, with change/priority hints. */
 const STATIC: { path: string; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']; priority: number }[] = [
@@ -41,7 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Products — one entry per locale the product's category is visible in.
-  for (const product of PRODUCTS) {
+  for (const product of await getAllProducts()) {
     const path = `/product/${product.code}`;
     const productLocales = CATEGORIES.find((c) => c.key === product.cat)?.visibleIn ?? routing.locales;
     const languages = languagesFor(path, productLocales);
