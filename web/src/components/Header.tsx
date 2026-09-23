@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import LanguageSwitcher from './LanguageSwitcher';
 import BrandLogo from './BrandLogo';
+import MobileNav from './MobileNav';
 
 export default async function Header() {
   const t = await getTranslations('nav');
@@ -36,6 +37,13 @@ export default async function Header() {
           >
             {t('quote')}
           </Link>
+          <MobileNav
+            links={links}
+            quoteLabel={t('quote')}
+            primaryLabel={t('primary')}
+            openLabel={t('menuOpen')}
+            closeLabel={t('menuClose')}
+          />
         </div>
       </div>
     </header>

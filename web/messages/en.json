@@ -13,7 +13,9 @@
     "contact": "Contact",
     "quote": "Request a Quote",
     "skip": "Skip to content",
-    "switchTo": "מעבר לעברית"
+    "switchTo": "מעבר לעברית",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu"
   },
   "hero": {
     "eyebrow": "Engineered in Israel. Built for every space.",
