@@ -11,6 +11,8 @@
     "about": "About",
     "process": "Process",
     "contact": "Contact",
+    "home": "Home",
+    "sections": "Jump between page sections",
     "quote": "Contact Us",
     "skip": "Skip to content",
     "switchTo": "מעבר לעברית",
@@ -47,6 +49,7 @@
     "body": "Choose a family to find a station suited to your working environment.",
     "all": "All",
     "allDescription": "Explore models across every product family.",
+    "featured": "Selected Products",
     "subcategoryCount": "subcategories",
     "statusCount": "products shown",
     "details": "Product Details",
@@ -65,7 +68,14 @@
     "detailsOnRequest": "For dimensions, technical drawings or configuration options for your project, contact us.",
     "viewPhotos": "Photos",
     "view3D": "3D view",
-    "media3dHint": "Drag to rotate, scroll to zoom."
+    "media3dHint": "Drag to rotate, scroll to zoom.",
+    "enlarge": "Enlarge image",
+    "close": "Close",
+    "previous": "Previous image",
+    "next": "Next image",
+    "zoomIn": "View full size",
+    "zoomOut": "Fit to screen",
+    "zoomHint": "Click the image for full size"
   },
   "compare": {
     "title": "Compare Products",
@@ -154,6 +164,7 @@
     "email": "Email",
     "phone": "Phone",
     "country": "Country",
+    "countryNone": "Select a country",
     "projectType": "Project type",
     "projectTypeNone": "Select a project type",
     "projectTypes": {

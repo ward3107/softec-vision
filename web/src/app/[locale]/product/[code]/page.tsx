@@ -113,7 +113,20 @@ export default async function ProductPage({
             alt={primaryAlt}
             gallery={gallery.map((item) => ({ src: item.src, alt: localized(item.alt, l) }))}
             model3d={product.model3d}
-            labels={{ photos: t('viewPhotos'), model: t('view3D'), hint: t('media3dHint') }}
+            labels={{
+              photos: t('viewPhotos'),
+              model: t('view3D'),
+              hint: t('media3dHint'),
+              enlarge: t('enlarge'),
+              lightbox: {
+                close: t('close'),
+                previous: t('previous'),
+                next: t('next'),
+                zoomIn: t('zoomIn'),
+                zoomOut: t('zoomOut'),
+                hint: t('zoomHint')
+              }
+            }}
           />
         </div>
 

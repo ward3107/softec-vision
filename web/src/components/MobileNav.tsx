@@ -10,20 +10,17 @@ export interface MobileNavLink {
 
 /**
  * Compact menu for screens below the `lg` breakpoint, where the primary nav
- * (and, on very small screens, the quote button) is otherwise unreachable.
- * A disclosure, not a modal: focus is trapped and Escape/outside-click close
- * it, matching AccessibilityWidget's pattern, but the rest of the page stays
- * interactive underneath.
+ * is otherwise unreachable. A disclosure, not a modal: focus is trapped and
+ * Escape/outside-click close it, matching AccessibilityWidget's pattern, but
+ * the rest of the page stays interactive underneath.
  */
 export default function MobileNav({
   links,
-  quoteLabel,
   primaryLabel,
   openLabel,
   closeLabel
 }: {
   links: MobileNavLink[];
-  quoteLabel: string;
   primaryLabel: string;
   openLabel: string;
   closeLabel: string;
@@ -120,13 +117,6 @@ export default function MobileNav({
                 </li>
               ))}
             </ul>
-            <Link
-              href="/contact"
-              onClick={() => setOpen(false)}
-              className="my-3 flex min-h-[48px] items-center justify-center rounded bg-blueprint px-6 font-bold text-pure hover:bg-graphite"
-            >
-              {quoteLabel}
-            </Link>
           </nav>
         </div>
       )}
