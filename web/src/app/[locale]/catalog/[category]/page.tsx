@@ -113,16 +113,15 @@ export default async function CategoryPage({
       )}
 
       {products.length > 0 ? (
-        <>
-          <p className="mt-8 text-sm font-semibold text-machine dark:text-fog">
-            {products.length} {t('statusCount')}
-          </p>
-          <ProductScroller>
-            {products.map((product) => (
-              <ProductCard key={product.code} product={product} />
-            ))}
-          </ProductScroller>
-        </>
+        <ProductScroller
+          variant="row"
+          caption={`${products.length} ${t('statusCount')}`}
+          labels={{ region: localized(cat.label, l), previous: t('scrollPrevious'), next: t('scrollNext') }}
+        >
+          {products.map((product) => (
+            <ProductCard key={product.code} product={product} />
+          ))}
+        </ProductScroller>
       ) : (
         <div className="mt-8 rounded border border-line bg-paper p-8 dark:border-white/10 dark:bg-canvas">
           <p className="text-lg font-bold">{t('emptyTitle')}</p>

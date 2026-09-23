@@ -54,6 +54,8 @@
     "back": "Back",
     "subcategoryCount": "subcategories",
     "statusCount": "products shown",
+    "scrollPrevious": "Previous products",
+    "scrollNext": "Next products",
     "details": "Product Details",
     "productImage": "Product image",
     "emptyTitle": "No models are currently listed in this category",
