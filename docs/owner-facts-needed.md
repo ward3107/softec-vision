@@ -4,7 +4,7 @@ The website publishes only facts the business has confirmed. Anything below is
 **not shown** on the site until the owner supplies it. Fill in the blanks (or
 reply with the values) and they will be added.
 
-_Last updated: Stage 3 — Supabase database and owner admin area._
+_Last updated: Stage 7 — trust and operational info._
 
 ## 0. Setup steps (turn on online quote requests + the owner admin area)
 
@@ -116,3 +116,32 @@ MEMORIAL-HALL, ROTHSCHILD, SDEROT-HALL, ACCESSIBLE-TLV (Tel Aviv University) and
 BIO-DOUBLE (Israel Institute for Biological Research) name the client in the
 product name, description or photo. Please confirm each client has approved
 being named publicly.
+
+## 4. Trust and operational info
+
+What's already confirmed and live: legal name (Softec Vision Ltd), contact
+(phone 03-6968777, email Alon@softec.co.il, WhatsApp), and delivery/
+installation scope (manufactured and tested in Israel; installed on site by
+our team within Israel; shipped ready to install for projects further
+afield — added to the Process page). Every product page already has a clear
+WhatsApp and quote-request path.
+
+Still missing — nothing is published until confirmed:
+
+- **A physical business address.** The privacy policy currently states this
+  is not yet supplied (a legal-review note flags it may be required for
+  controller-identity / consumer-notice disclosure in some jurisdictions).
+- **A warranty policy**, if any (e.g. "1 year on materials and workmanship") —
+  the site makes no warranty claim today.
+- **How quickly you typically respond** to a quote request (e.g. "within 1
+  business day") — the site makes no response-time claim today.
+
+## 5. Legal and accessibility statement — professional review flags
+
+Two more items in `web/src/lib/legal/content.json` are flagged as implementation
+notes for a lawyer, not something to answer here directly:
+- Whether Israeli Standard 5568 (accessibility) or any other formal
+  accessibility certification is claimed — the site currently only says it
+  implements *against* WCAG 2.2 AA, making no certification claim.
+- Which jurisdiction's law and courts govern the Terms of Use, given visitors
+  from the EU, UK, US and Canada.
