@@ -13,9 +13,10 @@ function persist(dark: boolean) {
 
 /**
  * Light/dark toggle. The actual theme is decided before paint by the boot
- * script (reads `softec-theme`, else the OS preference) toggling `.dark` on
- * `<html>`; this button only reads that starting state back on mount (so
- * its icon matches what's already on screen) and flips it from then on.
+ * script (light by default; dark only when the visitor has chosen it, saved
+ * in `softec-theme`) toggling `.dark` on `<html>`; this button only reads
+ * that starting state back on mount (so its icon matches what's already on
+ * screen) and flips it from then on.
  */
 export default function ThemeToggle({
   toLightLabel,

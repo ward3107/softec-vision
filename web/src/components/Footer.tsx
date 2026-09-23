@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
+import AdminEntrance from './AdminEntrance';
 import BrandLogo from './BrandLogo';
 import CookiePreferencesLink from './consent/CookiePreferencesLink';
 import CreatorSignature from './CreatorSignature';
@@ -14,7 +15,7 @@ export default async function Footer() {
   ];
 
   return (
-    <footer className="bg-graphite text-paper">
+    <footer className="bg-footer text-paper">
       {/* pb-36 keeps the last row clear of the floating WhatsApp/back-to-top/
           accessibility dock (fixed, up to ~124px tall at the bottom-5 corner)
           when the page is scrolled all the way down — otherwise it covers
@@ -36,8 +37,9 @@ export default async function Footer() {
             <CookiePreferencesLink label={t('cookiePreferences')} />
           </nav>
         </div>
-        <div className="mt-7 border-t border-white/15 pt-5">
+        <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-5">
           <CreatorSignature />
+          <AdminEntrance />
         </div>
       </div>
     </footer>

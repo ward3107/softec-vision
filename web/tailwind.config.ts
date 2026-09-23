@@ -19,6 +19,10 @@ const config: Config = {
         machine: '#697077',
         softec: '#1683C7',
         blueprint: '#0C5E91',
+        // Footer: a softened dark slate carrying the Softec blue undertone —
+        // less harsh than near-black graphite, still deep enough for AA-white
+        // text. A permanent-dark brand surface (not theme-flipped).
+        footer: '#27353E',
         line: 'color-mix(in srgb, #697077 24%, transparent)',
         // Dark-theme-only surfaces/text, used exclusively behind the `dark:`
         // variant. The light-mode tokens above (paper/pure/graphite/etc.)

@@ -22,8 +22,9 @@ export default async function ProductCard({ product }: { product: Product }) {
           <Image
             src={product.image}
             alt={imageAlt}
-            width={640}
-            height={480}
+            width={800}
+            height={600}
+            quality={90}
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.02]"
           />

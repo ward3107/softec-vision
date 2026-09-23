@@ -47,7 +47,7 @@ export default async function ContactPage({
       <p className="mt-4 max-w-[52ch] text-lg text-machine dark:text-fog">{t('body')}</p>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
-        {/* Quote request form */}
+        {/* Contact form */}
         <div>
           <h2 className="text-lg font-bold">{tf('title')}</h2>
           <p className="mb-5 mt-1 text-sm text-machine dark:text-fog">{tf(onlineEnabled ? 'intro' : 'introOffline')}</p>

@@ -15,7 +15,21 @@ export const S = {
     'no-access': 'לחשבון זה אין הרשאת ניהול. פנו למנהל/ת האתר.',
     'admin-only': 'פעולה זו זמינה למנהל/ת בלבד.',
     notConfigured: 'אזור הניהול יופעל לאחר חיבור מסד הנתונים (Supabase).',
-    saveFailed: 'השמירה נכשלה. נסו שוב.'
+    saveFailed: 'השמירה נכשלה. נסו שוב.',
+    otpFailed: 'לא הצלחנו לשלוח קוד. בדקו את כתובת הדוא"ל ונסו שוב.',
+    invalidOtp: 'הקוד שגוי או שפג תוקפו. בקשו קוד חדש.'
+  },
+  otp: {
+    emailHint: 'נשלח קוד אימות חד-פעמי לכתובת הדוא"ל של המנהל/ת.',
+    sendCode: 'שליחת קוד',
+    sending: 'שולח…',
+    codeLabel: 'קוד אימות',
+    codeHint: (email: string) => `הזינו את הקוד בן 6 הספרות שנשלח אל ${email}.`,
+    verify: 'כניסה',
+    verifying: 'מאמת…',
+    changeEmail: 'שינוי כתובת הדוא"ל',
+    usePassword: 'כניסה עם סיסמה',
+    useOtp: 'כניסה עם קוד לדוא"ל'
   },
   nav: { dashboard: 'לוח בקרה', inquiries: 'פניות', products: 'מוצרים', content: 'תוכן האתר', site: 'לאתר' },
   dashboard: {

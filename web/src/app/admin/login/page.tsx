@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getAdminContext, isSupabaseConfigured } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
-import LoginForm from './LoginForm';
+import AdminAuth from './AdminAuth';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,7 +19,7 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
       <h1 className="mt-1 text-2xl font-extrabold">{S.signInTitle}</h1>
       <div className="mt-6 rounded border border-line bg-pure p-6 dark:border-white/10 dark:bg-surface">
         {configured ? (
-          <LoginForm initialError={error === 'no-access' ? 'no-access' : undefined} />
+          <AdminAuth initialError={error === 'no-access' ? 'no-access' : undefined} />
         ) : (
           <p role="status" className="text-sm">
             {S.errors.notConfigured}

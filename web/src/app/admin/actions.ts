@@ -38,6 +38,34 @@ export async function signIn(_previous: SignInState, fd: FormData): Promise<Sign
   redirect('/admin');
 }
 
+export type OtpSendState = { ok?: boolean; email?: string; error?: 'missing' | 'notConfigured' | 'otpFailed' };
+
+/** Step 1 of passwordless sign-in: email a one-time code to an existing staff account. */
+export async function sendOtp(_previous: OtpSendState, fd: FormData): Promise<OtpSendState> {
+  if (!isSupabaseConfigured()) return { error: 'notConfigured' };
+  const email = String(fd.get('email') ?? '').trim();
+  if (!email) return { error: 'missing' };
+  const client = await createUserClient();
+  // shouldCreateUser:false — only existing accounts get a code; the site never self-registers admins.
+  const { error } = await client.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  if (error) return { error: 'otpFailed', email };
+  return { ok: true, email };
+}
+
+export type OtpVerifyState = { error?: 'missing' | 'notConfigured' | 'invalidOtp' };
+
+/** Step 2: verify the emailed code, which establishes the session (RLS still gates access). */
+export async function verifyOtp(_previous: OtpVerifyState, fd: FormData): Promise<OtpVerifyState> {
+  if (!isSupabaseConfigured()) return { error: 'notConfigured' };
+  const email = String(fd.get('email') ?? '').trim();
+  const token = String(fd.get('token') ?? '').replace(/\s/g, '');
+  if (!email || !token) return { error: 'missing' };
+  const client = await createUserClient();
+  const { error } = await client.auth.verifyOtp({ email, token, type: 'email' });
+  if (error) return { error: 'invalidOtp' };
+  redirect('/admin');
+}
+
 export async function signOut() {
   if (isSupabaseConfigured()) {
     const client = await createUserClient();

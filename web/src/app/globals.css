@@ -171,16 +171,51 @@ body.brand-splash-open {
   display: none;
 }
 
+/* Typed-text reveal: staggered per-character fade so a paragraph appears to
+   type itself in. Opacity-only (chars stay inline) so the text wraps normally. */
+.typed-char {
+  opacity: 0;
+  animation: typedReveal 0.09s ease forwards;
+}
+.typed-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-inline-start: 2px;
+  vertical-align: text-bottom;
+  background: currentColor;
+  opacity: 0;
+  animation: typedCaret 0.85s steps(1, end) infinite;
+}
+@keyframes typedReveal {
+  to { opacity: 1; }
+}
+@keyframes typedCaret {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typed-char {
+    opacity: 1;
+    animation: none;
+  }
+  .typed-caret {
+    display: none;
+  }
+}
+
 /* Creator credit: handwritten-style, letter-by-letter reveal. */
 .creator-signature {
   display: inline-flex;
   align-items: baseline;
-  min-height: 28px;
-  color: #cfe6f6;
+  min-height: 34px;
+  color: #e8f4fc;
   font-family: 'Segoe Print', 'Bradley Hand', cursive;
-  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
   font-style: italic;
-  letter-spacing: 0.015em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 8px rgba(22, 131, 199, 0.35);
 }
 .creator-signature__character {
   display: inline-block;

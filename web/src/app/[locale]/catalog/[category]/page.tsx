@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
@@ -11,6 +12,7 @@ import {
 import type { AppLocale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
 import ProductCard from '@/components/catalog/ProductCard';
+import ProductScroller from '@/components/catalog/ProductScroller';
 
 export async function generateMetadata({
   params
@@ -48,13 +50,16 @@ export default async function CategoryPage({
 
   const state = normalizeCatalogState({ lang: l, cat: category, sub });
   const products = await filterProducts(state);
+  const categoryProducts = await filterProducts({ lang: l, cat: category, sub: 'all' });
+  const subImage = (subKey: string) => categoryProducts.find((p) => p.sub === subKey)?.image;
   const t = await getTranslations('catalog');
 
   const subs = cat.subs ?? [];
   const subLinkClass = (active: boolean) =>
-    `inline-flex min-h-[40px] items-center rounded border px-4 text-sm font-semibold hover:bg-paper dark:hover:bg-canvas ${
+    `inline-flex min-h-[44px] items-center gap-2 rounded border px-2.5 text-sm font-semibold hover:bg-paper dark:hover:bg-canvas ${
       active ? 'border-blueprint bg-paper dark:border-skyline dark:bg-canvas' : 'border-line dark:border-white/10'
     }`;
+  const subThumb = 'h-9 w-11 flex-none rounded-sm border border-line bg-pure object-contain dark:border-white/10 dark:bg-surface';
 
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)] pb-28">
@@ -77,22 +82,28 @@ export default async function CategoryPage({
             <Link
               href={`/catalog/${cat.key}`}
               aria-current={state.sub === 'all' ? 'page' : undefined}
-              className={subLinkClass(state.sub === 'all')}
+              className={`${subLinkClass(state.sub === 'all')} px-4`}
             >
               {t('all')}
             </Link>
           </li>
-          {subs.map((s) => (
-            <li key={s.key}>
-              <Link
-                href={`/catalog/${cat.key}?sub=${s.key}`}
-                aria-current={state.sub === s.key ? 'page' : undefined}
-                className={subLinkClass(state.sub === s.key)}
-              >
-                {localized(s.label, l)}
-              </Link>
-            </li>
-          ))}
+          {subs.map((s) => {
+            const thumb = subImage(s.key);
+            return (
+              <li key={s.key}>
+                <Link
+                  href={`/catalog/${cat.key}?sub=${s.key}`}
+                  aria-current={state.sub === s.key ? 'page' : undefined}
+                  className={subLinkClass(state.sub === s.key)}
+                >
+                  {thumb ? (
+                    <Image src={thumb} alt="" width={44} height={36} quality={85} className={subThumb} />
+                  ) : null}
+                  {localized(s.label, l)}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
 
@@ -101,11 +112,11 @@ export default async function CategoryPage({
           <p className="mt-8 text-sm font-semibold text-machine dark:text-fog">
             {products.length} {t('statusCount')}
           </p>
-          <div className="mt-4 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <ProductScroller>
             {products.map((product) => (
               <ProductCard key={product.code} product={product} />
             ))}
-          </div>
+          </ProductScroller>
         </>
       ) : (
         <div className="mt-8 rounded border border-line bg-paper p-8 dark:border-white/10 dark:bg-canvas">
