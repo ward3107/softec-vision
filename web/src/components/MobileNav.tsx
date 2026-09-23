@@ -89,7 +89,7 @@ export default function MobileNav({
         aria-controls="mobile-nav-panel"
         aria-label={open ? closeLabel : openLabel}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-11 w-11 flex-none items-center justify-center rounded border border-line text-graphite hover:border-blueprint"
+        className="flex h-11 w-11 flex-none items-center justify-center rounded border border-line text-graphite hover:border-blueprint dark:border-white/10 dark:text-ink dark:hover:border-skyline"
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           {open ? (
@@ -104,16 +104,16 @@ export default function MobileNav({
         <div
           id="mobile-nav-panel"
           ref={panelRef}
-          className="absolute inset-x-0 top-full z-40 border-b border-line bg-pure shadow-[0_16px_40px_-16px_rgba(0,0,0,0.25)]"
+          className="absolute inset-x-0 top-full z-40 border-b border-line bg-pure shadow-[0_16px_40px_-16px_rgba(0,0,0,0.25)] dark:border-white/10 dark:bg-surface"
         >
           <nav aria-label={primaryLabel} className="mx-auto max-w-shell px-[clamp(16px,4.5vw,72px)] py-2">
             <ul>
               {links.map((link) => (
-                <li key={link.href} className="border-b border-line last:border-b-0">
+                <li key={link.href} className="border-b border-line last:border-b-0 dark:border-white/10">
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="flex min-h-[48px] items-center text-base font-semibold hover:text-blueprint"
+                    className="flex min-h-[48px] items-center text-base font-semibold text-graphite hover:text-blueprint dark:text-ink dark:hover:text-skyline"
                   >
                     {link.label}
                   </Link>

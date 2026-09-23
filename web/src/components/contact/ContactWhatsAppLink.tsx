@@ -10,7 +10,7 @@ export default function ContactWhatsAppLink({ href, children }: { href: string; 
       target="_blank"
       rel="noopener"
       onClick={() => track('whatsapp_clicked', { source: 'contact_details' })}
-      className="font-semibold text-blueprint"
+      className="font-semibold text-blueprint dark:text-skyline"
       dir="ltr"
     >
       {children}

@@ -44,8 +44,8 @@ export default async function ComparePage({
     return (
       <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-16">
         <h1 className="text-2xl font-extrabold">{t('title')}</h1>
-        <p className="mt-3 text-machine">{t('minimum')}</p>
-        <Link href="/catalog" className="mt-4 inline-block font-bold text-blueprint hover:underline">
+        <p className="mt-3 text-machine dark:text-fog">{t('minimum')}</p>
+        <Link href="/catalog" className="mt-4 inline-block font-bold text-blueprint hover:underline dark:text-skyline">
           {tp('backToCatalog')}
         </Link>
       </div>
@@ -73,7 +73,7 @@ export default async function ComparePage({
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(28px,4vw,56px)]">
       <h1 className="text-[clamp(1.8rem,3.2vw,2.6rem)] font-extrabold tracking-tight">{t('title')}</h1>
-      <p className="mt-2 text-machine">{t('instructions')}</p>
+      <p className="mt-2 text-machine dark:text-fog">{t('instructions')}</p>
 
       <div className="mt-8 overflow-x-auto" tabIndex={0} role="region" aria-label={t('title')}>
         <table className="w-full min-w-[560px] border-collapse text-sm">
@@ -84,7 +84,7 @@ export default async function ComparePage({
               </th>
               {products.map((product) => (
                 <th key={product.code} scope="col" className="p-3 text-start align-bottom">
-                  <span className="block overflow-hidden rounded border border-line bg-pure">
+                  <span className="block overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface">
                     <Image
                       src={product.image}
                       alt=""
@@ -94,7 +94,7 @@ export default async function ComparePage({
                       className="h-24 w-full object-contain"
                     />
                   </span>
-                  <span className="mt-2 block text-xs font-semibold text-machine" dir="ltr">
+                  <span className="mt-2 block text-xs font-semibold text-machine dark:text-fog" dir="ltr">
                     {product.code}
                   </span>
                   <span className="block font-bold">{localized(product.name, l)}</span>
@@ -104,14 +104,14 @@ export default async function ComparePage({
           </thead>
           <tbody>
             {keys.map((key) => (
-              <tr key={key} className="border-t border-line">
-                <th scope="row" className="py-3 pe-4 text-start font-medium text-machine">
+              <tr key={key} className="border-t border-line dark:border-white/10">
+                <th scope="row" className="py-3 pe-4 text-start font-medium text-machine dark:text-fog">
                   {localized(labels[key], l)}
                 </th>
                 {products.map((product) => {
                   const value = valueFor(product.code, key);
                   return (
-                    <td key={product.code} className={`py-3 pe-4 ${value ? 'text-graphite' : 'text-machine'}`}>
+                    <td key={product.code} className={`py-3 pe-4 ${value ? 'text-graphite dark:text-ink' : 'text-machine dark:text-fog'}`}>
                       {value || (
                         <>
                           <span aria-hidden="true">—</span>
@@ -127,9 +127,9 @@ export default async function ComparePage({
         </table>
       </div>
 
-      <p className="mt-4 text-sm text-machine">{tp('detailsOnRequest')}</p>
+      <p className="mt-4 text-sm text-machine dark:text-fog">{tp('detailsOnRequest')}</p>
 
-      <Link href="/catalog" className="mt-6 inline-block font-bold text-blueprint hover:underline">
+      <Link href="/catalog" className="mt-6 inline-block font-bold text-blueprint hover:underline dark:text-skyline">
         {tp('backToCatalog')}
       </Link>
     </div>

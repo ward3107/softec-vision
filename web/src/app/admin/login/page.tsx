@@ -15,9 +15,9 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
 
   return (
     <main id="main" className="mx-auto grid min-h-screen max-w-sm content-center px-5 py-12">
-      <p className="text-sm font-bold text-blueprint">{S.brand}</p>
+      <p className="text-sm font-bold text-blueprint dark:text-skyline">{S.brand}</p>
       <h1 className="mt-1 text-2xl font-extrabold">{S.signInTitle}</h1>
-      <div className="mt-6 rounded border border-line bg-pure p-6">
+      <div className="mt-6 rounded border border-line bg-pure p-6 dark:border-white/10 dark:bg-surface">
         {configured ? (
           <LoginForm initialError={error === 'no-access' ? 'no-access' : undefined} />
         ) : (

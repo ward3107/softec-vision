@@ -96,19 +96,19 @@ export default async function ProductPage({
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(28px,4vw,56px)] pb-28">
       <JsonLd data={[productLd, breadcrumbLd]} />
       <ProductViewTracker code={product.code} />
-      <nav className="text-sm text-machine">
-        <Link href="/catalog" className="hover:text-blueprint">
+      <nav className="text-sm text-machine dark:text-fog">
+        <Link href="/catalog" className="hover:text-blueprint dark:hover:text-skyline">
           {t('backToCatalog')}
         </Link>
         <span className="px-2">/</span>
-        <span className="text-graphite" dir="ltr">
+        <span className="text-graphite dark:text-ink" dir="ltr">
           {product.code}
         </span>
       </nav>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2">
         <div className="reveal reveal-left">
-          <div className="aspect-[4/3] overflow-hidden rounded border border-line bg-pure">
+          <div className="aspect-[4/3] overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface">
             <Image
               src={product.image}
               alt={primaryAlt}
@@ -124,7 +124,7 @@ export default async function ProductPage({
               {gallery.map((item) => (
                 <div
                   key={item.src}
-                  className="aspect-[4/3] overflow-hidden rounded border border-line bg-pure"
+                  className="aspect-[4/3] overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface"
                 >
                   <Image
                     src={item.src}
@@ -141,11 +141,11 @@ export default async function ProductPage({
         </div>
 
         <div className="reveal reveal-right">
-          <span className="text-sm font-semibold text-machine" dir="ltr">
+          <span className="text-sm font-semibold text-machine dark:text-fog" dir="ltr">
             {product.code}
           </span>
           <h1 className="text-[clamp(1.8rem,3.2vw,2.6rem)] font-extrabold tracking-tight">{name}</h1>
-          <p className="mt-3 text-machine">{localized(product.desc, l)}</p>
+          <p className="mt-3 text-machine dark:text-fog">{localized(product.desc, l)}</p>
 
           {specs.length > 0 && (
             <section aria-labelledby="specs-title" className="mt-6">
@@ -155,18 +155,18 @@ export default async function ProductPage({
               <table className="mt-2 w-full border-collapse text-sm">
                 <tbody>
                   {specs.map((spec) => (
-                    <tr key={spec.key} className="border-b border-line">
-                      <th scope="row" className="py-2 pe-4 text-start font-medium text-machine">
+                    <tr key={spec.key} className="border-b border-line dark:border-white/10">
+                      <th scope="row" className="py-2 pe-4 text-start font-medium text-machine dark:text-fog">
                         {localized(spec.label, l)}
                       </th>
-                      <td className="py-2 text-graphite">{localized(spec.value, l)}</td>
+                      <td className="py-2 text-graphite dark:text-ink">{localized(spec.value, l)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </section>
           )}
-          <p className="mt-3 text-sm text-machine">{t('detailsOnRequest')}</p>
+          <p className="mt-3 text-sm text-machine dark:text-fog">{t('detailsOnRequest')}</p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <ProductWhatsAppButton href={buildInquiryUrl(product, l)} label={t('inquiry')} code={product.code} />

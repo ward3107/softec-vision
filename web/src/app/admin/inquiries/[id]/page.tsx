@@ -23,7 +23,7 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
     return (
       <AdminShell email={user?.email} active="inquiries">
         <p>{S.detail.notFound}</p>
-        <Link href="/admin" className="mt-4 inline-block font-semibold text-blueprint hover:underline">
+        <Link href="/admin" className="mt-4 inline-block font-semibold text-blueprint hover:underline dark:text-skyline">
           {S.detail.back}
         </Link>
       </AdminShell>
@@ -49,7 +49,7 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
         <>
           {dateFormat.format(new Date(inquiry.consent_at))}
           {inquiry.consent_version && (
-            <span className="block text-sm font-normal text-machine">
+            <span className="block text-sm font-normal text-machine dark:text-fog">
               {S.detail.policyVersion}: <bdi>{inquiry.consent_version}</bdi>
             </span>
           )}
@@ -62,25 +62,25 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
 
   return (
     <AdminShell email={user?.email} active="inquiries">
-      <Link href="/admin" className="text-sm font-semibold text-blueprint hover:underline">
+      <Link href="/admin" className="text-sm font-semibold text-blueprint hover:underline dark:text-skyline">
         ← {S.detail.back}
       </Link>
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-extrabold">{inquiry.name}</h1>
         <span className={`rounded px-2 py-0.5 text-xs font-bold ${statusBadge[inquiry.status]}`}>{S.statuses[inquiry.status]}</span>
-        <span className="text-sm text-machine">
+        <span className="text-sm text-machine dark:text-fog">
           {S.detail.reference}: <bdi>{reference}</bdi>
         </span>
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <section className="rounded border border-line bg-pure p-5">
+        <section className="rounded border border-line bg-pure p-5 dark:border-white/10 dark:bg-surface">
           <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[auto_1fr]">
             {rows
               .filter(([, value]) => value)
               .map(([label, value, ltr]) => (
                 <div key={label} className="contents">
-                  <dt className="text-sm text-machine">{label}</dt>
+                  <dt className="text-sm text-machine dark:text-fog">{label}</dt>
                   <dd className="font-semibold">{ltr ? <bdi>{value}</bdi> : value}</dd>
                 </div>
               ))}
@@ -92,30 +92,36 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
 
           <h2 className="mt-6 text-base font-bold">{S.detail.attachments}</h2>
           {attachments.length === 0 ? (
-            <p className="mt-2 text-sm text-machine">{S.detail.noAttachments}</p>
+            <p className="mt-2 text-sm text-machine dark:text-fog">{S.detail.noAttachments}</p>
           ) : (
             <>
               <ul className="mt-2 grid gap-2">
                 {attachments.map((file) => (
                   <li key={file.filename + file.size}>
                     {file.url ? (
-                      <a href={file.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-blueprint underline underline-offset-2" dir="ltr">
+                      <a
+                        href={file.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-blueprint underline underline-offset-2 dark:text-skyline"
+                        dir="ltr"
+                      >
                         {file.filename}
                       </a>
                     ) : (
                       <span dir="ltr">{file.filename}</span>
                     )}{' '}
-                    <span className="text-sm text-machine">({kb(file.size)})</span>
+                    <span className="text-sm text-machine dark:text-fog">({kb(file.size)})</span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-1 text-xs text-machine">{S.detail.fileLinkNote}</p>
+              <p className="mt-1 text-xs text-machine dark:text-fog">{S.detail.fileLinkNote}</p>
             </>
           )}
         </section>
 
         <aside className="grid content-start gap-6">
-          <section className="rounded border border-line bg-pure p-5">
+          <section className="rounded border border-line bg-pure p-5 dark:border-white/10 dark:bg-surface">
             <h2 className="text-base font-bold">{S.detail.reply}</h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {links.email && (
@@ -124,7 +130,7 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
                 </a>
               )}
               {links.phone && (
-                <a href={links.phone} className={`${button} border-line hover:border-machine`}>
+                <a href={links.phone} className={`${button} border-line hover:border-machine dark:border-white/10 dark:hover:border-white/25`}>
                   {S.detail.replyPhone}
                 </a>
               )}
@@ -136,7 +142,7 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
             </div>
           </section>
 
-          <section className="rounded border border-line bg-pure p-5">
+          <section className="rounded border border-line bg-pure p-5 dark:border-white/10 dark:bg-surface">
             <h2 className="text-base font-bold">{S.detail.setStatus}</h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {INQUIRY_STATUSES.map((status) => (
@@ -147,7 +153,9 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
                     type="submit"
                     aria-pressed={inquiry.status === status}
                     className={`${button} ${
-                      inquiry.status === status ? 'border-blueprint bg-blueprint text-pure' : 'border-line hover:border-machine'
+                      inquiry.status === status
+                        ? 'border-blueprint bg-blueprint text-pure'
+                        : 'border-line hover:border-machine dark:border-white/10 dark:hover:border-white/25'
                     }`}
                   >
                     {S.statuses[status]}
@@ -158,8 +166,8 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
           </section>
 
           {access === 'admin' && (
-            <section className="rounded border-2 border-red-700 bg-pure p-5">
-              <h2 className="text-base font-bold text-red-700">{S.detail.erase}</h2>
+            <section className="rounded border-2 border-red-700 bg-pure p-5 dark:border-red-400 dark:bg-surface">
+              <h2 className="text-base font-bold text-red-700 dark:text-red-400">{S.detail.erase}</h2>
               <p className="mt-1 text-sm">{S.detail.eraseHelp}</p>
               <form action={eraseInquiry} className="mt-3 grid gap-3">
                 <input type="hidden" name="id" value={inquiry.id} />
@@ -167,7 +175,10 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
                   <input type="checkbox" name="confirm" required className="mt-0.5 h-5 w-5 accent-red-700" />
                   {S.detail.eraseConfirm}
                 </label>
-                <button type="submit" className={`${button} justify-center border-red-700 text-red-700 hover:bg-red-50`}>
+                <button
+                  type="submit"
+                  className={`${button} justify-center border-red-700 text-red-700 hover:bg-red-50 dark:border-red-400 dark:text-red-400 dark:hover:bg-red-950`}
+                >
                   {S.detail.eraseButton}
                 </button>
               </form>

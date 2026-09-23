@@ -18,6 +18,7 @@ export const S = {
     saveFailed: 'השמירה נכשלה. נסו שוב.'
   },
   nav: { inquiries: 'פניות', products: 'מוצרים', site: 'לאתר' },
+  theme: { toLight: 'מעבר למצב בהיר', toDark: 'מעבר למצב כהה' },
   inquiries: {
     title: 'פניות להצעת מחיר',
     empty: 'אין פניות להצגה.',

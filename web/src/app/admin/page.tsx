@@ -29,7 +29,9 @@ export default async function AdminInquiriesPage({
       href={value ? `/admin?status=${value}` : '/admin'}
       aria-current={status === value ? 'page' : undefined}
       className={`inline-flex min-h-[44px] items-center rounded border px-3 text-sm font-semibold ${
-        status === value ? 'border-blueprint bg-pure text-blueprint' : 'border-line hover:border-machine'
+        status === value
+          ? 'border-blueprint bg-pure text-blueprint dark:border-skyline dark:bg-surface dark:text-skyline'
+          : 'border-line hover:border-machine dark:border-white/10 dark:hover:border-white/25'
       }`}
     >
       {label}
@@ -40,12 +42,15 @@ export default async function AdminInquiriesPage({
     <AdminShell email={user?.email} active="inquiries">
       <h1 className="text-2xl font-extrabold">{S.inquiries.title}</h1>
       {erased && (
-        <p role="status" className="mt-3 rounded border border-line bg-pure p-3 text-sm">
+        <p role="status" className="mt-3 rounded border border-line bg-pure p-3 text-sm dark:border-white/10 dark:bg-surface">
           ✓ {S.detail.erased}
         </p>
       )}
       {error === 'admin-only' && (
-        <p role="alert" className="mt-3 rounded border-2 border-red-700 bg-pure p-3 text-sm font-semibold text-red-700">
+        <p
+          role="alert"
+          className="mt-3 rounded border-2 border-red-700 bg-pure p-3 text-sm font-semibold text-red-700 dark:border-red-400 dark:bg-surface dark:text-red-400"
+        >
           {S.errors['admin-only']}
         </p>
       )}
@@ -55,15 +60,20 @@ export default async function AdminInquiriesPage({
       </nav>
 
       {rows.length === 0 ? (
-        <p className="mt-8 text-machine">{S.inquiries.empty}</p>
+        <p className="mt-8 text-machine dark:text-fog">{S.inquiries.empty}</p>
       ) : (
-        <div className="mt-6 overflow-x-auto rounded border border-line bg-pure" tabIndex={0} role="region" aria-label={S.inquiries.title}>
+        <div
+          className="mt-6 overflow-x-auto rounded border border-line bg-pure dark:border-white/10 dark:bg-surface"
+          tabIndex={0}
+          role="region"
+          aria-label={S.inquiries.title}
+        >
           <table className="w-full min-w-[640px] border-collapse text-sm">
             <thead>
-              <tr className="border-b border-line text-start">
+              <tr className="border-b border-line text-start dark:border-white/10">
                 {[S.inquiries.date, S.inquiries.name, S.inquiries.company, S.inquiries.country, S.inquiries.product, S.inquiries.status].map(
                   (h) => (
-                    <th key={h} scope="col" className="px-3 py-3 text-start font-semibold text-machine">
+                    <th key={h} scope="col" className="px-3 py-3 text-start font-semibold text-machine dark:text-fog">
                       {h}
                     </th>
                   )
@@ -72,15 +82,18 @@ export default async function AdminInquiriesPage({
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.id} className="border-b border-line last:border-b-0 hover:bg-paper">
+                <tr key={row.id} className="border-b border-line last:border-b-0 hover:bg-paper dark:border-white/10 dark:hover:bg-canvas">
                   <td className="whitespace-nowrap px-3 py-3">
                     <bdi>{dateFormat.format(new Date(row.created_at))}</bdi>
                   </td>
                   <td className="px-3 py-3 font-semibold">
-                    <Link href={`/admin/inquiries/${row.id}`} className="text-blueprint underline-offset-2 hover:underline">
+                    <Link
+                      href={`/admin/inquiries/${row.id}`}
+                      className="text-blueprint underline-offset-2 hover:underline dark:text-skyline"
+                    >
                       {row.name}
                     </Link>
-                    <span className="ms-2 text-xs text-machine">
+                    <span className="ms-2 text-xs text-machine dark:text-fog">
                       <bdi>{shortReference(row.id)}</bdi>
                     </span>
                   </td>

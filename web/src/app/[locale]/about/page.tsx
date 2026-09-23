@@ -34,21 +34,21 @@ export default async function AboutPage({
   return (
     <>
       <section className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)]">
-        <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blueprint">{t('eyebrow')}</p>
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blueprint dark:text-skyline">{t('eyebrow')}</p>
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-24">
           <div className="reveal reveal-left">
             <h1>
               <span className="sr-only">{t('title')}</span>
               <BrandLogo className="max-w-[420px]" />
             </h1>
-            <p className="mt-4 text-lg text-machine">{t('body')}</p>
-            <p className="mt-3 text-lg text-machine">{t('detail')}</p>
+            <p className="mt-4 text-lg text-machine dark:text-fog">{t('body')}</p>
+            <p className="mt-3 text-lg text-machine dark:text-fog">{t('detail')}</p>
           </div>
           <div className="reveal reveal-right">
             <h2 className="text-lg font-bold">{t('spaces')}</h2>
             <ul className="mt-4">
               {sectors.map((row) => (
-                <li key={row} className="border-b border-line py-4 text-lg">
+                <li key={row} className="border-b border-line py-4 text-lg dark:border-white/10">
                   {row}
                 </li>
               ))}
@@ -58,7 +58,7 @@ export default async function AboutPage({
       </section>
 
       {/* Capabilities: manufacturing, AV integration, accessibility */}
-      <section aria-labelledby="capabilities-title" className="bg-paper">
+      <section aria-labelledby="capabilities-title" className="bg-paper dark:bg-canvas">
         <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)]">
           <h2 id="capabilities-title" className="sr-only">
             {t('capabilitiesTitle')}
@@ -67,7 +67,7 @@ export default async function AboutPage({
             {capabilities.map((item, i) => (
               <div key={item.title} className={`reveal reveal-up reveal-d${i + 1} border-s-2 border-softec ps-5`}>
                 <h3 className="text-lg font-bold">{item.title}</h3>
-                <p className="mt-2 text-machine">{item.body}</p>
+                <p className="mt-2 text-machine dark:text-fog">{item.body}</p>
               </div>
             ))}
           </div>

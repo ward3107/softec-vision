@@ -31,26 +31,26 @@ export default async function ProcessPage({
 
   return (
     <section className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)]">
-      <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blueprint">{t('eyebrow')}</p>
+      <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-blueprint dark:text-skyline">{t('eyebrow')}</p>
       <h1 className="max-w-2xl text-[clamp(2rem,3.5vw,3rem)] font-extrabold tracking-tight">{t('title')}</h1>
-      <p className="mt-3 max-w-2xl text-lg text-machine">{t('body')}</p>
+      <p className="mt-3 max-w-2xl text-lg text-machine dark:text-fog">{t('body')}</p>
 
       <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, i) => (
-          <li key={step.n} className={`reveal reveal-up reveal-d${i + 1} border-t-2 border-line pt-5`}>
+          <li key={step.n} className={`reveal reveal-up reveal-d${i + 1} border-t-2 border-line pt-5 dark:border-white/10`}>
 
-            <span className="text-base font-bold text-blueprint" aria-hidden="true">
+            <span className="text-base font-bold text-blueprint dark:text-skyline" aria-hidden="true">
               {step.n}
             </span>
             <h2 className="mt-3 text-lg font-bold">{step.t}</h2>
-            <p className="mt-2 text-machine">{step.b}</p>
+            <p className="mt-2 text-machine dark:text-fog">{step.b}</p>
           </li>
         ))}
       </ol>
 
-      <div className="reveal reveal-up mt-12 max-w-2xl rounded border-s-2 border-softec bg-paper p-6">
+      <div className="reveal reveal-up mt-12 max-w-2xl rounded border-s-2 border-softec bg-paper p-6 dark:bg-canvas">
         <h2 className="text-lg font-bold">{t('deliveryTitle')}</h2>
-        <p className="mt-2 text-machine">{t('deliveryBody')}</p>
+        <p className="mt-2 text-machine dark:text-fog">{t('deliveryBody')}</p>
       </div>
     </section>
   );

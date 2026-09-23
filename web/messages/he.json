@@ -15,7 +15,9 @@
     "skip": "דלגו לתוכן",
     "switchTo": "Switch to English",
     "menuOpen": "פתיחת תפריט",
-    "menuClose": "סגירת תפריט"
+    "menuClose": "סגירת תפריט",
+    "themeToLight": "מעבר למצב בהיר",
+    "themeToDark": "מעבר למצב כהה"
   },
   "hero": {
     "eyebrow": "מתכננים בישראל. מייצרים לכל מרחב.",

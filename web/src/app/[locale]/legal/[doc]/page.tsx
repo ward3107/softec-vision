@@ -63,23 +63,23 @@ export default async function LegalDocPage({
 
       <div className="mx-auto max-w-4xl px-[clamp(20px,4.5vw,72px)] py-[clamp(28px,4vw,56px)]">
         <h1 className="text-[clamp(1.9rem,4vw,2.7rem)] font-extrabold tracking-tight">{loc(d.h1, l)}</h1>
-        <p className="mt-2 text-sm text-machine">
-          <strong className="text-graphite">{loc(d.lastUpdatedLabel, l)}</strong> {loc(d.lastUpdated, l)}
+        <p className="mt-2 text-sm text-machine dark:text-fog">
+          <strong className="text-graphite dark:text-ink">{loc(d.lastUpdatedLabel, l)}</strong> {loc(d.lastUpdated, l)}
         </p>
         {d.reviewLabel && d.reviewDate && (
-          <p className="text-sm text-machine">
-            <strong className="text-graphite">{loc(d.reviewLabel, l)}</strong> {loc(d.reviewDate, l)}
+          <p className="text-sm text-machine dark:text-fog">
+            <strong className="text-graphite dark:text-ink">{loc(d.reviewLabel, l)}</strong> {loc(d.reviewDate, l)}
           </p>
         )}
         <p className="mt-4 max-w-[70ch] text-lg">{loc(d.lead, l)}</p>
 
-        <nav className="mt-8 rounded border border-line bg-pure p-5" aria-label={loc(d.contents, l)}>
-          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-machine">{loc(d.contents, l)}</h2>
+        <nav className="mt-8 rounded border border-line bg-pure p-5 dark:border-white/10 dark:bg-surface" aria-label={loc(d.contents, l)}>
+          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-machine dark:text-fog">{loc(d.contents, l)}</h2>
           <ol className="mt-3 grid gap-1 sm:grid-cols-2">
             {d.sections.map((s, i) => (
               <li key={s.id}>
-                <a href={`#${s.id}`} className="block rounded px-2 py-1 text-sm font-medium hover:bg-paper hover:text-blueprint">
-                  <span className="text-machine">{String(i + 1).padStart(2, '0')}.</span> {loc(s.title, l)}
+                <a href={`#${s.id}`} className="block rounded px-2 py-1 text-sm font-medium hover:bg-paper hover:text-blueprint dark:hover:bg-canvas dark:hover:text-skyline">
+                  <span className="text-machine dark:text-fog">{String(i + 1).padStart(2, '0')}.</span> {loc(s.title, l)}
                 </a>
               </li>
             ))}
