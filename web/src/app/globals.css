@@ -16,6 +16,10 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Keep focused and linked-to elements clear of the sticky header and the
+       floating corner buttons (WCAG 2.2 — 2.4.11 Focus Not Obscured). */
+    scroll-padding-top: 7.5rem;
+    scroll-padding-bottom: 5.5rem;
   }
   body {
     background: var(--paper);
