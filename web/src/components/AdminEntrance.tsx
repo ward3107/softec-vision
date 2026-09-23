@@ -34,9 +34,11 @@ export default function AdminEntrance() {
     }, 3000);
   }
 
-  const btn = 'px-1 leading-none text-paper/45 transition-colors hover:text-paper/80';
+  const btn =
+    'inline-flex h-11 min-w-[48px] items-center justify-center rounded-sm border border-white/30 bg-white/5 px-4 leading-none text-paper/80 transition-colors hover:border-white/60 hover:bg-white/10 hover:text-pure active:bg-white/20';
   return (
-    <span className="inline-flex select-none items-baseline gap-0.5 text-sm font-bold tracking-wide" aria-hidden="true">
+    // LTR so the monogram reads "S V Ltd" on the Hebrew site too.
+    <span className="inline-flex select-none items-center gap-2 text-base font-bold tracking-wider" dir="ltr" aria-hidden="true">
       <button type="button" tabIndex={-1} onClick={() => press('S')} className={btn}>
         S
       </button>
