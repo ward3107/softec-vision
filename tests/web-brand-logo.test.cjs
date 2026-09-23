@@ -44,7 +44,8 @@ test('footer renders the saved creator signature letter by letter', () => {
   const footer = read('web', 'src', 'components', 'Footer.tsx');
   const css = read('web', 'src', 'app', 'globals.css');
 
-  assert.match(signature, /Made with love by Was/);
+  assert.match(signature, /const HEART = '❤️'/);
+  assert.match(signature, /https:\/\/waseemp\.vercel\.app\//);
   assert.match(signature, /creator-signature__character/);
   assert.match(footer, /<CreatorSignature/);
   assert.match(css, /@keyframes signatureWrite/);

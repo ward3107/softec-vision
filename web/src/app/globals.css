@@ -77,6 +77,23 @@ body.brand-splash-open {
   transform: translateY(4px);
   animation: signatureWrite 0.24s ease forwards;
 }
+.creator-signature__heart {
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;
+  font-style: normal;
+}
+.creator-signature__link {
+  color: #5cc7ec;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.creator-signature__link:hover,
+.creator-signature__link:focus-visible {
+  color: #fff;
+  text-decoration-color: currentColor;
+}
 .creator-signature__cursor {
   width: 2px;
   height: 1.15em;
