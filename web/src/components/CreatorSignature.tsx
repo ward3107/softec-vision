@@ -43,7 +43,6 @@ export default function CreatorSignature() {
           <SignatureCharacters text={NAME} startIndex={PREFIX.length + CONNECTOR.length + 1} />
         </span>
       </a>
-      <span className="creator-signature__cursor" aria-hidden="true" />
     </p>
   );
 }
