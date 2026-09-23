@@ -11,7 +11,9 @@ import CompareTray from '@/components/catalog/CompareTray';
 import RevealController from '@/components/motion/RevealController';
 import FloatingDock from '@/components/widgets/FloatingDock';
 import BrandSplash from '@/components/BrandSplash';
+import JsonLd, { organizationSchema } from '@/components/JsonLd';
 import { WA_NUMBER } from '@/lib/catalog/seed';
+import { SITE_URL, BRAND, OG_LOCALE, localeUrl, metaAlternates } from '@/lib/seo';
 import '../globals.css';
 
 /**
@@ -46,10 +48,25 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const l = locale as AppLocale;
   const t = await getTranslations({ locale, namespace: 'meta' });
   return {
-    title: t('title'),
-    description: t('description')
+    metadataBase: new URL(SITE_URL),
+    title: { default: t('title'), template: `%s | ${BRAND}` },
+    description: t('description'),
+    applicationName: BRAND,
+    alternates: metaAlternates(l, ''),
+    openGraph: {
+      type: 'website',
+      siteName: BRAND,
+      locale: OG_LOCALE[l],
+      alternateLocale: l === 'he' ? OG_LOCALE.en : OG_LOCALE.he,
+      url: localeUrl(l, ''),
+      title: t('title'),
+      description: t('description')
+    },
+    twitter: { card: 'summary_large_image', title: t('title'), description: t('description') },
+    robots: { index: true, follow: true }
   };
 }
 
@@ -74,6 +91,7 @@ export default async function LocaleLayout({
     <html lang={locale} dir={dir} className={assistant.variable} suppressHydrationWarning>
       <body className="min-h-screen bg-paper font-sans text-graphite antialiased" suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
+        <JsonLd data={organizationSchema(locale as AppLocale)} />
         <BrandSplash />
         <NextIntlClientProvider messages={messages}>
           <CompareProvider>

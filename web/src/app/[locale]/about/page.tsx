@@ -1,5 +1,19 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import type { AppLocale } from '@/i18n/routing';
+import { pageMetadata } from '@/lib/seo';
 import BrandLogo from '@/components/BrandLogo';
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const nav = await getTranslations({ locale, namespace: 'nav' });
+  const about = await getTranslations({ locale, namespace: 'about' });
+  return pageMetadata({ locale: locale as AppLocale, path: '/about', title: nav('about'), description: about('body') });
+}
 
 export default async function AboutPage({
   params
