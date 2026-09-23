@@ -90,6 +90,7 @@ export default async function ComparePage({
                       alt=""
                       width={220}
                       height={165}
+                      sizes="200px"
                       className="h-24 w-full object-contain"
                     />
                   </span>
