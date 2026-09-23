@@ -214,7 +214,9 @@ export const PRODUCTS: Product[] = [
       s('finish', 'פח צבוע בתנור', 'Powder-coated steel'),
       ph('dimensions'), ph('weight'), ph('power'),
       s('accessibility', 'גובה עבודה נגיש', 'Accessible working height')
-    ]
+    ],
+    // Drag-to-rotate frames (front half only), rendered from the 3D model.
+    spin: Array.from({ length: 14 }, (_, i) => `/products/spin/RAV-500/${String(i).padStart(2, '0')}.webp`)
   },
   {
     code: 'V-5',

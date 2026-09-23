@@ -4,6 +4,9 @@ import { useState } from 'react';
 import Image from 'next/image';
 import ImageLightbox, { type LightboxLabels } from './ImageLightbox';
 import Product3DViewer from './Product3DViewer';
+import ProductSpin from './ProductSpin';
+
+type Mode = 'photos' | 'spin' | 'model';
 
 const frame = 'aspect-[4/3] overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface';
 const zoomable = `${frame} group block w-full cursor-zoom-in`;
@@ -15,23 +18,39 @@ const tab = (active: boolean) =>
       : 'border-line text-machine hover:border-machine dark:border-white/10 dark:text-fog dark:hover:border-white/25'
   }`;
 
-/** Product page image area: photos (click to enlarge) by default, with a 3D tab when the owner has uploaded a model. */
+/** Product page image area: photos (click to enlarge) by default, plus a drag-to-rotate tab and a 3D tab where those exist. */
 export default function ProductMediaSwitch({
   image,
   alt,
   gallery,
   model3d,
+  spin,
   labels
 }: {
   image: string;
   alt: string;
   gallery: Array<{ src: string; alt: string }>;
   model3d?: string;
-  labels: { photos: string; model: string; hint: string; enlarge: string; lightbox: LightboxLabels };
+  spin?: string[];
+  labels: {
+    photos: string;
+    spin: string;
+    spinHint: string;
+    model: string;
+    hint: string;
+    enlarge: string;
+    lightbox: LightboxLabels;
+  };
 }) {
-  const [mode, setMode] = useState<'photos' | 'model'>('photos');
+  const [mode, setMode] = useState<Mode>('photos');
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const allPhotos = [{ src: image, alt }, ...gallery];
+  const hasSpin = !!spin && spin.length > 1;
+  const tabs: Array<{ id: Mode; label: string }> = [
+    { id: 'photos', label: labels.photos },
+    ...(hasSpin ? [{ id: 'spin' as Mode, label: labels.spin }] : []),
+    ...(model3d ? [{ id: 'model' as Mode, label: labels.model }] : [])
+  ];
 
   const photos = (
     <>
@@ -61,19 +80,32 @@ export default function ProductMediaSwitch({
 
   return (
     <>
-      {model3d ? (
+      {tabs.length > 1 ? (
         <>
           <div role="tablist" className="mb-3 flex gap-2">
-            <button type="button" role="tab" aria-selected={mode === 'photos'} className={tab(mode === 'photos')} onClick={() => setMode('photos')}>
-              {labels.photos}
-            </button>
-            <button type="button" role="tab" aria-selected={mode === 'model'} className={tab(mode === 'model')} onClick={() => setMode('model')}>
-              {labels.model}
-            </button>
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                aria-selected={mode === t.id}
+                className={tab(mode === t.id)}
+                onClick={() => setMode(t.id)}
+              >
+                {t.label}
+              </button>
+            ))}
           </div>
-          {mode === 'photos' ? (
-            photos
-          ) : (
+          {mode === 'photos' && photos}
+          {mode === 'spin' && hasSpin && (
+            <>
+              <div className={frame}>
+                <ProductSpin frames={spin!} alt={alt} label={labels.spinHint} />
+              </div>
+              <p className="mt-2 text-xs text-machine dark:text-fog">{labels.spinHint}</p>
+            </>
+          )}
+          {mode === 'model' && model3d && (
             <>
               <div className={frame}>
                 <Product3DViewer src={model3d} alt={alt} />

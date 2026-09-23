@@ -113,8 +113,11 @@ export default async function ProductPage({
             alt={primaryAlt}
             gallery={gallery.map((item) => ({ src: item.src, alt: localized(item.alt, l) }))}
             model3d={product.model3d}
+            spin={product.spin}
             labels={{
               photos: t('viewPhotos'),
+              spin: t('viewSpin'),
+              spinHint: t('spinHint'),
               model: t('view3D'),
               hint: t('media3dHint'),
               enlarge: t('enlarge'),

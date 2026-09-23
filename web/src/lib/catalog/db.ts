@@ -108,7 +108,9 @@ export function rowsToProducts(
       gallery,
       specs,
       // An owner-uploaded model (via /admin/products/[code]) replaces the built-in one, same as the photos above.
-      model3d: supabaseUrl && row.model_3d_url ? publicModelUrl(supabaseUrl, row.model_3d_url) : base.model3d
+      model3d: supabaseUrl && row.model_3d_url ? publicModelUrl(supabaseUrl, row.model_3d_url) : base.model3d,
+      // Spin frames are built-in only (no admin upload yet), so always from the seed.
+      spin: base.spin
     });
   }
   return products;

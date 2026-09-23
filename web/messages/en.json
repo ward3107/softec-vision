@@ -75,6 +75,8 @@
     "detailsOnRequest": "For dimensions, technical drawings or configuration options for your project, contact us.",
     "viewPhotos": "Photos",
     "view3D": "3D view",
+    "viewSpin": "Rotate",
+    "spinHint": "Drag to rotate",
     "media3dHint": "Drag to rotate, scroll to zoom.",
     "enlarge": "Enlarge image",
     "close": "Close",
