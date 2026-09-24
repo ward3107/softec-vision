@@ -26,12 +26,13 @@ export default async function AdminInquiriesPage({
 
   const filter = (value: InquiryStatus | undefined, label: string) => (
     <Link
+      key={value ?? 'all'}
       href={value ? `/admin/inquiries?status=${value}` : '/admin/inquiries'}
       aria-current={status === value ? 'page' : undefined}
-      className={`inline-flex min-h-[44px] items-center rounded border px-3 text-sm font-semibold ${
+      className={`inline-flex min-h-[42px] items-center rounded-lg px-3 text-sm font-semibold transition-colors ${
         status === value
-          ? 'border-blueprint bg-pure text-blueprint dark:border-skyline dark:bg-surface dark:text-skyline'
-          : 'border-line hover:border-machine dark:border-white/10 dark:hover:border-white/25'
+          ? 'bg-blueprint text-pure shadow-[0_6px_16px_-8px_rgba(12,94,145,0.7)]'
+          : 'border border-line text-machine hover:bg-paper hover:text-graphite dark:border-white/10 dark:text-fog dark:hover:bg-white/5 dark:hover:text-ink'
       }`}
     >
       {label}
