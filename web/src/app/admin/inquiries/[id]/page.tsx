@@ -4,7 +4,6 @@ import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
 import { shortReference } from '@/lib/inquiry/reference';
 import he from '../../../../../messages/he.json';
-import AdminShell from '../../AdminShell';
 import { eraseInquiry, setInquiryStatus } from '../../actions';
 import { statusBadge } from '../../statusBadge';
 
@@ -16,17 +15,17 @@ const kb = (bytes: number) => `${Math.max(1, Math.round(bytes / 1024))} KB`;
 
 export default async function AdminInquiryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { client, user, access } = await requireStaff();
+  const { client, access } = await requireStaff();
   const detail = /^[0-9a-f-]{36}$/i.test(id) ? await getInquiryDetail(client, id) : null;
 
   if (!detail) {
     return (
-      <AdminShell email={user?.email} active="inquiries">
+      <>
         <p>{S.detail.notFound}</p>
         <Link href="/admin/inquiries" className="mt-4 inline-block font-semibold text-blueprint hover:underline dark:text-skyline">
           {S.detail.back}
         </Link>
-      </AdminShell>
+      </>
     );
   }
 
@@ -61,7 +60,7 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
   const button = 'inline-flex min-h-[44px] items-center rounded border px-4 text-sm font-semibold';
 
   return (
-    <AdminShell email={user?.email} active="inquiries">
+    <>
       <Link href="/admin/inquiries" className="text-sm font-semibold text-blueprint hover:underline dark:text-skyline">
         ← {S.detail.back}
       </Link>
@@ -186,6 +185,6 @@ export default async function AdminInquiryPage({ params }: { params: Promise<{ i
           )}
         </aside>
       </div>
-    </AdminShell>
+    </>
   );
 }

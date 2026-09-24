@@ -1,19 +1,26 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { S } from '@/lib/admin/strings';
 import ThemeToggle from '@/components/ThemeToggle';
 import { signOut } from './actions';
 import { AdminIcons, type AdminIconKey } from './icons';
 
-/** Page frame for signed-in admin pages. */
-export default function AdminShell({
-  email,
-  active,
-  children
-}: {
-  email?: string | null;
-  active: AdminIconKey;
-  children: React.ReactNode;
-}) {
+function activeFromPath(pathname: string): AdminIconKey {
+  if (pathname.startsWith('/admin/inquiries')) return 'inquiries';
+  if (pathname.startsWith('/admin/products')) return 'products';
+  if (pathname.startsWith('/admin/content')) return 'content';
+  return 'dashboard';
+}
+
+/**
+ * Persistent frame for the signed-in admin. Rendered once by the admin layout,
+ * so navigating between sections swaps only the page content (with the loading
+ * skeleton) while this nav stays put — no re-render, no flash.
+ */
+export default function AdminShell({ email, children }: { email?: string | null; children: React.ReactNode }) {
+  const active = activeFromPath(usePathname());
   const tab = (key: AdminIconKey, href: string) => (
     <Link
       href={href}

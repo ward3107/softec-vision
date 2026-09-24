@@ -1,18 +1,17 @@
 import { listAdminContentBlocks } from '@/lib/admin/content';
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
-import AdminShell from '../AdminShell';
 import ContentBlockForm from './ContentBlockForm';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminContentPage({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
   const { saved } = await searchParams;
-  const { client, user } = await requireStaff();
+  const { client } = await requireStaff();
   const blocks = await listAdminContentBlocks(client);
 
   return (
-    <AdminShell email={user?.email} active="content">
+    <>
       <h1 className="text-2xl font-extrabold">{S.content.title}</h1>
       <p className="mt-1 text-machine dark:text-fog">{S.content.help}</p>
       <div className="mt-6 grid max-w-3xl gap-8">
@@ -25,6 +24,6 @@ export default async function AdminContentPage({ searchParams }: { searchParams:
           <ContentBlockForm key={block.key} block={block} />
         ))}
       </div>
-    </AdminShell>
+    </>
   );
 }

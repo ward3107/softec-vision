@@ -5,7 +5,6 @@ import { isCatalogManaged, listAdminProducts } from '@/lib/admin/products';
 import { listAdminContentBlocks } from '@/lib/admin/content';
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
-import AdminShell from './AdminShell';
 import { AdminIcons } from './icons';
 
 export const dynamic = 'force-dynamic';
@@ -72,7 +71,7 @@ export default async function AdminDashboardPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const { error } = await searchParams;
-  const { client, user } = await requireStaff();
+  const { client } = await requireStaff();
 
   const [inquiries, products, managed, contentBlocks] = await Promise.all([
     countInquiries(client),
@@ -87,7 +86,7 @@ export default async function AdminDashboardPage({
   ).length;
 
   return (
-    <AdminShell email={user?.email} active="dashboard">
+    <>
       <h1 className="text-2xl font-extrabold">{S.dashboard.title}</h1>
       <p className="mt-1 text-machine dark:text-fog">{S.dashboard.welcome}</p>
 
@@ -150,6 +149,6 @@ export default async function AdminDashboardPage({
           </p>
         </Card>
       </div>
-    </AdminShell>
+    </>
   );
 }

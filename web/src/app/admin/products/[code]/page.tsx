@@ -6,7 +6,6 @@ import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
 import { publicMediaUrl } from '@/lib/catalog/media';
 import { PRODUCTS, SPEC_LABELS } from '@/lib/catalog/seed';
-import AdminShell from '../../AdminShell';
 import { saveProductAction } from '../../actions';
 import ProductForm from './ProductForm';
 import ProductMediaForm from './ProductMediaForm';
@@ -38,17 +37,17 @@ export default async function AdminProductEditPage({
 }) {
   const { code } = await params;
   const { media } = await searchParams;
-  const { client, user } = await requireStaff();
+  const { client } = await requireStaff();
   const product = await getAdminProduct(client, code);
 
   if (!product) {
     return (
-      <AdminShell email={user?.email} active="products">
+      <>
         <p>{S.products.notFound}</p>
         <Link href="/admin/products" className="mt-4 inline-block font-semibold text-blueprint hover:underline dark:text-skyline">
           {S.products.back}
         </Link>
-      </AdminShell>
+      </>
     );
   }
 
@@ -69,7 +68,7 @@ export default async function AdminProductEditPage({
   const bannerIsError = media?.startsWith('error-') ?? false;
 
   return (
-    <AdminShell email={user?.email} active="products">
+    <>
       <Link href="/admin/products" className="text-sm font-semibold text-blueprint hover:underline dark:text-skyline">
         ← {S.products.back}
       </Link>
@@ -92,6 +91,6 @@ export default async function AdminProductEditPage({
         <ProductMediaForm code={code} image={image} gallery={gallery} model={model} />
         <ProductForm product={product} specFields={specFields} action={action} />
       </div>
-    </AdminShell>
+    </>
   );
 }

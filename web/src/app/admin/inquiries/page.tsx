@@ -3,7 +3,6 @@ import { INQUIRY_STATUSES, listInquiries, type InquiryStatus } from '@/lib/admin
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
 import { shortReference } from '@/lib/inquiry/reference';
-import AdminShell from '../AdminShell';
 import { statusBadge } from '../statusBadge';
 
 export const dynamic = 'force-dynamic';
@@ -21,7 +20,7 @@ export default async function AdminInquiriesPage({
 }) {
   const { status: raw, erased } = await searchParams;
   const status = (INQUIRY_STATUSES as readonly string[]).includes(raw ?? '') ? (raw as InquiryStatus) : undefined;
-  const { client, user } = await requireStaff();
+  const { client } = await requireStaff();
   const rows = await listInquiries(client, { status });
 
   const filter = (value: InquiryStatus | undefined, label: string) => (
@@ -40,7 +39,7 @@ export default async function AdminInquiriesPage({
   );
 
   return (
-    <AdminShell email={user?.email} active="inquiries">
+    <>
       <h1 className="text-2xl font-extrabold">{S.inquiries.title}</h1>
       {erased && (
         <p role="status" className="mt-3 rounded border border-line bg-pure p-3 text-sm dark:border-white/10 dark:bg-surface">
@@ -106,6 +105,6 @@ export default async function AdminInquiriesPage({
           </table>
         </div>
       )}
-    </AdminShell>
+    </>
   );
 }

@@ -3,7 +3,6 @@ import { isCatalogManaged, listAdminProducts } from '@/lib/admin/products';
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
 import { CATEGORIES } from '@/lib/catalog/seed';
-import AdminShell from '../AdminShell';
 import { importCatalogAction } from '../actions';
 
 export const dynamic = 'force-dynamic';
@@ -20,11 +19,11 @@ export default async function AdminProductsPage({
   searchParams: Promise<{ imported?: string }>;
 }) {
   const { imported } = await searchParams;
-  const { client, user, access } = await requireStaff();
+  const { client, access } = await requireStaff();
   const [managed, rows] = await Promise.all([isCatalogManaged(client), listAdminProducts(client)]);
 
   return (
-    <AdminShell email={user?.email} active="products">
+    <>
       <h1 className="text-2xl font-extrabold">{S.products.title}</h1>
 
       {imported !== undefined && (
@@ -104,6 +103,6 @@ export default async function AdminProductsPage({
           </table>
         </div>
       )}
-    </AdminShell>
+    </>
   );
 }

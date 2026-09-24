@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createServerClient } from '@supabase/ssr';
@@ -35,7 +36,9 @@ export interface AdminContext {
   client: SupabaseClient;
 }
 
-export async function getAdminContext(): Promise<AdminContext> {
+// Cached per request: the admin layout and the page it renders both need the
+// signed-in context, so they share a single auth verification instead of two.
+export const getAdminContext = cache(async (): Promise<AdminContext> => {
   const client = await createUserClient();
   // getUser() verifies the session with the auth server (never trust the cookie alone).
   const {
@@ -44,7 +47,7 @@ export async function getAdminContext(): Promise<AdminContext> {
   if (!user) return { access: 'sign-in', user: null, client };
   const { data: profile } = await client.from('profiles').select('role').eq('id', user.id).maybeSingle();
   return { access: decideAccess(user, profile), user, client };
-}
+});
 
 /** For pages and actions: continue only as staff (optionally admin). */
 export async function requireStaff({ admin = false } = {}): Promise<AdminContext> {
