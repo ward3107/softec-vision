@@ -23,8 +23,8 @@ export default async function Footer() {
       <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] pb-36 pt-8 text-sm">
         <div className="flex flex-wrap items-center justify-between gap-6">
           <div className="flex flex-wrap items-center gap-4">
-            <span className="w-[150px] overflow-hidden rounded-sm bg-white p-1.5">
-              <BrandLogo />
+            <span className="block w-[160px]">
+              <BrandLogo dark />
             </span>
             <span className="font-semibold">{t('rights')}</span>
           </div>

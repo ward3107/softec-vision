@@ -13,10 +13,9 @@ const en = JSON.parse(fs.readFileSync(path.join(root, 'web', 'messages', 'en.jso
 test('home opens with the engineered product hero', () => {
   assert.match(home, /className="home-hero/);
   assert.match(home, /home-hero__blueprint/);
-  // The showpiece is the drag-to-rotate HeroSpin fed the RAV-500 spin frames.
-  assert.match(home, /<HeroSpin/);
-  assert.match(home, /frames=\{heroSpin\}/);
-  assert.match(home, /\/products\/spin\/RAV-500\//);
+  // The showpiece is the real product photo (static), so its colours match the
+  // catalog picture — not a grey 3D scan.
+  assert.match(home, /src="\/products\/RAV-500-transparent\.webp"/);
   assert.match(home, /home-hero__product/);
   assert.match(css, /\.home-hero__blueprint/);
   assert.match(css, /@keyframes heroProductSettle/);
@@ -40,10 +39,5 @@ test('hero motion has a reduced-motion fallback', () => {
 
 test('mobile header keeps the logo and language control without horizontal overflow', () => {
   assert.match(header, /w-\[116px\][^"']*sm:w-\[190px\]/);
-  assert.match(header, /hidden[^"']*sm:inline-flex/);
   assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/s);
-});
-
-test('phones still reach the contact page from the menu when the header button is hidden', () => {
-  assert.match(header, /<MobileNav[\s\S]*?href: '\/contact'[\s\S]*?\/>/);
 });

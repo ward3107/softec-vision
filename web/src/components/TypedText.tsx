@@ -7,6 +7,8 @@
  */
 const CHAR_DELAY = 0.022;
 const MAX_DELAY = 4.5;
+// The text types itself in once on load; no blinking caret follows (it read as
+// a line flickering forever), so nothing on the hero animates continuously.
 
 export default function TypedText({ text, className }: { text: string; className?: string }) {
   const chars = [...text];
@@ -18,11 +20,6 @@ export default function TypedText({ text, className }: { text: string; className
             {char}
           </span>
         ))}
-        <span
-          className="typed-caret"
-          aria-hidden="true"
-          style={{ animationDelay: `${Math.min(chars.length * CHAR_DELAY, MAX_DELAY)}s` }}
-        />
       </span>
     </p>
   );

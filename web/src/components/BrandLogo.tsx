@@ -2,14 +2,17 @@ import Image from 'next/image';
 
 export default function BrandLogo({
   className = '',
-  priority = false
+  priority = false,
+  dark = false
 }: {
   className?: string;
   priority?: boolean;
+  /** Light-ink variant (transparent, white wordmark) for dark surfaces like the footer. */
+  dark?: boolean;
 }) {
   return (
     <Image
-      src="/brand/softec-vision-logo.png"
+      src={dark ? '/brand/softec-vision-logo-dark.png' : '/brand/softec-vision-logo.png'}
       alt="Softec Vision"
       width={1997}
       height={795}

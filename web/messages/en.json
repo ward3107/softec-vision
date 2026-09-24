@@ -25,7 +25,7 @@
   "hero": {
     "eyebrow": "Engineered in Israel. Built for every space.",
     "title": "The room’s technology, engineered into one precise station",
-    "body": "Softec Vision designs and manufactures lecturer, control and display stations that unite ergonomics, AV integration and industrial-grade finishing — around your space, equipment and workflow.",
+    "body": "We turn your room, workflow and equipment into one precise station — designed, built and installed by us, start to finish.",
     "quote": "Contact us",
     "explore": "Explore products",
     "model": "Accessible lecturer and control station",
@@ -43,8 +43,11 @@
   },
   "capabilities": {
     "custom": "Custom Manufacturing",
+    "customSub": "Built to your space and equipment",
     "av": "Integrated AV",
-    "accessible": "Accessible Solutions"
+    "avSub": "Screens and control, engineered in",
+    "accessible": "Accessible Solutions",
+    "accessibleSub": "Reach and height for every user"
   },
   "catalog": {
     "title": "Product Families",

@@ -1,3 +1,5 @@
+import type { ReactElement } from 'react';
+import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import type { AppLocale } from '@/i18n/routing';
@@ -8,11 +10,43 @@ import JsonLd, { faqSchema } from '@/components/JsonLd';
 import CategoryExplorer, { type ExplorerCategory, type ExplorerItem } from '@/components/catalog/CategoryExplorer';
 import TypedText from '@/components/TypedText';
 import SectionIndicator from '@/components/SectionIndicator';
-import HeroSpin from '@/components/HeroSpin';
 
-// Front-half rotation frames for the hero showpiece (transparent RAV-500
-// renders); mirrors the product's `spin` set in the catalog seed.
-const heroSpin = Array.from({ length: 14 }, (_, i) => `/products/spin/RAV-500/${String(i).padStart(2, '0')}.webp`);
+// Line icons for the capabilities band (inline so no icon dependency is added);
+// each inherits colour and 24px size from its chip.
+const capabilityIconProps = {
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.6,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+  className: 'h-6 w-6'
+};
+const CAPABILITY_ICONS: Record<string, ReactElement> = {
+  custom: (
+    <svg {...capabilityIconProps} aria-hidden="true">
+      <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+      <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+    </svg>
+  ),
+  av: (
+    <svg {...capabilityIconProps} aria-hidden="true">
+      <rect x="3" y="4" width="18" height="12" rx="1" />
+      <path d="M7 20h10" />
+      <path d="M9 16v4" />
+      <path d="M15 16v4" />
+    </svg>
+  ),
+  accessible: (
+    <svg {...capabilityIconProps} aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="7.6" r="1" />
+      <path d="M12 9.2v3.8" />
+      <path d="M9 10.4c.9 .5 1.9 .8 3 .8s2.1 -.3 3 -.8" />
+      <path d="M9.8 16.6l2.2 -3.6l2.2 3.6" />
+    </svg>
+  )
+};
 
 export default async function HomePage({
   params
@@ -58,9 +92,9 @@ export default async function HomePage({
     body: resolveText(blocks, 'home.hero', l, 'body', t('body'))
   };
   const capabilities = [
-    { key: 'custom', label: resolveText(blocks, 'home.capabilities', l, 'custom', c('custom')) },
-    { key: 'av', label: resolveText(blocks, 'home.capabilities', l, 'av', c('av')) },
-    { key: 'accessible', label: resolveText(blocks, 'home.capabilities', l, 'accessible', c('accessible')) }
+    { key: 'custom', label: resolveText(blocks, 'home.capabilities', l, 'custom', c('custom')), sub: c('customSub') },
+    { key: 'av', label: resolveText(blocks, 'home.capabilities', l, 'av', c('av')), sub: c('avSub') },
+    { key: 'accessible', label: resolveText(blocks, 'home.capabilities', l, 'accessible', c('accessible')), sub: c('accessibleSub') }
   ];
   const faqItems = Array.from({ length: FAQ_COUNT }, (_, i) => {
     const q = `q${i + 1}`;
@@ -139,11 +173,14 @@ export default async function HomePage({
 
           <div className="home-hero__visual relative min-h-[390px] lg:min-h-[620px]">
             <div className="home-hero__orbit" aria-hidden="true" />
-            <HeroSpin
-              frames={heroSpin}
+            <Image
+              src="/products/RAV-500-transparent.webp"
               alt={`${t('model')} (RAV-500)`}
-              label={t('spin')}
-              className="home-hero__product absolute inset-0 h-full w-full"
+              width={1200}
+              height={924}
+              priority
+              sizes="(max-width: 1023px) 92vw, 55vw"
+              className="home-hero__product absolute inset-0 h-full w-full object-contain object-center"
             />
             <p className="home-hero__delivery absolute bottom-2 end-0 max-w-[250px] border-s-2 border-softec bg-pure/90 py-2 ps-4 text-sm font-semibold leading-relaxed text-machine backdrop-blur dark:bg-surface/90 dark:text-fog">
               {t('delivery')}
@@ -153,12 +190,23 @@ export default async function HomePage({
       </section>
 
       {/* Capabilities */}
-      <section aria-label="Capabilities" className="border-y border-line bg-pure dark:border-white/10 dark:bg-surface">
-        <div className="mx-auto grid max-w-shell gap-4 px-[clamp(20px,4.5vw,72px)] py-8 sm:grid-cols-3">
-          {capabilities.map(({ key, label }, i) => (
-            <p key={key} className={`reveal reveal-up reveal-d${i + 1} border-s-2 border-softec ps-4 text-lg font-semibold`}>
-              {label}
-            </p>
+      <section aria-label="Capabilities" className="border-t-2 border-t-softec border-b border-b-line bg-paper dark:bg-surface">
+        <div className="mx-auto grid max-w-shell gap-x-6 gap-y-6 px-[clamp(20px,4.5vw,72px)] py-9 sm:grid-cols-3">
+          {capabilities.map(({ key, label, sub }, i) => (
+            <div
+              key={key}
+              className={`reveal reveal-up reveal-d${i + 1} flex items-start gap-4 ${
+                i > 0 ? 'sm:border-s sm:border-line sm:ps-6' : ''
+              }`}
+            >
+              <span className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-softec/10 text-blueprint dark:bg-softec/20 dark:text-skyline">
+                {CAPABILITY_ICONS[key]}
+              </span>
+              <span className="min-w-0">
+                <span className="block text-lg font-semibold leading-tight text-graphite dark:text-ink">{label}</span>
+                <span className="mt-1 block text-sm leading-snug text-machine dark:text-fog">{sub}</span>
+              </span>
+            </div>
           ))}
         </div>
       </section>

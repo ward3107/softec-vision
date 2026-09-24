@@ -122,6 +122,9 @@ html[dir='rtl'] .home-hero__blueprint {
   border-radius: 50%;
   content: '';
   transform: rotate(-8deg);
+  /* The solid ring orbits too, counter to the dashed one and a touch slower, so
+     the two turn independently. Stopped by the global reduced-motion rule. */
+  animation: heroRing 52s linear infinite;
 }
 .home-hero__orbit {
   position: absolute;
@@ -129,6 +132,9 @@ html[dir='rtl'] .home-hero__blueprint {
   border: 1px dashed rgb(12 94 145 / 30%);
   border-radius: 50%;
   transform: rotate(13deg);
+  /* The dashed ellipse orbits the product forever — its dashes read as travelling
+     dots. Slow and decorative; the global reduced-motion rule stops it. */
+  animation: heroOrbit 40s linear infinite;
 }
 .home-hero__product {
   z-index: 1;
@@ -141,6 +147,14 @@ html[dir='rtl'] .home-hero__blueprint {
 @keyframes heroProductSettle {
   from { opacity: 0; transform: translate3d(0, 28px, 0) scale(0.96); }
   to { opacity: 1; transform: none; }
+}
+@keyframes heroOrbit {
+  from { transform: rotate(13deg); }
+  to { transform: rotate(373deg); }
+}
+@keyframes heroRing {
+  from { transform: rotate(-8deg); }
+  to { transform: rotate(-368deg); }
 }
 @media (max-width: 1023px) {
   .home-hero__blueprint,
@@ -191,30 +205,13 @@ body.brand-splash-open {
   opacity: 0;
   animation: typedReveal 0.09s ease forwards;
 }
-.typed-caret {
-  display: inline-block;
-  width: 2px;
-  height: 1.05em;
-  margin-inline-start: 2px;
-  vertical-align: text-bottom;
-  background: currentColor;
-  opacity: 0;
-  animation: typedCaret 0.85s steps(1, end) infinite;
-}
 @keyframes typedReveal {
   to { opacity: 1; }
-}
-@keyframes typedCaret {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .typed-char {
     opacity: 1;
     animation: none;
-  }
-  .typed-caret {
-    display: none;
   }
 }
 
