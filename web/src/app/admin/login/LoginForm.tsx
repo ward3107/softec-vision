@@ -1,6 +1,7 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { S } from '@/lib/admin/strings';
 import { signIn, type SignInState } from '../actions';
 
@@ -18,7 +19,7 @@ function Submit() {
 }
 
 export default function LoginForm({ initialError }: { initialError?: string }) {
-  const [state, action] = useFormState<SignInState, FormData>(signIn, {});
+  const [state, action] = useActionState<SignInState, FormData>(signIn, {});
   const errorKey = state.error ?? initialError;
   const message = errorKey ? S.errors[errorKey as keyof typeof S.errors] : null;
 

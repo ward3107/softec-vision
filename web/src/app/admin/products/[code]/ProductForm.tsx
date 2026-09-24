@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useEffect, useRef, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import type { AdminProductDetail, ProductStatus } from '@/lib/admin/productForm';
 import { PRODUCT_STATUSES } from '@/lib/admin/productForm';
 import { S } from '@/lib/admin/strings';
@@ -89,7 +89,7 @@ export default function ProductForm({
   specFields: Array<{ key: string; label: Localized }>;
   action: (state: SaveProductState, fd: FormData) => Promise<SaveProductState>;
 }) {
-  const [state, formAction] = useFormState<SaveProductState, FormData>(action, {});
+  const [state, formAction] = useActionState<SaveProductState, FormData>(action, {});
   const savedRef = useRef<HTMLParagraphElement>(null);
 
   // The product actually loaded when the form first mounted. A validation
