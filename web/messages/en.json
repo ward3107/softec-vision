@@ -38,7 +38,8 @@
     "storyLead": "Every station follows the same path",
     "s1": "Your room, workflow and equipment.",
     "s2": "Translated into a steel design and built.",
-    "s3": "Installed on site and ready to work."
+    "s3": "Installed on site and ready to work.",
+    "spin": "Drag to rotate"
   },
   "capabilities": {
     "custom": "Custom Manufacturing",
