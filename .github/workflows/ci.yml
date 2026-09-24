@@ -26,7 +26,19 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: web/package-lock.json
+      # `next` bundles `sharp`, whose wasm32 optional deps a Windows-generated
+      # lockfile can't fully pin for the Linux runner, so strict `npm ci` can't
+      # be satisfied. `npm install` honours the lockfile's pinned versions and
+      # fills only the runner's platform deps; supply-chain integrity is enforced
+      # by `npm audit signatures` below (registry provenance) rather than by
+      # npm ci's lockfile-hash parity.
       - run: npm install --no-audit --no-fund
+      # Supply-chain integrity: verify every installed package against the
+      # registry's cryptographic signatures/attestations (fails on tampering).
+      - run: npm audit signatures
+      # Surface known-vulnerable dependencies without blocking the build.
+      - run: npm audit --audit-level=high
+        continue-on-error: true
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run test
