@@ -7,7 +7,6 @@ import { FAQ_COUNT, resolveText } from '@/lib/content/blocks';
 import { loadContentBlocks } from '@/lib/content/source';
 import JsonLd, { faqSchema } from '@/components/JsonLd';
 import CategoryExplorer, { type ExplorerCategory, type ExplorerItem } from '@/components/catalog/CategoryExplorer';
-import ProductCard from '@/components/catalog/ProductCard';
 import TypedText from '@/components/TypedText';
 import SectionIndicator from '@/components/SectionIndicator';
 
@@ -66,7 +65,6 @@ export default async function HomePage({
   });
 
   const allProducts = await filterProducts({ lang: l, cat: 'all' });
-  const featured = allProducts.slice(0, 3);
   const categories = await getVisibleCategories(l);
   // One tile per family. Families with subcategories open onto them (those that
   // have products), the rest onto their products.
@@ -178,25 +176,6 @@ export default async function HomePage({
               categories={explorer}
               labels={{ viewAll: tcat('exploreViewAll'), empty: tcat('exploreEmpty'), contact: t('quote') }}
             />
-          </div>
-        </div>
-      </section>
-
-      {/* Featured products */}
-      <section id="featured" aria-labelledby="featured-title" className="bg-paper dark:bg-canvas">
-        <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
-          <div className="reveal reveal-left flex flex-wrap items-end justify-between gap-4">
-            <h2 id="featured-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
-              {tcat('featured')}
-            </h2>
-            <Link href="/catalog" className="font-bold text-blueprint hover:underline dark:text-skyline">
-              {t('explore')} →
-            </Link>
-          </div>
-          <div className="reveal reveal-up mt-8 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((product) => (
-              <ProductCard key={product.code} product={product} />
-            ))}
           </div>
         </div>
       </section>
