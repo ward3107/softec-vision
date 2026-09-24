@@ -32,8 +32,15 @@ export default async function Header() {
         <div className="ms-auto flex flex-none items-center gap-3 lg:ms-0">
           <ThemeToggle toLightLabel={t('themeToLight')} toDarkLabel={t('themeToDark')} />
           <LanguageSwitcher />
+          {/* Hidden on the narrowest phones so the header never overflows; the menu carries it there. */}
+          <Link
+            href="/contact"
+            className="hidden h-11 flex-none items-center rounded bg-blueprint px-5 font-bold text-pure hover:bg-graphite sm:inline-flex"
+          >
+            {t('quote')}
+          </Link>
           <MobileNav
-            links={links}
+            links={[...links, { href: '/contact', label: t('contact') }]}
             primaryLabel={t('primary')}
             openLabel={t('menuOpen')}
             closeLabel={t('menuClose')}

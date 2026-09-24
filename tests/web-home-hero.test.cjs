@@ -40,3 +40,7 @@ test('mobile header keeps the logo and language control without horizontal overf
   assert.match(header, /hidden[^"']*sm:inline-flex/);
   assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/s);
 });
+
+test('phones still reach the contact page from the menu when the header button is hidden', () => {
+  assert.match(header, /<MobileNav[\s\S]*?href: '\/contact'[\s\S]*?\/>/);
+});

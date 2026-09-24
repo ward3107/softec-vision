@@ -33,7 +33,11 @@ test('every new catalog image is optimized, referenced and available', () => {
   for (const publicPath of uniquePaths) {
     const file = path.join(root, 'web', 'public', ...publicPath.split('/').filter(Boolean));
     assert.ok(fs.existsSync(file), `${publicPath} must exist`);
-    assert.ok(fs.statSync(file).size < 200_000, `${publicPath} should stay below 200 KB`);
+    // High-resolution originals (~3200px) so the full-screen viewer can zoom to
+    // detail; ordinary browsing is served resized copies via next/image, so the
+    // full file only downloads when a visitor opens the zoom viewer. The cap
+    // still catches an accidental multi-megabyte upload.
+    assert.ok(fs.statSync(file).size < 500_000, `${publicPath} should stay below 500 KB`);
   }
 });
 
@@ -52,6 +56,9 @@ test('legacy catalog products use lightweight transparent WebP cutouts', () => {
 
     assert.match(seed, new RegExp(`image: '${publicPath}'`));
     assert.ok(fs.existsSync(file), `${publicPath} must exist`);
-    assert.ok(fs.statSync(file).size < 150_000, `${publicPath} should stay below 150 KB`);
+    // High-resolution transparent cutouts for the zoom viewer; see the note on
+    // the new-image cap above. Kept a touch tighter than the photos since a
+    // clean cutout on transparency compresses smaller than a full scene.
+    assert.ok(fs.statSync(file).size < 350_000, `${publicPath} should stay below 350 KB`);
   }
 });
