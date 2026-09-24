@@ -3,8 +3,8 @@
 The production site: a bilingual (Hebrew/English) product catalog and quote-request platform for
 Softec Vision Ltd, with a Supabase-backed owner admin. Live at `softecvision.vercel.app`.
 
-**Stack:** Next.js 15 (App Router, RSC) · TypeScript · Tailwind CSS · next-intl (he/en, RTL/LTR) ·
-Supabase (Postgres + Auth + Storage) · Vercel.
+**Stack:** Next.js 15 (App Router, RSC) · React 19 · TypeScript · Tailwind CSS · next-intl (he/en,
+RTL/LTR) · Supabase (Postgres + Auth + Storage) · Vercel.
 
 ## Screenshots
 
@@ -16,6 +16,10 @@ Supabase (Postgres + Auth + Storage) · Vercel.
 | --- | --- |
 | [![Product page](docs/screenshots/product-desktop.png)](docs/screenshots/product-desktop.png) | [![Contact form](docs/screenshots/contact-desktop.png)](docs/screenshots/contact-desktop.png) |
 
+| Owner admin — dashboard |
+| --- |
+| [![Admin dashboard](docs/screenshots/admin-dashboard.png)](docs/screenshots/admin-dashboard.png) |
+
 <p align="center">
   <img src="docs/screenshots/catalog-mobile.png" alt="Catalog on mobile" width="300" />
   <br />
@@ -23,7 +27,10 @@ Supabase (Postgres + Auth + Storage) · Vercel.
 </p>
 
 Screenshots show the Hebrew (RTL) site in light mode. Regenerate them with
-`node docs/screenshots/shoot.mjs` against a local `npm run start` (see the script header).
+`node docs/screenshots/shoot.mjs` (see the script header) against a running server — a production
+`npm run start`, or the dev server via `BASE_URL=http://localhost:3000`. Set `ADMIN_EMAIL` /
+`ADMIN_PASSWORD` (a staff login) to also capture the admin dashboard; without them that shot is
+skipped and no credentials live in the repo.
 
 ## What's here
 

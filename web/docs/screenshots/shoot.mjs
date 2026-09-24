@@ -11,6 +11,10 @@
  * Override the target with BASE_URL, e.g. BASE_URL=http://localhost:3000 node docs/screenshots/shoot.mjs
  * Captured in light mode with reduced motion so the reveal/typing animations
  * resolve to their final state.
+ *
+ * To also capture the admin dashboard, set ADMIN_EMAIL and ADMIN_PASSWORD (a
+ * staff login for the target); with them unset the admin shot is skipped and no
+ * credentials live in this file.
  */
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -41,5 +45,23 @@ for (const s of shots) {
   console.log('shot', s.name);
   await ctx.close();
 }
+
+if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce', deviceScaleFactor: 1 });
+  const page = await ctx.newPage();
+  await page.goto(`${BASE}/admin/login`, { waitUntil: 'domcontentloaded', timeout: 40000 });
+  await page.waitForTimeout(2500);
+  await page.getByRole('button', { name: 'כניסה עם סיסמה' }).click();
+  await page.waitForSelector('input[name="password"]', { state: 'visible', timeout: 15000 });
+  await page.fill('input[name="email"]', process.env.ADMIN_EMAIL);
+  await page.fill('input[name="password"]', process.env.ADMIN_PASSWORD);
+  await page.getByRole('button', { name: 'כניסה', exact: true }).click();
+  await page.waitForURL('**/admin', { timeout: 25000 });
+  await page.waitForTimeout(2000);
+  await page.screenshot({ path: join(OUT, 'admin-dashboard.png') });
+  console.log('shot admin-dashboard');
+  await ctx.close();
+}
+
 await browser.close();
 console.log('done');
