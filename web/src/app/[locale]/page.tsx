@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import type { AppLocale } from '@/i18n/routing';
@@ -9,6 +8,11 @@ import JsonLd, { faqSchema } from '@/components/JsonLd';
 import CategoryExplorer, { type ExplorerCategory, type ExplorerItem } from '@/components/catalog/CategoryExplorer';
 import TypedText from '@/components/TypedText';
 import SectionIndicator from '@/components/SectionIndicator';
+import HeroSpin from '@/components/HeroSpin';
+
+// Front-half rotation frames for the hero showpiece (transparent RAV-500
+// renders); mirrors the product's `spin` set in the catalog seed.
+const heroSpin = Array.from({ length: 14 }, (_, i) => `/products/spin/RAV-500/${String(i).padStart(2, '0')}.webp`);
 
 export default async function HomePage({
   params
@@ -135,14 +139,11 @@ export default async function HomePage({
 
           <div className="home-hero__visual relative min-h-[390px] lg:min-h-[620px]">
             <div className="home-hero__orbit" aria-hidden="true" />
-            <Image
-              src="/products/RAV-500-transparent.webp"
+            <HeroSpin
+              frames={heroSpin}
               alt={`${t('model')} (RAV-500)`}
-              width={1200}
-              height={924}
-              priority
-              sizes="(max-width: 1023px) 92vw, 55vw"
-              className="home-hero__product absolute inset-0 h-full w-full object-contain object-center"
+              label={t('spin')}
+              className="home-hero__product absolute inset-0 h-full w-full"
             />
             <p className="home-hero__delivery absolute bottom-2 end-0 max-w-[250px] border-s-2 border-softec bg-pure/90 py-2 ps-4 text-sm font-semibold leading-relaxed text-machine backdrop-blur dark:bg-surface/90 dark:text-fog">
               {t('delivery')}
