@@ -118,7 +118,7 @@ export async function saveProductAction(
   const parsed = parseProductForm(fd, CANONICAL_SPEC_KEYS);
   if (!parsed.ok) return { errors: parsed.errors, values: echoFormValues(fd, CANONICAL_SPEC_KEYS) };
   await saveProduct(client, code, parsed.data);
-  revalidateTag(CATALOG_TAG);
+  revalidateTag(CATALOG_TAG, 'max');
   revalidatePath('/admin/products');
   revalidatePath(`/admin/products/${code}`);
   return { saved: true, values: valuesFromParsedForm(parsed.data, CANONICAL_SPEC_KEYS) };
@@ -128,13 +128,13 @@ export async function saveProductAction(
 export async function importCatalogAction() {
   const { client } = await requireStaff({ admin: true });
   const added = await importBuiltInCatalog(client);
-  revalidateTag(CATALOG_TAG);
+  revalidateTag(CATALOG_TAG, 'max');
   revalidatePath('/admin/products');
   redirect(`/admin/products?imported=${added}`);
 }
 
 function revalidateProductMedia(code: string) {
-  revalidateTag(CATALOG_TAG);
+  revalidateTag(CATALOG_TAG, 'max');
   revalidatePath('/admin/products');
   revalidatePath(`/admin/products/${code}`);
 }
@@ -196,7 +196,7 @@ export async function saveContentBlockAction(key: ContentBlockKey, fd: FormData)
   const { client } = await requireStaff();
   const values = parseContentBlockForm(fd, key);
   await saveContentBlock(client, key, values);
-  revalidateTag(CONTENT_TAG);
+  revalidateTag(CONTENT_TAG, 'max');
   revalidatePath('/admin/content');
   redirect('/admin/content?saved=1');
 }

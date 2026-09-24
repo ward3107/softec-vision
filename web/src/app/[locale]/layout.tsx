@@ -114,7 +114,7 @@ export default async function LocaleLayout({
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
         <JsonLd data={organizationSchema(locale as AppLocale)} />
         <BrandSplash />
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <ConsentProvider gaId={process.env.NEXT_PUBLIC_GA4_ID ?? ''}>
             <CompareProvider>
               <a href="#main" className="skip-link">

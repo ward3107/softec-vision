@@ -10,7 +10,7 @@ const intl = createMiddleware(routing);
  * the Supabase session cookie and are marked noindex; everything else goes
  * through next-intl.
  */
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (pathname === '/admin' || pathname.startsWith('/admin/')) return adminSession(request);
   return intl(request);

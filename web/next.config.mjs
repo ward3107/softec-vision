@@ -1,7 +1,13 @@
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 // Points the plugin at the request config used for server-side i18n.
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
+// This app is the Turbopack root. Pin it so a stray lockfile in a parent
+// directory (e.g. the home folder) can't shift Next's inferred workspace root.
+const projectRoot = dirname(fileURLToPath(import.meta.url));
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -47,6 +53,7 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  turbopack: { root: projectRoot },
   // Product/media images are served from Supabase Storage in later phases.
   images: {
     remotePatterns: [
