@@ -1,3 +1,5 @@
+<a id="readme-top"></a>
+
 # Softec Vision — Architectural Precision Catalog
 
 A premium, **bilingual (Hebrew / English)** product catalog for **Softec Vision Ltd** —
@@ -12,6 +14,41 @@ no runtime dependencies** — it runs directly from GitHub Pages.
 - Brand primary color: `#1683C7` (Softec Blue). Palette tokens live in `:root` at the top of
   the `<style>` block: Paper White `#F7F8F8`, Pure White `#FFFFFF`, Graphite `#151719`,
   Machine Grey `#697077`, Softec Blue `#1683C7`, Blueprint Blue `#0C5E91`.
+
+**Contents:** [Screenshots](#screenshots) · [Local preview and tests](#local-preview-and-tests) ·
+[Language and URL behavior](#language-and-url-behavior) ·
+[Catalog data format](#catalog-data-format-categories-subcategories-products) ·
+[Compliance and consent](#compliance-and-consent-configuration) ·
+[Product media](#product-media-gallery-3d-and-specs) · [Deployment](#deployment-github-pages) ·
+[Missing production values](#missing-production-values)
+
+---
+
+## Screenshots
+
+The production platform — the Next.js + Supabase app in [`web/`](web/) (see
+[`web/README.md`](web/README.md)), live at `softecvision.vercel.app`. Shown in Hebrew (RTL),
+light mode.
+
+<p align="center">
+  <a href="web/docs/screenshots/home-desktop.png"><img src="web/docs/screenshots/home-desktop.png" alt="Home page — the lecturer station hero with the story headline" width="100%" /></a>
+</p>
+
+| Catalog | Product |
+| --- | --- |
+| [![Product catalog](web/docs/screenshots/catalog-desktop.png)](web/docs/screenshots/catalog-desktop.png) | [![Product page](web/docs/screenshots/product-desktop.png)](web/docs/screenshots/product-desktop.png) |
+
+| Contact | Owner admin — dashboard |
+| --- | --- |
+| [![Contact form](web/docs/screenshots/contact-desktop.png)](web/docs/screenshots/contact-desktop.png) | [![Admin dashboard](web/docs/screenshots/admin-dashboard.png)](web/docs/screenshots/admin-dashboard.png) |
+
+<p align="center">
+  <img src="web/docs/screenshots/catalog-mobile.png" alt="Catalog on mobile" width="280" />
+  <br />
+  <em>Catalog on mobile</em>
+</p>
+
+<p align="right"><a href="#readme-top">⬆ Back to top</a></p>
 
 ---
 
@@ -42,6 +79,8 @@ The browser tests launch Chrome via Playwright's `channel:'chrome'`. If only Chr
 installed, point that channel at it (e.g. symlink the Chromium binary to the path Playwright
 expects) — do **not** add Playwright or any other dependency to the project.
 
+<p align="right"><a href="#readme-top">⬆ Back to top</a></p>
+
 ---
 
 ## Language and URL behavior
@@ -58,6 +97,8 @@ expects) — do **not** add Playwright or any other dependency to the project.
   session (all storage access is wrapped in `safeStorageGet` / `safeStorageSet`).
 - The standalone legal pages read the same `?lang=` / `softec-language` preference, and internal
   links carry the current language across navigation.
+
+<p align="right"><a href="#readme-top">⬆ Back to top</a></p>
 
 ---
 
@@ -105,6 +146,8 @@ The topic stays crawlable in **both** languages via a semantic, always-in-DOM bl
 `aside#seo-charging-carts` (class `seo-only`) inside the catalog section. It is **visually
 hidden by clipping — never `display:none`** — so it remains in the render/crawl tree. Keep the
 copy accurate; avoid keyword stuffing.
+
+<p align="right"><a href="#readme-top">⬆ Back to top</a></p>
 
 ---
 
@@ -194,6 +237,8 @@ Escape with focus return, is positioned on the logical start side for RTL/LTR, t
 storage, respects reduced motion, stays scrollable under larger text/spacing, and links to the
 accessibility statement. The cookie banner always stacks above it.
 
+<p align="right"><a href="#readme-top">⬆ Back to top</a></p>
+
 ---
 
 ## Product media, gallery, 3D and specs
@@ -209,6 +254,8 @@ accessibility statement. The cookie banner always stacks above it.
 - **Specs & comparison:** `specs` is a `{ label: value }` object feeding both the detail table
   and the 2–3 product comparison. `[למילוי]` / `[To be completed]` values render greyed.
 
+<p align="right"><a href="#readme-top">⬆ Back to top</a></p>
+
 ---
 
 ## Deployment (GitHub Pages)
@@ -221,6 +268,8 @@ accessibility statement. The cookie banner always stacks above it.
 > Do not merge to `main` or publish to production without explicit approval and completed legal
 > review.
 
+<p align="right"><a href="#readme-top">⬆ Back to top</a></p>
+
 ---
 
 ## Missing production values
@@ -232,3 +281,5 @@ These must be supplied before a production launch (see the compliance notes for 
 - **GA4 Measurement ID / GTM container ID** — none configured; analytics stays off until set.
 - **Real spec values** — replace `[למילוי]` / `[To be completed]` placeholders.
 - **Québec French** — flagged for legal/product review (site languages are English and Hebrew).
+
+<p align="right"><a href="#readme-top">⬆ Back to top</a></p>

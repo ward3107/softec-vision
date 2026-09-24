@@ -32,6 +32,22 @@ Screenshots show the Hebrew (RTL) site in light mode. Regenerate them with
 `ADMIN_PASSWORD` (a staff login) to also capture the admin dashboard; without them that shot is
 skipped and no credentials live in the repo.
 
+### Social reel (Instagram / Facebook)
+
+A ~29s vertical promo (1080×1920, 30fps, H.264) is built from the site itself — its product
+photos, the RAV-500 turntable frames, real project photos, a phone-scroll of the live homepage
+and the copy in `messages/{he,en}.json` — and rendered frame by frame (so no dropped frames),
+in Hebrew and English. With a production server on port 3100 and `ffmpeg` on `PATH`:
+
+```bash
+node docs/reel/capture.mjs     # phone screenshots of the homepage (he + en)
+node docs/reel/render.mjs      # -> docs/reel/out/softec-reel-{he,en}.mp4 + -cover.jpg
+```
+
+The track is silent on purpose: add music in the Instagram/Facebook app. `REEL_URL` overrides the
+URL on the closing card; `REEL_STILLS="2.6,15"` renders just those moments for a quick layout
+check. Edit the scenes in `docs/reel/reel.html` (`?lang=he&preview` plays it in a browser).
+
 ## What's here
 
 - **Public catalog** — categories/subcategories, product pages (specs, gallery, optional 3D

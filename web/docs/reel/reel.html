@@ -1,0 +1,400 @@
+<!doctype html>
+<!--
+  Softec Vision — 9:16 social reel (Instagram / Facebook Reels), 1080x1920.
+  Rendered frame-by-frame by render.mjs: every visual is a pure function of
+  time via window.seek(t), so output is deterministic (no dropped frames).
+  Copy comes from assets/copy.js, which render.mjs generates from
+  messages/{he,en}.json, so the reel always speaks with the site's own words.
+  Open directly in a browser with ?lang=he&preview (after one render) to watch
+  it play in real time.
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Softec Vision reel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=block" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #1683c7; --blueprint: #0c5e91; --paper: #f7f8f8; --pure: #fff;
+    --graphite: #151719; --grey: #697077; --line: #dfe3e6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--graphite); }
+  body { font-family: 'Assistant', system-ui, sans-serif; color: var(--graphite); -webkit-font-smoothing: antialiased; }
+  .scene { position: absolute; inset: 0; overflow: hidden; opacity: 0; will-change: opacity, transform; }
+  .grid { background-image:
+      linear-gradient(rgba(22,131,199,.07) 2px, transparent 2px),
+      linear-gradient(90deg, rgba(22,131,199,.07) 2px, transparent 2px);
+    background-size: 72px 72px; }
+  .abs { position: absolute; }
+  .center-x { left: 0; right: 0; text-align: center; }
+  .pad { left: 90px; right: 90px; }
+  .eyebrow { font-size: 38px; font-weight: 700; color: var(--blue); display: flex; align-items: center; gap: 22px; }
+  .eyebrow::before { content: ''; width: 64px; height: 4px; background: currentColor; border-radius: 2px; flex: none; }
+  .eyebrow.centered { justify-content: center; }
+  .h1 { font-weight: 800; letter-spacing: -.01em; line-height: 1.04; }
+  img { display: block; }
+
+  /* S1 hook */
+  #s1 { background: #0b0c0d; }
+  #s1 .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #s1 .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,12,13,.92) 0%, rgba(11,12,13,.65) 30%, rgba(11,12,13,0) 55%, rgba(11,12,13,0) 80%, rgba(11,12,13,.6) 100%); }
+  #s1 .logo { top: 250px; width: 360px; }
+  #s1 .eyebrow { top: 420px; color: #6cc0f2; }
+  #s1 .title { top: 500px; color: #fff; font-size: 100px; }
+  #s1 .title span { display: block; }
+  #s1 .scanline { top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, transparent, #6cc0f2, transparent); opacity: .7; }
+
+  /* S2 spin */
+  #s2 { background: var(--paper); }
+  #s2 .eyebrow { top: 290px; }
+  #s2 .h1 { top: 360px; font-size: 84px; }
+  #s2 .stage { left: 40px; top: 560px; width: 1000px; height: 750px; }
+  #s2 .stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; }
+  #s2 .orbits { left: 40px; top: 560px; width: 1000px; height: 750px; }
+  #s2 .chip { top: 1360px; left: 50%; transform: translateX(-50%); background: var(--pure); border: 2px solid var(--line);
+    border-radius: 999px; padding: 18px 40px; font-size: 40px; font-weight: 700; white-space: nowrap; box-shadow: 0 18px 40px rgba(21,23,25,.08); }
+  #s2 .chip b { color: var(--blue); margin-inline-end: 16px; }
+
+  /* S3 story */
+  #s3 { background: var(--pure); }
+  #s3 .lead { top: 270px; }
+  #s3 .dots { top: 350px; display: flex; gap: 18px; }
+  #s3 .dots i { width: 120px; height: 8px; border-radius: 4px; background: var(--line); position: relative; overflow: hidden; }
+  #s3 .dots i b { position: absolute; inset: 0; background: var(--blue); transform-origin: 0 50%; transform: scaleX(0); }
+  [dir=rtl] #s3 .dots i b { transform-origin: 100% 50%; }
+  .step { position: absolute; inset: 0; opacity: 0; }
+  .step .num { position: absolute; top: 420px; font-size: 130px; font-weight: 800; color: transparent; -webkit-text-stroke: 3px var(--blue); line-height: 1; }
+  .step .txt { position: absolute; top: 580px; font-size: 78px; font-weight: 800; line-height: 1.08; }
+  .step .card { position: absolute; left: 90px; right: 90px; top: 860px; height: 660px; border-radius: 44px; overflow: hidden; background: var(--paper); box-shadow: 0 30px 70px rgba(21,23,25,.14); }
+  .step .card img { width: 100%; height: 100%; object-fit: cover; }
+  .card.blueprint { background: var(--blueprint); background-image:
+      linear-gradient(rgba(255,255,255,.09) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.09) 2px, transparent 2px);
+    background-size: 60px 60px; }
+  .card.blueprint img { position: absolute; left: 170px; top: 60px; width: 560px; height: 540px; object-fit: contain; }
+  .card.blueprint svg { position: absolute; inset: 0; }
+
+  /* S4 capabilities */
+  #s4 { background: var(--paper); }
+  #s4 .cap { position: absolute; left: 90px; right: 90px; top: 250px; opacity: 0; }
+  #s4 .cap .row { display: flex; align-items: center; gap: 26px; }
+  #s4 .cap .ico { width: 104px; height: 104px; border-radius: 30px; background: var(--blue); color: #fff; display: grid; place-items: center; flex: none; }
+  #s4 .cap .k { font-size: 34px; font-weight: 700; color: var(--grey); }
+  #s4 .cap .t { font-size: 82px; font-weight: 800; line-height: 1.05; margin-top: 30px; }
+  #s4 .cap .s { font-size: 44px; font-weight: 600; color: var(--grey); margin-top: 14px; }
+  #s4 .frame { left: 60px; right: 60px; top: 690px; height: 900px; border-radius: 48px; overflow: hidden; background: #fff; box-shadow: 0 30px 70px rgba(21,23,25,.12); }
+  #s4 .frame img { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+
+  /* S5 collage */
+  #s5 { background: var(--paper); }
+  #s5 .h1 { top: 280px; font-size: 96px; }
+  #s5 .tiles { left: 70px; right: 70px; top: 470px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  #s5 .tile { height: 360px; border-radius: 34px; background: #fff; overflow: hidden; box-shadow: 0 20px 50px rgba(21,23,25,.10); opacity: 0; }
+  #s5 .tile img { width: 100%; height: 100%; object-fit: contain; padding: 18px; }
+
+  /* S6 website */
+  #s6 { background: linear-gradient(180deg, #eaf4fb 0%, var(--paper) 60%); }
+  #s6 .h1 { top: 250px; font-size: 92px; }
+  #s6 .url { top: 370px; }
+  #s6 .url span { display: inline-block; background: var(--blue); color: #fff; font-size: 38px; font-weight: 700; padding: 12px 34px; border-radius: 999px; direction: ltr; }
+  #s6 .phone { left: 250px; top: 480px; width: 580px; height: 1180px; border-radius: 88px; background: #111; padding: 20px; box-shadow: 0 50px 90px rgba(12,94,145,.30); }
+  #s6 .screen { position: relative; width: 100%; height: 100%; border-radius: 70px; overflow: hidden; background: #fff; }
+  #s6 .screen img { position: absolute; left: 0; top: 0; width: 100%; }
+  #s6 .notch { position: absolute; top: 34px; left: 50%; width: 150px; height: 40px; margin-left: -75px; background: #111; border-radius: 22px; z-index: 2; }
+
+  /* S7 CTA */
+  #s7 { background: linear-gradient(160deg, var(--blueprint) 0%, var(--blue) 100%); color: #fff; }
+  #s7 .gridw { position: absolute; inset: 0; background-image:
+      linear-gradient(rgba(255,255,255,.07) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.07) 2px, transparent 2px);
+    background-size: 72px 72px; }
+  #s7 .logo { top: 380px; left: 50%; width: 620px; margin-left: -310px; }
+  #s7 .h1 { top: 720px; font-size: 150px; }
+  #s7 .sub { top: 920px; font-size: 46px; font-weight: 600; line-height: 1.3; opacity: .9; }
+  #s7 .pill { top: 1150px; }
+  #s7 .pill span { display: inline-block; background: #fff; color: var(--blueprint); font-size: 50px; font-weight: 800; padding: 22px 56px; border-radius: 999px; direction: ltr; box-shadow: 0 24px 50px rgba(0,0,0,.18); }
+  #s7 .wa { top: 1300px; display: flex; justify-content: center; align-items: center; gap: 18px; font-size: 46px; font-weight: 700; direction: ltr; }
+  #s7 .wa i { width: 70px; height: 70px; border-radius: 50%; background: #15803d; display: grid; place-items: center; }
+</style>
+</head>
+<body>
+<!-- S1 · hook -->
+<section class="scene" id="s1">
+  <img class="photo" data-src="products/new/accessible-podium-tel-aviv-02.webp" alt="" />
+  <div class="shade"></div>
+  <div class="abs scanline"></div>
+  <img class="abs logo" data-src="brand/softec-vision-logo-dark.png" alt="" />
+  <div class="abs pad eyebrow" data-copy="eyebrow"></div>
+  <div class="abs pad h1 title"><span data-copy="titleA"></span><span data-copy="titleB"></span></div>
+</section>
+
+<!-- S2 · product turntable -->
+<section class="scene grid" id="s2">
+  <div class="abs center-x eyebrow centered" data-copy="code"></div>
+  <div class="abs pad h1" data-copy="model" style="text-align:center"></div>
+  <svg class="abs orbits" viewBox="0 0 1000 750">
+    <g id="orbA" style="transform-origin:500px 420px">
+      <ellipse cx="500" cy="420" rx="470" ry="250" fill="none" stroke="#1683c7" stroke-opacity=".28" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round" />
+      <circle cx="970" cy="420" r="11" fill="#1683c7" />
+    </g>
+    <g id="orbB" style="transform-origin:500px 420px">
+      <ellipse cx="500" cy="420" rx="390" ry="190" fill="none" stroke="#0c5e91" stroke-opacity=".18" stroke-width="3" />
+      <circle cx="110" cy="420" r="8" fill="#0c5e91" />
+    </g>
+  </svg>
+  <div class="abs stage" id="spin"></div>
+  <div class="abs chip"><span data-copy="avSub"></span></div>
+</section>
+
+<!-- S3 · the path: room → steel → installed -->
+<section class="scene" id="s3">
+  <div class="abs pad eyebrow" data-copy="storyLead" style="top:270px"></div>
+  <div class="abs pad dots"><i><b></b></i><i><b></b></i><i><b></b></i></div>
+  <div class="step"><div class="num pad" style="left:90px;right:90px">01</div><div class="txt pad" style="left:90px;right:90px" data-copy="s1"></div>
+    <div class="card"><img data-src="products/new/accessible-podium-tel-aviv-03.webp" alt="" /></div></div>
+  <div class="step"><div class="num" style="left:90px;right:90px">02</div><div class="txt" style="left:90px;right:90px" data-copy="s2"></div>
+    <div class="card blueprint"><img data-src="products/V-18W-transparent.webp" alt="" />
+      <svg viewBox="0 0 900 660" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
+        <path class="draw" d="M140 90 V600" /><path class="draw" d="M125 90 H155 M125 600 H155" />
+        <path class="draw" d="M190 630 H710" /><path class="draw" d="M190 615 V645 M710 615 V645" />
+        <path class="draw" d="M760 70 H840 V160" stroke-dasharray="6 10" /><circle class="draw" cx="840" cy="190" r="26" />
+      </svg></div></div>
+  <div class="step"><div class="num" style="left:90px;right:90px">03</div><div class="txt" style="left:90px;right:90px" data-copy="s3"></div>
+    <div class="card"><img data-src="products/new/memorial-hall-podium-01.webp" alt="" style="object-position:50% 60%" /></div></div>
+</section>
+
+<!-- S4 · capabilities over real projects -->
+<section class="scene" id="s4">
+  <div class="cap"><div class="row"><div class="ico">
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+    </div><div class="k">01 / 03</div></div><div class="t" data-copy="c1t"></div><div class="s" data-copy="c1s"></div></div>
+  <div class="cap"><div class="row"><div class="ico">
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+    </div><div class="k">02 / 03</div></div><div class="t" data-copy="c2t"></div><div class="s" data-copy="c2s"></div></div>
+  <div class="cap"><div class="row"><div class="ico">
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.8"/><path d="M5 8.5l7 1.5 7-1.5M12 10v5l-3.5 6M12 15l3.5 6"/></svg>
+    </div><div class="k">03 / 03</div></div><div class="t" data-copy="c3t"></div><div class="s" data-copy="c3s"></div></div>
+  <div class="abs frame">
+    <img data-src="products/new/sderot-performing-arts-podium.webp" data-fit="contain" alt="" />
+    <img data-src="products/new/rothschild-foundation-podium-01.webp" data-fit="contain" alt="" />
+    <img data-src="products/new/lecturer-station-g1-01.webp" data-fit="contain" alt="" />
+    <img data-src="products/new/lecturer-station-g1-02.webp" data-fit="contain" alt="" />
+    <img data-src="products/new/accessible-podium-tel-aviv-01.webp" data-fit="contain" alt="" />
+    <img data-src="products/RAV-500.jpg" data-fit="cover" alt="" />
+  </div>
+</section>
+
+<!-- S5 · built for every space -->
+<section class="scene grid" id="s5">
+  <div class="abs pad h1" data-copy="builtFor" style="text-align:center"></div>
+  <div class="abs tiles">
+    <div class="tile"><img data-src="products/new/biology-double-podium-02.webp" alt="" /></div>
+    <div class="tile"><img data-src="products/new/podium-il18-01.webp" alt="" /></div>
+    <div class="tile"><img data-src="products/new/aluminum-podium-l2.webp" alt="" /></div>
+    <div class="tile"><img data-src="products/new/premium-lecturer-podium.webp" alt="" /></div>
+    <div class="tile"><img data-src="products/new/biology-double-podium-01.webp" alt="" /></div>
+    <div class="tile"><img data-src="products/new/memorial-hall-podium-02.webp" alt="" style="object-fit:cover;padding:0" /></div>
+  </div>
+</section>
+
+<!-- S6 · the website -->
+<section class="scene grid" id="s6">
+  <div class="abs pad h1" data-copy="explore" style="text-align:center"></div>
+  <div class="abs center-x url"><span data-copy="url"></span></div>
+  <div class="abs phone"><div class="screen"><div class="notch"></div><img id="site" alt="" /></div></div>
+</section>
+
+<!-- S7 · call to action -->
+<section class="scene" id="s7">
+  <div class="gridw"></div>
+  <img class="abs logo" data-src="brand/softec-vision-logo-dark.png" alt="" />
+  <div class="abs center-x h1" data-copy="quote"></div>
+  <div class="abs pad sub" data-copy="delivery" style="text-align:center"></div>
+  <div class="abs center-x pill"><span data-copy="url"></span></div>
+  <div class="abs center-x wa"><i><svg width="40" height="40" viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.03c-.24.68-1.42 1.33-1.95 1.38-.5.05-.97.24-3.28-.68-2.77-1.09-4.53-3.92-4.67-4.1-.13-.18-1.12-1.49-1.12-2.84 0-1.35.71-2.01.96-2.29.24-.27.53-.34.71-.34.18 0 .35 0 .51.01.16.01.39-.06.6.46.24.58.79 2 .86 2.14.07.14.12.3.02.48-.09.18-.14.29-.28.45-.14.16-.29.36-.42.48-.14.14-.28.29-.12.57.16.27.71 1.17 1.53 1.9 1.05.93 1.94 1.22 2.22 1.36.27.14.43.12.59-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.6-.14.24.09 1.55.73 1.81.86.27.14.45.2.51.31.07.11.07.64-.17 1.31z"/></svg></i><span data-copy="phone"></span></div>
+</section>
+
+<script src="assets/copy.js"></script>
+<script>
+  const PUBLIC = '../../public/';
+  const FPS = 30;
+  // Scene windows in seconds. Keep the total under 30s — Reels sweet spot.
+  const S = { s1: [0, 3.2], s2: [3.2, 7.2], s3: [7.2, 13.8], s4: [13.8, 19.8], s5: [19.8, 22.4], s6: [22.4, 25.8], s7: [25.8, 29.2] };
+  const DURATION = 29.2;
+  const FADE = 0.35;
+
+  const E = {
+    out: (t) => 1 - Math.pow(1 - t, 3),
+    inOut: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+    back: (t) => { const c = 1.6; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); }
+  };
+  const p = (t, a, b) => Math.min(1, Math.max(0, (t - a) / (b - a)));
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  const lang = new URLSearchParams(location.search).get('lang') || 'he';
+  const copy = window.REEL_COPIES[lang];
+  const rtl = copy.dir === 'rtl';
+  const sign = rtl ? -1 : 1; // "forward" in the reading direction
+  document.documentElement.dir = copy.dir;
+  document.documentElement.lang = copy.lang;
+  $$('[data-copy]').forEach((el) => (el.textContent = copy[el.dataset.copy] ?? ''));
+  $$('img[data-src]').forEach((img) => (img.src = PUBLIC + img.dataset.src));
+  $$('#s4 .frame img').forEach((img) => (img.style.objectFit = img.dataset.fit));
+  $('#site').src = `assets/site-${copy.lang}.png`;
+  $('#s1 .logo').style[rtl ? 'right' : 'left'] = '90px';
+
+  const spin = $('#spin');
+  const SPIN_FRAMES = 14;
+  for (let i = 0; i < SPIN_FRAMES; i++) {
+    const img = document.createElement('img');
+    img.src = `${PUBLIC}products/spin/RAV-500/${String(i).padStart(2, '0')}.webp`;
+    spin.appendChild(img);
+  }
+
+  const set = (el, o, tf = '') => { el.style.opacity = o; el.style.transform = tf; };
+  const reveal = (el, t, start, dur = 0.55, dy = 44) => {
+    const k = E.out(p(t, start, start + dur));
+    set(el, k, `translateY(${(1 - k) * dy}px)`);
+  };
+  // True crossfade: each scene stays fully opaque until the next one (later in
+  // the DOM, so stacked on top) has finished fading in over it — never a dip
+  // to the background between scenes.
+  function seek(t) {
+    const keys = Object.keys(S);
+    keys.forEach((k, i) => {
+      const [a, b] = S[k];
+      const el = document.getElementById(k);
+      const end = i === keys.length - 1 ? b : b + FADE;
+      const vis = t >= a - 0.001 && t <= end + 0.001;
+      el.style.display = vis ? 'block' : 'none';
+      if (!vis) return;
+      const alpha = i === 0 ? 1 : p(t, a, a + FADE);
+      const zin = 1 + 0.04 * (1 - E.out(p(t, a, a + 0.6))) * (i === 0 ? 0 : 1);
+      el.style.opacity = alpha;
+      el.style.transform = `scale(${zin})`;
+      SCENES[k](t - a, b - a);
+    });
+  }
+
+  const SCENES = {
+    s1(t, d) {
+      const photo = $('#s1 .photo');
+      set(photo, 0.75 + 0.25 * E.out(p(t, 0, 0.5)), `scale(${1.14 - 0.12 * E.out(p(t, 0, d))})`);
+      const scan = $('#s1 .scanline');
+      const x = E.inOut(p(t, 0.1, 1.6)) * 1080;
+      set(scan, 0.8 * (1 - p(t, 1.3, 1.6)), `translateX(${rtl ? 1080 - x : x}px)`);
+      reveal($('#s1 .logo'), t, 0.0, 0.5, 20);
+      reveal($('#s1 .eyebrow'), t, 0.25);
+      const [l1, l2] = $$('#s1 .title span');
+      reveal(l1, t, 0.45, 0.6, 60);
+      reveal(l2, t, 0.8, 0.6, 60);
+    },
+    s2(t, d) {
+      reveal($('#s2 .eyebrow'), t, 0.15);
+      reveal($('#s2 .h1'), t, 0.3);
+      // Turntable: sweep 00 → 13 → 00 (the frames cover the front half).
+      const u = E.inOut(p(t, 0.2, d - 0.1));
+      const f = Math.round((u < 0.5 ? u * 2 : 2 - u * 2) * (SPIN_FRAMES - 1));
+      $$('#spin img').forEach((img, i) => (img.style.opacity = i === f ? 1 : 0));
+      const k = E.out(p(t, 0, 0.7));
+      spin.style.transform = `translateY(${(1 - k) * 60}px) scale(${0.92 + 0.08 * k})`;
+      $('#orbA').style.transform = `rotate(${t * 26}deg)`;
+      $('#orbB').style.transform = `rotate(${-t * 18}deg)`;
+      const chip = $('#s2 .chip');
+      const c = E.back(p(t, 0.7, 1.2));
+      chip.style.opacity = p(t, 0.7, 1.0);
+      chip.style.transform = `translateX(-50%) scale(${0.8 + 0.2 * c})`;
+    },
+    s3(t, d) {
+      reveal($('#s3 .eyebrow'), t, 0.05, 0.4);
+      const STEP = (d - 0.3) / 3;
+      $$('#s3 .dots b').forEach((b, i) => (b.style.transform = `scaleX(${p(t, 0.3 + i * STEP, 0.3 + (i + 1) * STEP)})`));
+      $$('#s3 .step').forEach((st, i) => {
+        const a = 0.3 + i * STEP, b = a + STEP;
+        const kin = E.out(p(t, a - 0.05, a + 0.45));
+        const kout = i === 2 ? 0 : E.inOut(p(t, b - 0.3, b));
+        st.style.opacity = kin * (1 - kout);
+        st.style.transform = `translateX(${sign * (120 * (1 - kin) - 120 * kout)}px)`;
+        const card = $('.card', st);
+        const img = $('img', card);
+        img.style.transform = `scale(${1.12 - 0.1 * p(t, a, b)})`;
+        $$('.draw', st).forEach((path, j) => {
+          const len = 600;
+          path.style.strokeDasharray = path.getAttribute('stroke-dasharray') ? '' : `${len}`;
+          if (!path.getAttribute('stroke-dasharray')) path.style.strokeDashoffset = len * (1 - E.out(p(t, a + 0.3 + j * 0.12, a + 1.0 + j * 0.12)));
+          else path.style.opacity = p(t, a + 0.8, a + 1.1);
+        });
+      });
+    },
+    s4(t, d) {
+      const PER = d / 6;
+      $$('#s4 .frame img').forEach((img, i) => {
+        const a = i * PER, b = a + PER;
+        const o = p(t, a - 0.12, a + 0.12) * (i === 5 ? 1 : 1 - p(t, b - 0.12, b + 0.12));
+        img.style.opacity = i === 0 ? (t < b ? 1 : 1 - p(t, b - 0.12, b + 0.12)) : o;
+        img.style.transform = `scale(${1.02 + 0.08 * p(t, a - 0.2, b + 0.2)})`;
+      });
+      $$('#s4 .cap').forEach((cap, i) => {
+        const a = i * PER * 2, b = a + PER * 2;
+        const kin = i === 0 ? E.out(p(t, 0.05, 0.5)) : E.out(p(t, a - 0.05, a + 0.4));
+        const kout = i === 2 ? 0 : E.inOut(p(t, b - 0.25, b));
+        cap.style.opacity = kin * (1 - kout);
+        cap.style.transform = `translateX(${sign * (90 * (1 - kin) - 90 * kout)}px)`;
+      });
+      const frame = $('#s4 .frame');
+      const k = E.out(p(t, 0, 0.6));
+      frame.style.transform = `translateY(${(1 - k) * 80}px)`;
+    },
+    s5(t) {
+      reveal($('#s5 .h1'), t, 0.1);
+      $$('#s5 .tile').forEach((tile, i) => {
+        const k = E.back(p(t, 0.3 + i * 0.11, 0.75 + i * 0.11));
+        tile.style.opacity = p(t, 0.3 + i * 0.11, 0.55 + i * 0.11);
+        tile.style.transform = `scale(${0.7 + 0.3 * k})`;
+      });
+    },
+    s6(t, d) {
+      reveal($('#s6 .h1'), t, 0.1);
+      reveal($('#s6 .url'), t, 0.3, 0.5, 30);
+      const phone = $('#s6 .phone');
+      const k = E.out(p(t, 0, 0.7));
+      phone.style.transform = `translateY(${(1 - k) * 160}px) scale(${0.94 + 0.06 * k})`;
+      const site = $('#site');
+      // Layout size (screen is 540x1140), not the transformed on-screen box.
+      const h = (site.naturalHeight * 540) / (site.naturalWidth || 1);
+      const max = Math.max(0, Math.min(h - 1140, 2700));
+      site.style.transform = `translateY(${-max * E.inOut(p(t, 0.7, d - 0.25))}px)`;
+    },
+    s7(t) {
+      reveal($('#s7 .logo'), t, 0.15, 0.6, 30);
+      const h = $('#s7 .h1');
+      const k = E.back(p(t, 0.35, 0.9));
+      h.style.opacity = p(t, 0.35, 0.6);
+      h.style.transform = `scale(${0.8 + 0.2 * k})`;
+      reveal($('#s7 .sub'), t, 0.7);
+      const pill = $('#s7 .pill');
+      reveal(pill, t, 1.0);
+      reveal($('#s7 .wa'), t, 1.2);
+    }
+  };
+
+  window.REEL = { FPS, DURATION, seek };
+  window.reelReady = (async () => {
+    await document.fonts.ready;
+    await Promise.all([...document.images].map((i) => (i.complete && i.naturalWidth ? i.decode() : i.decode().catch(() => { throw new Error('image failed: ' + i.src); }))));
+    seek(0);
+    return true;
+  })();
+
+  if (new URLSearchParams(location.search).has('preview')) {
+    window.reelReady.then(() => {
+      const t0 = performance.now();
+      const loop = () => { seek(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+      loop();
+    });
+  }
+</script>
+</body>
+</html>
