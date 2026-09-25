@@ -14,6 +14,19 @@ const TAGLINE: Record<AppLocale, string> = {
   en: 'Lecturer, control and display stations — designed and manufactured to order'
 };
 
+// Satori (next/og) has no bidi support: it lays glyphs out left-to-right in
+// logical order, so Hebrew comes out mirrored. For RTL we lay the words out
+// ourselves (right-to-left via row-reverse) and reverse the glyphs inside each
+// Hebrew word so it reads correctly.
+const HEBREW = /[\u0590-\u05FF]/;
+
+function rtlWords(text: string) {
+  return text
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word, i) => <span key={i}>{HEBREW.test(word) ? Array.from(word).reverse().join('') : word}</span>);
+}
+
 export default async function OgImage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const l = (routing.locales as readonly string[]).includes(locale) ? (locale as AppLocale) : routing.defaultLocale;
@@ -46,10 +59,11 @@ export default async function OgImage({ params }: { params: Promise<{ locale: st
             lineHeight: 1.15,
             maxWidth: 900,
             textAlign: rtl ? 'right' : 'left',
-            alignSelf: rtl ? 'flex-end' : 'flex-start'
+            alignSelf: rtl ? 'flex-end' : 'flex-start',
+            ...(rtl ? { flexDirection: 'row-reverse', flexWrap: 'wrap', columnGap: 16 } : {})
           }}
         >
-          {TAGLINE[l]}
+          {rtl ? rtlWords(TAGLINE[l]) : TAGLINE[l]}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 26, color: '#CFE6F6' }}>
           <div style={{ width: 40, height: 4, background: '#1683C7' }} />
