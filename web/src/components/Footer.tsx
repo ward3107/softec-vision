@@ -37,9 +37,11 @@ export default async function Footer() {
             <CookiePreferencesLink label={t('cookiePreferences')} />
           </nav>
         </div>
-        <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-5">
+        <div className="mt-8 flex flex-col items-center gap-5 border-t border-white/10 pt-7">
           <CreatorSignature />
-          <AdminEntrance />
+          <span className="self-end opacity-60 transition-opacity hover:opacity-100">
+            <AdminEntrance />
+          </span>
         </div>
       </div>
     </footer>

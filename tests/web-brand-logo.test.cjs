@@ -39,17 +39,17 @@ test('first-visit splash persists its completed state and respects reduced motio
   assert.match(css, /\.brand-splash-seen \.brand-splash/);
 });
 
-test('footer renders the saved creator signature letter by letter', () => {
+test('footer renders the supplied Vasia dev. creator mark with verified contact links', () => {
   const signature = read('web', 'src', 'components', 'CreatorSignature.tsx');
   const footer = read('web', 'src', 'components', 'Footer.tsx');
-  const css = read('web', 'src', 'app', 'globals.css');
 
-  assert.match(signature, /const HEART = '❤️'/);
-  assert.match(signature, /https:\/\/waseemp\.vercel\.app\//);
-  assert.match(signature, /creator-signature__character/);
+  assert.match(signature, /\/brand\/vasia-dev-signature\.png/);
+  assert.match(signature, /https:\/\/www\.vasia\.dev\//);
+  assert.match(signature, /mailto:vasyaward@gmail\.com/);
+  assert.match(signature, /https:\/\/wa\.me\/972544742520/);
+  assert.match(signature, /https:\/\/github\.com\/ward3107/);
+  assert.match(signature, /https:\/\/www\.linkedin\.com\/in\/waseem-abu-akel-334486374\//);
   assert.match(footer, /<CreatorSignature/);
-  assert.match(css, /@keyframes signatureWrite/);
-  assert.match(css, /prefers-reduced-motion/);
 });
 
 test('floating controls keep WhatsApp left and accessibility right', () => {

@@ -215,51 +215,6 @@ body.brand-splash-open {
   }
 }
 
-/* Creator credit: handwritten-style, letter-by-letter reveal. */
-.creator-signature {
-  display: inline-flex;
-  align-items: baseline;
-  min-height: 34px;
-  color: #e8f4fc;
-  font-family: var(--font-signature), Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  text-shadow: 0 1px 8px rgba(22, 131, 199, 0.35);
-}
-.creator-signature__character {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(4px);
-  animation: signatureWrite 0.24s ease forwards;
-}
-.creator-signature__heart {
-  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;
-  font-style: normal;
-}
-.creator-signature__link {
-  color: #5cc7ec;
-  font-weight: 700;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: 4px;
-  transition: color 0.2s ease, text-decoration-color 0.2s ease;
-}
-.creator-signature__link:hover,
-.creator-signature__link:focus-visible {
-  color: #fff;
-  text-decoration-color: currentColor;
-}
-@keyframes signatureWrite {
-  to { opacity: 1; transform: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .creator-signature__character {
-    opacity: 1;
-    transform: none;
-    animation: none !important;
-  }
-}
 .brand-splash__card {
   width: min(760px, 92vw);
   overflow: hidden;
