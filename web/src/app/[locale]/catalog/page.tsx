@@ -57,7 +57,6 @@ export default async function CatalogPage({
                       alt=""
                       width={520}
                       height={325}
-                      quality={90}
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                       className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
                     />

@@ -27,6 +27,8 @@ export function organizationSchema(locale: AppLocale) {
       email: EMAIL,
       telephone: PHONE,
       areaServed: 'IL',
+      knowsAbout: ['Lecturer stations', 'Control-room workstations', 'AV integration', 'Accessible technology furniture'],
+      availableLanguage: ['he', 'en'],
       contactPoint: [
         {
           '@type': 'ContactPoint',
@@ -71,5 +73,44 @@ export function breadcrumbSchema(locale: AppLocale, items: { name: string; path:
       name: item.name,
       item: localeUrl(locale, item.path)
     }))
+  };
+}
+
+/** BlogPosting schema for the visible, research-backed knowledge articles. */
+export function articleSchema({
+  locale,
+  slug,
+  title,
+  description,
+  image,
+  publishedAt,
+  updatedAt
+}: {
+  locale: AppLocale;
+  slug: string;
+  title: string;
+  description: string;
+  image: string;
+  publishedAt: string;
+  updatedAt: string;
+}) {
+  const url = localeUrl(locale, `/blog/${slug}`);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    url,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    inLanguage: locale,
+    datePublished: publishedAt,
+    dateModified: updatedAt,
+    image: { '@type': 'ImageObject', url: `${SITE_URL}${image}` },
+    author: { '@type': 'Organization', name: 'Softec Vision Engineering Team', url: localeUrl(locale, '/about') },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Softec Vision Ltd',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/brand/softec-vision-logo.png` }
+    }
   };
 }

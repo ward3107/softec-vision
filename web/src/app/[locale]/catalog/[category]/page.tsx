@@ -102,7 +102,7 @@ export default async function CategoryPage({
                   className={subLinkClass(state.sub === s.key)}
                 >
                   {thumb ? (
-                    <Image src={thumb} alt="" width={44} height={36} quality={85} className={subThumb} />
+                    <Image src={thumb} alt="" width={44} height={36} className={subThumb} />
                   ) : null}
                   {localized(s.label, l)}
                 </Link>

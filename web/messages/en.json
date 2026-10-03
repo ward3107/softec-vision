@@ -8,6 +8,7 @@
     "primary": "Main navigation",
     "products": "Products",
     "custom": "Custom Solutions",
+    "blog": "Insights",
     "about": "About",
     "process": "Process",
     "faq": "FAQ",
@@ -21,6 +22,20 @@
     "menuClose": "Close menu",
     "themeToLight": "Switch to light mode",
     "themeToDark": "Switch to dark mode"
+  },
+  "blog": {
+    "eyebrow": "Research-backed knowledge",
+    "title": "Designing Better Technology Workspaces",
+    "description": "Practical articles connecting workstation engineering, accessibility, learning-space design and human-factors research.",
+    "latest": "Latest articles",
+    "method": "Each article separates published evidence from practical design interpretation and links directly to its sources.",
+    "articleCount": "{count, plural, one {# article} other {# articles}}",
+    "updated": "Updated",
+    "read": "Read article",
+    "author": "By the Softec Vision engineering team",
+    "home": "Home",
+    "breadcrumbs": "Breadcrumbs",
+    "discuss": "Discuss your project"
   },
   "hero": {
     "eyebrow": "Engineered in Israel. Built for every space.",

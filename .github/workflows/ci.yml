@@ -63,3 +63,4 @@ jobs:
           tests/web-brand-logo.test.cjs
           tests/web-catalog-media.test.cjs
           tests/web-home-hero.test.cjs
+          tests/web-seo-blog.test.cjs

@@ -3,11 +3,13 @@ import { routing, type AppLocale } from '@/i18n/routing';
 import { localeUrl } from '@/lib/seo';
 import { getAllProducts } from '@/lib/catalog';
 import { CATEGORIES } from '@/lib/catalog/seed';
+import { BLOG_POSTS } from '@/lib/blog/posts';
 
 /** Static routes present in every locale, with change/priority hints. */
 const STATIC: { path: string; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']; priority: number }[] = [
   { path: '', changeFrequency: 'weekly', priority: 1 },
   { path: '/catalog', changeFrequency: 'weekly', priority: 0.9 },
+  { path: '/blog', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/custom', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/contact', changeFrequency: 'monthly', priority: 0.7 },
@@ -17,7 +19,9 @@ const STATIC: { path: string; changeFrequency: MetadataRoute.Sitemap[number]['ch
 ];
 
 function languagesFor(path: string, locales: readonly AppLocale[]): Record<string, string> {
-  return Object.fromEntries(locales.map((l) => [l, localeUrl(l, path)]));
+  const languages = Object.fromEntries(locales.map((l) => [l, localeUrl(l, path)]));
+  const fallback = locales.includes(routing.defaultLocale) ? routing.defaultLocale : locales[0];
+  return fallback ? { ...languages, 'x-default': localeUrl(fallback, path) } : languages;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -47,6 +51,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const languages = languagesFor(path, productLocales);
     for (const locale of productLocales) {
       entries.push({ url: localeUrl(locale, path), lastModified: now, changeFrequency: 'monthly', priority: 0.6, alternates: { languages } });
+    }
+  }
+
+  for (const post of BLOG_POSTS) {
+    const path = `/blog/${post.slug}`;
+    const languages = languagesFor(path, routing.locales);
+    for (const locale of routing.locales) {
+      entries.push({
+        url: localeUrl(locale, path),
+        lastModified: new Date(post.updatedAt),
+        changeFrequency: 'monthly',
+        priority: 0.7,
+        alternates: { languages }
+      });
     }
   }
 

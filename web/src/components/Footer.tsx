@@ -39,7 +39,7 @@ export default async function Footer() {
         </div>
         <div className="mt-8 flex flex-col items-center gap-5 border-t border-white/10 pt-7">
           <CreatorSignature />
-          <span className="self-end opacity-60 transition-opacity hover:opacity-100">
+          <span className="self-end opacity-80 transition-opacity hover:opacity-100">
             <AdminEntrance />
           </span>
         </div>

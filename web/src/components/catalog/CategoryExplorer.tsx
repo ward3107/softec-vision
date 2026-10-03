@@ -89,7 +89,6 @@ export default function CategoryExplorer({
                       alt=""
                       width={480}
                       height={360}
-                      quality={90}
                       sizes="(min-width: 1024px) 20vw, (min-width: 640px) 30vw, 42vw"
                       className="h-full w-full scale-[1.06] object-contain transition-transform duration-300 group-hover:scale-[1.1]"
                     />
@@ -179,7 +178,6 @@ export default function CategoryExplorer({
                           alt={item.alt}
                           width={640}
                           height={480}
-                          quality={90}
                           sizes="(min-width: 1024px) 30vw, 46vw"
                           className="h-full w-full scale-[1.06] object-contain transition-transform duration-300 group-hover:scale-[1.1]"
                         />

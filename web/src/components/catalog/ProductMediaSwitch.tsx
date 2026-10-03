@@ -60,7 +60,6 @@ export default function ProductMediaSwitch({
           alt={alt}
           width={1200}
           height={900}
-          quality={92}
           priority
           sizes="(min-width: 1024px) 50vw, 100vw"
           className={zoomImage}
