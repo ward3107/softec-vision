@@ -12,6 +12,7 @@ export interface ExplorerItem {
   image?: string;
   alt: string;
   href: string;
+  kind: 'subcategory' | 'product';
 }
 
 export interface ExplorerCategory {
@@ -35,11 +36,12 @@ export default function CategoryExplorer({
   labels
 }: {
   categories: ExplorerCategory[];
-  labels: { viewAll: string; empty: string; contact: string };
+  labels: { viewAll: string; empty: string; contact: string; previous: string; next: string };
 }) {
   const baseId = useId();
   const [open, setOpen] = useState<string | null>(null);
   const panels = useRef<Record<string, HTMLDivElement | null>>({});
+  const rails = useRef<Record<string, HTMLUListElement | null>>({});
 
   // Bring a newly opened panel into view (mainly for phones, where it can open below the fold).
   useEffect(() => {
@@ -48,11 +50,22 @@ export default function CategoryExplorer({
     panels.current[open]?.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
   }, [open]);
 
+  function scrollProducts(categoryKey: string, direction: -1 | 1) {
+    const rail = rails.current[categoryKey];
+    if (!rail) return;
+    const rtl = getComputedStyle(rail).direction === 'rtl';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    rail.scrollBy({
+      left: direction * (rtl ? -1 : 1) * rail.clientWidth * 0.82,
+      behavior: reduce ? 'auto' : 'smooth'
+    });
+  }
+
   return (
     <div className="mt-8">
       <ul
         style={{ '--cols': categories.length } as CSSProperties}
-        className="-mx-[clamp(20px,4.5vw,72px)] flex snap-x snap-mandatory gap-4 overflow-x-auto px-[clamp(20px,4.5vw,72px)] pb-3 scroll-px-[clamp(20px,4.5vw,72px)] [&>*]:w-[42%] [&>*]:shrink-0 [&>*]:snap-start sm:[&>*]:w-[30%] lg:mx-0 lg:grid lg:overflow-visible lg:px-0 lg:pb-0 lg:scroll-px-0 lg:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))] lg:[&>*]:w-auto"
+        className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:[grid-template-columns:repeat(var(--cols),minmax(0,1fr))]"
       >
         {categories.map((category) => {
           const isOpen = open === category.key;
@@ -78,7 +91,7 @@ export default function CategoryExplorer({
                       height={360}
                       quality={90}
                       sizes="(min-width: 1024px) 20vw, (min-width: 640px) 30vw, 42vw"
-                      className="h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-[1.04]"
+                      className="h-full w-full scale-[1.06] object-contain transition-transform duration-300 group-hover:scale-[1.1]"
                     />
                   ) : (
                     <PlaceholderIcon cart={category.key.includes('cart')} />
@@ -124,19 +137,42 @@ export default function CategoryExplorer({
               <h3 className="text-xl font-extrabold">{category.label}</h3>
               <p className="mt-1 max-w-2xl text-sm text-machine dark:text-fog">{category.description}</p>
             </div>
-            <Link href={`/catalog/${category.key}`} className="font-bold text-blueprint hover:underline dark:text-skyline">
-              {labels.viewAll} →
-            </Link>
+            <div className="flex items-center gap-2">
+              {category.items.some((item) => item.kind === 'product') ? (
+                <>
+                  <button type="button" className="grid h-11 w-11 place-items-center rounded-full border-2 border-blueprint bg-pure text-blueprint hover:bg-blueprint hover:text-pure" onClick={() => scrollProducts(category.key, -1)} aria-label={labels.previous}>
+                    <Chevron direction="previous" />
+                  </button>
+                  <button type="button" className="grid h-11 w-11 place-items-center rounded-full border-2 border-blueprint bg-pure text-blueprint hover:bg-blueprint hover:text-pure" onClick={() => scrollProducts(category.key, 1)} aria-label={labels.next}>
+                    <Chevron direction="next" />
+                  </button>
+                </>
+              ) : null}
+              <Link href={`/catalog/${category.key}`} className="font-bold text-blueprint hover:underline dark:text-skyline">
+                {labels.viewAll} →
+              </Link>
+            </div>
           </div>
           {category.items.length > 0 ? (
-            <ul className="mt-5 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3">
+            <ul
+              ref={(el) => {
+                rails.current[category.key] = el;
+              }}
+              className={category.items.some((item) => item.kind === 'product')
+                ? 'mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-color:#1683C7_#E6F2F9] [scrollbar-width:thin] [&>*]:w-[82%] [&>*]:shrink-0 [&>*]:snap-start sm:[&>*]:w-[46%] lg:[&>*]:w-[31%]'
+                : 'mt-5 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3'}
+            >
               {category.items.map((item) => (
                 <li key={item.key}>
                   <Link
                     href={item.href}
-                    className="group block overflow-hidden rounded border border-line bg-pure transition-colors hover:border-blueprint dark:border-white/10 dark:bg-surface dark:hover:border-skyline"
+                    className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-line bg-pure transition-[border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-blueprint hover:shadow-[0_14px_35px_rgba(12,94,145,0.12)] dark:border-white/10 dark:bg-surface dark:hover:border-skyline"
                   >
-                    <span className="block aspect-[4/3] overflow-hidden">
+                    <span className={item.kind === 'product' ? 'order-first block p-4 pb-3' : 'order-last block border-t border-line p-3 dark:border-white/10'}>
+                      <span className="block font-extrabold leading-snug group-hover:text-blueprint dark:group-hover:text-skyline">{item.label}</span>
+                      <span className="mt-1 block text-sm font-extrabold text-blueprint">{item.meta}</span>
+                    </span>
+                    <span className="block aspect-[4/3] overflow-hidden bg-[#F8FBFD]">
                       {item.image ? (
                         <Image
                           src={item.image}
@@ -145,13 +181,9 @@ export default function CategoryExplorer({
                           height={480}
                           quality={90}
                           sizes="(min-width: 1024px) 30vw, 46vw"
-                          className="h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-[1.04]"
+                          className="h-full w-full scale-[1.06] object-contain transition-transform duration-300 group-hover:scale-[1.1]"
                         />
                       ) : null}
-                    </span>
-                    <span className="block border-t border-line p-3 dark:border-white/10">
-                      <span className="block font-bold leading-snug group-hover:text-blueprint dark:group-hover:text-skyline">{item.label}</span>
-                      <span className="mt-0.5 block text-xs font-semibold text-machine dark:text-fog">{item.meta}</span>
                     </span>
                   </Link>
                 </li>
@@ -168,6 +200,14 @@ export default function CategoryExplorer({
         </div>
       ))}
     </div>
+  );
+}
+
+function Chevron({ direction }: { direction: 'previous' | 'next' }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 rtl:-scale-x-100" fill="none" stroke="currentColor" strokeWidth="2.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={direction === 'previous' ? 'M15 18l-6-6 6-6' : 'M9 18l6-6-6-6'} />
+    </svg>
   );
 }
 

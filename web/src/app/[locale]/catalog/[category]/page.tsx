@@ -114,7 +114,6 @@ export default async function CategoryPage({
 
       {products.length > 0 ? (
         <ProductScroller
-          variant="row"
           caption={`${products.length} ${t('statusCount')}`}
           labels={{ region: localized(cat.label, l), previous: t('scrollPrevious'), next: t('scrollNext') }}
         >

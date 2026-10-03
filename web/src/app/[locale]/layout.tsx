@@ -7,8 +7,6 @@ import { Assistant, Playfair_Display } from 'next/font/google';
 import { routing, localeDir, type AppLocale } from '@/i18n/routing';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { CompareProvider } from '@/components/catalog/CompareProvider';
-import CompareTray from '@/components/catalog/CompareTray';
 import RevealController from '@/components/motion/RevealController';
 import FloatingDock from '@/components/widgets/FloatingDock';
 import BrandSplash from '@/components/BrandSplash';
@@ -27,10 +25,7 @@ import '../globals.css';
  */
 const BOOT_SCRIPT = `(function(){try{
   var d=document.documentElement;d.classList.add('js');
-  var theme=localStorage.getItem('softec-theme');
-  if(theme==='dark'){
-    d.classList.add('dark');
-  }
+  d.classList.remove('dark');
   if(localStorage.getItem('softec-brand-intro-seen')==='1'){d.classList.add('brand-splash-seen');}
   var f=parseInt(localStorage.getItem('a11y-font')||'0',10);
   if(f){d.style.fontSize=(100+f*8)+'%';}
@@ -108,7 +103,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir} className={`${assistant.variable} ${signature.variable}`} suppressHydrationWarning>
       <body
-        className="min-h-screen bg-paper font-sans text-graphite antialiased dark:bg-canvas dark:text-ink"
+        className="min-h-screen bg-paper font-sans text-graphite antialiased"
         suppressHydrationWarning
       >
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
@@ -116,26 +111,23 @@ export default async function LocaleLayout({
         <BrandSplash />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ConsentProvider gaId={process.env.NEXT_PUBLIC_GA4_ID ?? ''}>
-            <CompareProvider>
-              <a href="#main" className="skip-link">
-                {t('skip')}
-              </a>
-              {/* Colour-filter aids apply here; the dock and reading overlays sit outside. */}
-              <div id="a11y-content">
-                <Header />
-                <main id="main" tabIndex={-1}>
-                  {children}
-                </main>
-                <Footer />
-              </div>
-              <CompareTray />
-              <FloatingDock waNumber={WA_NUMBER} />
-              <Suspense fallback={null}>
-                <NavTracker />
-              </Suspense>
-              <RevealController />
-              <ConsentBanner />
-            </CompareProvider>
+            <a href="#main" className="skip-link">
+              {t('skip')}
+            </a>
+            {/* Colour-filter aids apply here; the dock and reading overlays sit outside. */}
+            <div id="a11y-content">
+              <Header />
+              <main id="main" tabIndex={-1}>
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <FloatingDock waNumber={WA_NUMBER} />
+            <Suspense fallback={null}>
+              <NavTracker />
+            </Suspense>
+            <RevealController />
+            <ConsentBanner />
           </ConsentProvider>
         </NextIntlClientProvider>
       </body>

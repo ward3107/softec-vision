@@ -3,7 +3,6 @@ import { Link } from '@/i18n/navigation';
 import LanguageSwitcher from './LanguageSwitcher';
 import BrandLogo from './BrandLogo';
 import MobileNav from './MobileNav';
-import ThemeToggle from './ThemeToggle';
 
 export default async function Header() {
   const t = await getTranslations('nav');
@@ -29,11 +28,20 @@ export default async function Header() {
           ))}
         </nav>
 
-        <div className="ms-auto flex flex-none items-center gap-3 lg:ms-0">
-          <ThemeToggle toLightLabel={t('themeToLight')} toDarkLabel={t('themeToDark')} />
+        <div className="ms-auto flex flex-none items-center gap-2 sm:gap-3 lg:ms-0">
           <LanguageSwitcher />
+          <Link
+            href="/contact"
+            aria-label={t('contact')}
+            className="inline-flex h-11 flex-none items-center justify-center gap-2 rounded-full bg-blueprint px-3 font-bold text-pure shadow-[0_8px_24px_rgba(12,94,145,0.2)] transition-[background-color,transform,box-shadow] hover:-translate-y-0.5 hover:bg-graphite hover:shadow-[0_12px_28px_rgba(21,23,25,0.2)] sm:px-5"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5 sm:hidden" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+            </svg>
+            <span className="hidden sm:inline">{t('contact')}</span>
+          </Link>
           <MobileNav
-            links={links}
+            links={[...links, { href: '/contact', label: t('contact') }]}
             primaryLabel={t('primary')}
             openLabel={t('menuOpen')}
             closeLabel={t('menuClose')}

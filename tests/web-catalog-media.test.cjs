@@ -5,6 +5,10 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const seed = fs.readFileSync(path.join(root, 'web', 'src', 'lib', 'catalog', 'seed.ts'), 'utf8');
+const productCard = fs.readFileSync(path.join(root, 'web', 'src', 'components', 'catalog', 'ProductCard.tsx'), 'utf8');
+const productScroller = fs.readFileSync(path.join(root, 'web', 'src', 'components', 'catalog', 'ProductScroller.tsx'), 'utf8');
+const categoryExplorer = fs.readFileSync(path.join(root, 'web', 'src', 'components', 'catalog', 'CategoryExplorer.tsx'), 'utf8');
+const publicLayout = fs.readFileSync(path.join(root, 'web', 'src', 'app', '[locale]', 'layout.tsx'), 'utf8');
 
 const expectedCodes = [
   'ACCESSIBLE-TLV',
@@ -61,4 +65,24 @@ test('legacy catalog products use lightweight transparent WebP cutouts', () => {
     // clean cutout on transparency compresses smaller than a full scene.
     assert.ok(fs.statSync(file).size < 350_000, `${publicPath} should stay below 350 KB`);
   }
+});
+
+test('product cards are one clickable frame with copy above an enlarged image', () => {
+  assert.match(productCard, /className="group flex h-full flex-col overflow-hidden/);
+  assert.ok(productCard.indexOf('<h3') < productCard.indexOf('<Image'));
+  assert.match(productCard, /scale-\[1\.08\]/);
+  assert.doesNotMatch(productCard, /CompareButton|t\('details'\)/);
+});
+
+test('product listings stay horizontal while category families stay in a grid', () => {
+  assert.match(productScroller, /snap-x snap-mandatory/);
+  assert.match(productScroller, /scrollBy/);
+  assert.doesNotMatch(productScroller, /sm:grid/);
+  assert.match(categoryExplorer, /grid grid-cols-2/);
+  assert.match(categoryExplorer, /item\.kind === 'product'/);
+});
+
+test('the public shell is light-only and has no comparison tray', () => {
+  assert.match(publicLayout, /classList\.remove\('dark'\)/);
+  assert.doesNotMatch(publicLayout, /CompareProvider|CompareTray/);
 });

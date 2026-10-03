@@ -5,7 +5,6 @@ import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import type { AppLocale } from '@/i18n/routing';
 import {
-  buildInquiryUrl,
   getAllProducts,
   getProduct,
   getRelatedProducts,
@@ -14,11 +13,10 @@ import {
 } from '@/lib/catalog';
 import { CATEGORIES } from '@/lib/catalog/seed';
 import { pageMetadata, SITE_URL, BRAND } from '@/lib/seo';
-import CompareButton from '@/components/catalog/CompareButton';
 import ProductCard from '@/components/catalog/ProductCard';
+import ProductScroller from '@/components/catalog/ProductScroller';
 import ProductMediaSwitch from '@/components/catalog/ProductMediaSwitch';
 import ProductViewTracker from '@/components/catalog/ProductViewTracker';
-import ProductWhatsAppButton from '@/components/catalog/ProductWhatsAppButton';
 import ShareButton from '@/components/widgets/ShareButton';
 import JsonLd, { breadcrumbSchema } from '@/components/JsonLd';
 
@@ -163,14 +161,6 @@ export default async function ProductPage({
           <p className="mt-3 text-sm text-machine dark:text-fog">{t('detailsOnRequest')}</p>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <ProductWhatsAppButton href={buildInquiryUrl(product, l)} label={t('inquiry')} code={product.code} />
-            <Link
-              href={`/contact?product=${product.code}`}
-              className="inline-flex min-h-[48px] items-center rounded bg-blueprint px-5 font-bold text-pure hover:bg-graphite"
-            >
-              {t('quote')}
-            </Link>
-            <CompareButton code={product.code} />
             <ShareButton title={`${name} (${product.code}) — Softec Vision`} text={localized(product.desc, l)} />
           </div>
         </div>
@@ -179,11 +169,13 @@ export default async function ProductPage({
       {related.length > 0 && (
         <section className="mt-14">
           <h2 className="text-xl font-bold">{t('related')}</h2>
-          <div className="mt-4 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <ProductScroller
+            labels={{ region: t('related'), previous: tc('scrollPrevious'), next: tc('scrollNext') }}
+          >
             {related.map((r) => (
               <ProductCard key={r.code} product={r} />
             ))}
-          </div>
+          </ProductScroller>
         </section>
       )}
     </div>

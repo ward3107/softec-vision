@@ -41,7 +41,7 @@ export default async function CatalogPage({
       </header>
 
       {/* Product families */}
-      <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="mt-10 grid gap-5 rounded-[28px] bg-[#E8F5FC] p-4 sm:grid-cols-2 sm:p-6 lg:grid-cols-3 lg:p-8">
         {categories.map((category) => {
           const image = categoryImage(category.key);
           return (
@@ -67,8 +67,9 @@ export default async function CatalogPage({
                   <span className="text-lg font-bold">{localized(category.label, l)}</span>
                   <span className="text-sm text-machine dark:text-fog">{localized(category.description, l)}</span>
                   {category.subs?.length ? (
-                    <span className="mt-auto pt-2 text-xs font-semibold text-blueprint dark:text-skyline">
-                      {category.subs.length} {t('subcategoryCount')}
+                    <span className="mt-auto flex items-baseline gap-2 pt-3 text-blueprint">
+                      <strong className="text-3xl font-extrabold leading-none">{category.subs.length}</strong>
+                      <span className="text-sm font-bold">{t('subcategoryCount')}</span>
                     </span>
                   ) : null}
                 </div>
@@ -79,10 +80,10 @@ export default async function CatalogPage({
       </ul>
 
       {/* All products */}
-      <p className="mt-12 text-sm font-semibold text-machine dark:text-fog">
-        {products.length} {t('statusCount')}
-      </p>
-      <ProductScroller>
+      <ProductScroller
+        caption={`${products.length} ${t('statusCount')}`}
+        labels={{ region: t('title'), previous: t('scrollPrevious'), next: t('scrollNext') }}
+      >
         {products.map((product) => (
           <ProductCard key={product.code} product={product} />
         ))}

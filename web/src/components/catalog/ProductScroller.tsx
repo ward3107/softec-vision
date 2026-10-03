@@ -2,51 +2,25 @@
 
 import { useCallback, useEffect, useId, useRef, useState, type PointerEvent, type ReactNode } from 'react';
 
-/**
- * Product listing, in one of two layouts. Purely presentational: direct
- * children (e.g. ProductCard) are sized via arbitrary child selectors, so
- * nothing about the cards themselves changes.
- *
- * - `grid` (default): a horizontal, snap-scrolling row on mobile that becomes
- *   the usual multi-column grid from `sm` up.
- * - `row`: a horizontal row at every size (a category's products), with
- *   previous/next buttons, mouse drag-to-scroll on desktop and native
- *   touch/trackpad swiping. The next card peeks in so it's clear there is more.
- *
- * On mobile both bleed to the screen edges for a natural swipe; the negative
- * margin matches the page's side gutter, and the matching scroll padding keeps
- * the first card snapped to the gutter instead of the screen edge.
- */
+/** A dedicated product carousel: categories and subcategories remain grids. */
 export default function ProductScroller({
   children,
-  variant = 'grid',
   caption,
   labels
 }: {
   children: ReactNode;
-  variant?: 'grid' | 'row';
   caption?: ReactNode;
-  labels?: { region: string; previous: string; next: string };
+  labels: { region: string; previous: string; next: string };
 }) {
-  if (variant === 'row' && labels) {
-    return (
-      <ProductRow caption={caption} labels={labels}>
-        {children}
-      </ProductRow>
-    );
-  }
   return (
-    <>
-      {caption ? <p className="mt-8 text-sm font-semibold text-machine dark:text-fog">{caption}</p> : null}
-      <div className="mt-4 -mx-[clamp(20px,4.5vw,72px)] flex snap-x snap-mandatory gap-4 overflow-x-auto px-[clamp(20px,4.5vw,72px)] pb-3 scroll-px-[clamp(20px,4.5vw,72px)] [-webkit-overflow-scrolling:touch] [&>*]:w-[76%] [&>*]:shrink-0 [&>*]:snap-start sm:mx-0 sm:scroll-px-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 sm:pb-0 sm:[&>*]:w-auto sm:[&>*]:shrink lg:grid-cols-3">
-        {children}
-      </div>
-    </>
+    <ProductRow caption={caption} labels={labels}>
+      {children}
+    </ProductRow>
   );
 }
 
 const arrowButton =
-  'inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-blueprint bg-pure text-blueprint transition-colors hover:bg-blueprint hover:text-pure disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-pure disabled:hover:text-blueprint dark:border-skyline dark:bg-surface dark:text-skyline dark:hover:bg-skyline dark:hover:text-canvas dark:disabled:hover:bg-surface dark:disabled:hover:text-skyline';
+  'inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-blueprint bg-pure text-blueprint shadow-sm transition-[background-color,color,transform] hover:-translate-y-0.5 hover:bg-blueprint hover:text-pure disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:translate-y-0 disabled:hover:bg-pure disabled:hover:text-blueprint';
 
 function Chevron({ direction }: { direction: 'previous' | 'next' }) {
   // Drawn for LTR and mirrored in RTL, where "previous" is to the right.
@@ -142,7 +116,7 @@ function ProductRow({
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between gap-4">
-        <p className="text-sm font-semibold text-machine dark:text-fog">{caption}</p>
+        <p className="text-base font-extrabold text-blueprint">{caption}</p>
         <div className={`flex flex-none gap-2 ${edges.start && edges.end ? 'invisible' : ''}`}>
           <button type="button" className={arrowButton} onClick={() => step(-1)} disabled={edges.start} aria-controls={id} aria-label={labels.previous}>
             <Chevron direction="previous" />
@@ -169,7 +143,7 @@ function ProductRow({
           }
         }}
         onDragStart={(event) => event.preventDefault()}
-        className="mt-4 -mx-[clamp(20px,4.5vw,72px)] flex select-none snap-x snap-mandatory gap-4 overflow-x-auto px-[clamp(20px,4.5vw,72px)] pb-4 scroll-px-[clamp(20px,4.5vw,72px)] [-webkit-overflow-scrolling:touch] [scrollbar-width:thin] [&>*]:w-[76%] [&>*]:shrink-0 [&>*]:snap-start sm:mx-0 sm:scroll-px-0 sm:gap-6 sm:px-0 sm:[&>*]:w-[44%] lg:[&>*]:w-[31%]"
+        className="mt-4 -mx-[clamp(20px,4.5vw,72px)] flex select-none snap-x snap-mandatory gap-4 overflow-x-auto px-[clamp(20px,4.5vw,72px)] pb-6 pt-1 scroll-px-[clamp(20px,4.5vw,72px)] [-webkit-overflow-scrolling:touch] [scrollbar-color:#1683C7_#E6F2F9] [scrollbar-width:thin] [&>*]:w-[82%] [&>*]:shrink-0 [&>*]:snap-start sm:mx-0 sm:scroll-px-0 sm:gap-6 sm:px-0 sm:[&>*]:w-[46%] lg:[&>*]:w-[31%] xl:[&>*]:w-[23.5%]"
       >
         {children}
       </div>

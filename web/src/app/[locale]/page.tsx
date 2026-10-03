@@ -118,10 +118,11 @@ export default async function HomePage({
             meta: tcat('modelCount', { count: inSub.length }),
             image: inSub[0].image,
             alt: '',
-            href: `/catalog/${category.key}?sub=${s.key}`
+            href: `/catalog/${category.key}?sub=${s.key}`,
+            kind: 'subcategory' as const
           }];
         })
-      : inFamily.map((p) => ({ key: p.code, label: localized(p.name, l), meta: p.code, image: p.image, alt: '', href: `/product/${p.code}` }));
+      : inFamily.map((p) => ({ key: p.code, label: localized(p.name, l), meta: p.code, image: p.image, alt: '', href: `/product/${p.code}`, kind: 'product' as const }));
     return {
       key: category.key,
       label: localized(category.label, l),
@@ -212,7 +213,7 @@ export default async function HomePage({
       </section>
 
       {/* Product families — a tile per family; opening one shows its subcategories (or products) as pictures */}
-      <section id="families" aria-labelledby="families-title" className="bg-pure dark:bg-surface">
+      <section id="families" aria-labelledby="families-title" className="border-y border-[#C8E7F7] bg-[#E8F5FC]">
         <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(40px,5vw,80px)]">
           <div className="reveal reveal-left">
             <h2 id="families-title" className="text-[clamp(1.8rem,3vw,2.6rem)] font-extrabold tracking-tight">
@@ -223,7 +224,13 @@ export default async function HomePage({
           <div className="reveal reveal-up">
             <CategoryExplorer
               categories={explorer}
-              labels={{ viewAll: tcat('exploreViewAll'), empty: tcat('exploreEmpty'), contact: t('quote') }}
+              labels={{
+                viewAll: tcat('exploreViewAll'),
+                empty: tcat('exploreEmpty'),
+                contact: t('quote'),
+                previous: tcat('scrollPrevious'),
+                next: tcat('scrollNext')
+              }}
             />
           </div>
         </div>
