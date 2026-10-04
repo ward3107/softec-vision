@@ -59,6 +59,8 @@ test('floating controls keep WhatsApp left and accessibility right', () => {
   const widget = read('web', 'src', 'components', 'a11y', 'AccessibilityWidget.tsx');
 
   assert.match(dock, /fixed bottom-5 left-4[^\n]*[\s\S]*wa\.me/);
-  assert.ok(dock.includes('className="fixed right-4 top-1/2'));
+  assert.ok(dock.includes('className="fixed right-0 top-1/2'));
   assert.ok(widget.includes('absolute right-[calc(100%+0.75rem)] top-1/2'));
+  assert.ok(widget.includes('rounded-l-xl rounded-r-none'));
+  assert.match(widget, /<span className="whitespace-nowrap text-sm font-bold">\{t\('heading'\)\}<\/span>/);
 });
