@@ -47,7 +47,14 @@ export async function sendOtp(_previous: OtpSendState, fd: FormData): Promise<Ot
   if (!email) return { error: 'missing' };
   const client = await createUserClient();
   // shouldCreateUser:false — only existing accounts get a code; the site never self-registers admins.
-  const { error } = await client.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://softecvision.vercel.app').replace(/\/+$/, '');
+  const { error } = await client.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: false,
+      emailRedirectTo: `${siteUrl}/auth/callback`
+    }
+  });
   if (error) return { error: 'otpFailed', email };
   return { ok: true, email };
 }
