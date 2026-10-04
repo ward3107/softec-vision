@@ -51,6 +51,7 @@ test('footer renders the supplied Vasia dev. creator mark with verified contact 
   assert.match(signature, /https:\/\/www\.linkedin\.com\/in\/waseem-abu-akel-334486374\//);
   assert.match(footer, /<CreatorSignature/);
   assert.match(footer, /pb-16 pt-4 text-sm sm:pb-24 sm:pt-6/);
+  assert.ok(footer.includes('className="self-center opacity-80 transition-opacity hover:opacity-100"'));
   assert.ok(!signature.includes('bg-[#020716]'));
 });
 
@@ -61,6 +62,8 @@ test('floating controls keep WhatsApp left and accessibility right', () => {
   assert.match(dock, /fixed bottom-5 left-4[^\n]*[\s\S]*wa\.me/);
   assert.ok(dock.includes('className="fixed right-0 top-1/2'));
   assert.ok(widget.includes('absolute right-[calc(100%+0.75rem)] top-1/2'));
-  assert.ok(widget.includes('flex h-11 w-12 items-center justify-center rounded-l-lg rounded-r-none'));
+  assert.ok(widget.includes('group flex h-11 w-11 items-center justify-end bg-transparent'));
+  assert.ok(widget.includes('grid h-7 w-8 place-items-center rounded-l-md rounded-r-none'));
+  assert.match(widget, /width="16" height="16" viewBox="0 0 24 24"/);
   assert.match(widget, /aria-label=\{t\('open'\)\}/);
 });
