@@ -285,9 +285,9 @@ export default function AccessibilityWidget() {
         dir="ltr"
         className="group flex h-11 w-11 items-center justify-end bg-transparent p-0 focus-visible:outline-offset-2"
       >
-        <span className="grid h-7 w-8 place-items-center rounded-l-md rounded-r-none bg-graphite text-pure shadow-lg ring-1 ring-black/5 group-hover:bg-blueprint">
+        <span className="grid h-11 w-6 place-items-center rounded-l-md rounded-r-none bg-graphite text-pure shadow-lg ring-1 ring-black/5 group-hover:bg-blueprint">
           {/* Universal access glyph */}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <circle cx="12" cy="4" r="2" fill="currentColor" />
           <path
             d="M3 8h18M12 8v5m0 0l-3 7m3-7l3 7"

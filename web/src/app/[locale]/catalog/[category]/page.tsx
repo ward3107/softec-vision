@@ -63,12 +63,12 @@ export default async function CategoryPage({
   const subThumb = 'h-9 w-11 flex-none rounded-sm border border-line bg-pure object-contain dark:border-white/10 dark:bg-surface';
 
   return (
-    <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(36px,5vw,72px)] pb-28">
+    <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] pt-4 pb-24 sm:py-[clamp(36px,5vw,72px)] sm:pb-28">
       <BackButton
         fallbackHref={state.sub === 'all' ? '/catalog' : `/catalog/${cat.key}`}
         label={t('back')}
       />
-      <nav className="mt-5 text-sm text-machine dark:text-fog">
+      <nav className="mt-3 text-sm text-machine sm:mt-5 dark:text-fog">
         <Link href="/catalog" className="hover:text-blueprint dark:hover:text-skyline">
           {t('title')}
         </Link>
@@ -76,13 +76,13 @@ export default async function CategoryPage({
         <span className="text-graphite dark:text-ink">{localized(cat.label, l)}</span>
       </nav>
 
-      <h1 className="mt-3 text-[clamp(1.8rem,3.2vw,2.6rem)] font-extrabold tracking-tight">
+      <h1 className="mt-2 text-[clamp(1.8rem,3.2vw,2.6rem)] sm:mt-3 font-extrabold tracking-tight">
         {localized(cat.label, l)}
       </h1>
-      <p className="mt-2 max-w-2xl text-machine dark:text-fog">{localized(cat.description, l)}</p>
+      <p className="mt-1 max-w-2xl text-machine sm:mt-2 dark:text-fog">{localized(cat.description, l)}</p>
 
       {subs.length > 0 && (
-        <ul className="mt-5 -mx-1 flex snap-x snap-mandatory flex-nowrap gap-2 overflow-x-auto overscroll-x-contain px-1 pb-2 [scrollbar-width:thin] [-webkit-overflow-scrolling:touch]">
+        <ul className="mt-3 -mx-1 flex snap-x snap-mandatory flex-nowrap gap-2 overflow-x-auto overscroll-x-contain px-1 pb-1 sm:pb-2 [scrollbar-width:thin] [-webkit-overflow-scrolling:touch]">
           <li className="flex-none snap-start">
             <Link
               href={`/catalog/${cat.key}`}
