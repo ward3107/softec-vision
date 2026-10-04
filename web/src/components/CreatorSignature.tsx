@@ -8,13 +8,13 @@ const externalLinkProps = {
 /** Waseem's permanent creator mark, using the supplied artwork intact. */
 export default function CreatorSignature() {
   return (
-    <div className="relative w-full max-w-[373px]" dir="ltr">
+    <div className="relative w-full max-w-[320px] sm:max-w-[373px]" dir="ltr">
       <Image
         src="/brand/vasia-dev-signature.png"
         alt="Vasia dev. — digital solutions, branding and website design"
         width={373}
         height={259}
-        sizes="(max-width: 480px) calc(100vw - 72px), 373px"
+        sizes="(max-width: 480px) min(320px, calc(100vw - 72px)), 373px"
         className="h-auto w-full"
       />
 

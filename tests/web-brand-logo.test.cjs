@@ -50,7 +50,7 @@ test('footer renders the supplied Vasia dev. creator mark with verified contact 
   assert.match(signature, /https:\/\/github\.com\/ward3107/);
   assert.match(signature, /https:\/\/www\.linkedin\.com\/in\/waseem-abu-akel-334486374\//);
   assert.match(footer, /<CreatorSignature/);
-  assert.match(footer, /pb-24 pt-6/);
+  assert.match(footer, /pb-16 pt-4 text-sm sm:pb-24 sm:pt-6/);
   assert.ok(!signature.includes('bg-[#020716]'));
 });
 
