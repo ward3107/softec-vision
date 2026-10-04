@@ -17,7 +17,7 @@ export default async function Footer() {
   return (
     <footer className="bg-footer text-paper">
       {/* Keep enough room below the final footer row for the floating WhatsApp and back-to-top controls. */}
-      <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] pb-16 pt-4 text-sm sm:pb-24 sm:pt-8">
+      <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] pb-16 pt-4 text-sm sm:pb-24 sm:pt-6">
         <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-6">
           <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <span className="block w-[140px] sm:w-[160px]">
