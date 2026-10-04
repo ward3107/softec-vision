@@ -25,13 +25,13 @@ import { CATALOG_TAG } from '@/lib/catalog/source';
 import { parseContentBlockForm, type ContentBlockKey } from '@/lib/content/blocks';
 import { CONTENT_TAG } from '@/lib/content/source';
 
-export type SignInState = { error?: 'missing' | 'invalid' | 'notConfigured' };
+export type SignInState = { error?: 'missingPassword' | 'invalid' | 'notConfigured' };
 
 export async function signIn(_previous: SignInState, fd: FormData): Promise<SignInState> {
   if (!isSupabaseConfigured()) return { error: 'notConfigured' };
   const email = String(fd.get('email') ?? '').trim();
   const password = String(fd.get('password') ?? '');
-  if (!email || !password) return { error: 'missing' };
+  if (!email || !password) return { error: 'missingPassword' };
   const client = await createUserClient();
   const { error } = await client.auth.signInWithPassword({ email, password });
   if (error) return { error: 'invalid' };

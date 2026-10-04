@@ -68,7 +68,6 @@ export default function EmailLinkLoginForm({ initialError }: { initialError?: st
           dir="ltr"
           autoComplete="email"
           required
-          autoFocus
           value={email}
           onChange={(event) => {
             setEmail(event.target.value);
