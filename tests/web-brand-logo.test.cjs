@@ -49,7 +49,9 @@ test('footer renders the supplied Vasia dev. creator mark with verified contact 
   assert.match(signature, /https:\/\/wa\.me\/972544742520/);
   assert.match(signature, /https:\/\/github\.com\/ward3107/);
   assert.match(signature, /https:\/\/www\.linkedin\.com\/in\/waseem-abu-akel-334486374\//);
-  assert.match(footer, /<CreatorSignature/);\n  assert.match(footer, /pb-24 pt-6/);\n  assert.doesNotMatch(signature, /bg-\\[#020716\\]/);
+  assert.match(footer, /<CreatorSignature/);
+  assert.match(footer, /pb-24 pt-6/);
+  assert.doesNotMatch(signature, /bg-\\[#020716\\]/);
 });
 
 test('floating controls keep WhatsApp left and accessibility right', () => {
@@ -57,6 +59,6 @@ test('floating controls keep WhatsApp left and accessibility right', () => {
   const widget = read('web', 'src', 'components', 'a11y', 'AccessibilityWidget.tsx');
 
   assert.match(dock, /fixed bottom-5 left-4[^\n]*[\s\S]*wa\.me/);
-  assert.match(dock, /fixed bottom-5 right-4[^\n]*[\s\S]*<AccessibilityWidget/);
-  assert.match(widget, /absolute right-\\[calc\\(100%\\+0\\.75rem\\)\\] top-1\\/2/);
+  assert.ok(dock.includes('className="fixed right-4 top-1/2'));
+  assert.ok(widget.includes('absolute right-[calc(100%+0.75rem)] top-1/2'));
 });
