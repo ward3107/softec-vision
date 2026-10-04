@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Link } from '@/i18n/navigation';
 import { filterProducts, getVisibleCategories, localized } from '@/lib/catalog';
 import type { AppLocale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
 import ProductCard from '@/components/catalog/ProductCard';
 import ProductScroller from '@/components/catalog/ProductScroller';
+import CategoryScroller from '@/components/catalog/CategoryScroller';
 
 export async function generateMetadata({
   params
@@ -41,42 +40,18 @@ export default async function CatalogPage({
       </header>
 
       {/* Product families */}
-      <ul className="mt-10 grid gap-5 rounded-[28px] bg-[#E8F5FC] p-4 sm:grid-cols-2 sm:p-6 lg:grid-cols-3 lg:p-8">
-        {categories.map((category) => {
-          const image = categoryImage(category.key);
-          return (
-            <li key={category.key}>
-              <Link
-                href={`/catalog/${category.key}`}
-                className="group flex h-full flex-col overflow-hidden rounded border border-line bg-pure hover:border-blueprint dark:border-white/10 dark:bg-surface dark:hover:border-skyline"
-              >
-                <div className="aspect-[16/10] overflow-hidden border-b border-line bg-paper dark:border-white/10 dark:bg-canvas">
-                  {image ? (
-                    <Image
-                      src={image}
-                      alt=""
-                      width={520}
-                      height={325}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.03]"
-                    />
-                  ) : null}
-                </div>
-                <div className="flex flex-1 flex-col gap-2 p-6">
-                  <span className="text-lg font-bold">{localized(category.label, l)}</span>
-                  <span className="text-sm text-machine dark:text-fog">{localized(category.description, l)}</span>
-                  {category.subs?.length ? (
-                    <span className="mt-auto flex items-baseline gap-2 pt-3 text-blueprint">
-                      <strong className="text-3xl font-extrabold leading-none">{category.subs.length}</strong>
-                      <span className="text-sm font-bold">{t('subcategoryCount')}</span>
-                    </span>
-                  ) : null}
-                </div>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <CategoryScroller
+        categories={categories.map((category) => ({
+          key: category.key,
+          label: localized(category.label, l),
+          description: localized(category.description, l),
+          image: categoryImage(category.key),
+          count: category.subs?.length
+            ? `${category.subs.length} ${t('subcategoryCount')}`
+            : undefined
+        }))}
+        labels={{ region: t('title'), previous: t('scrollPrevious'), next: t('scrollNext') }}
+      />
 
       {/* All products */}
       <ProductScroller
