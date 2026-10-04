@@ -61,6 +61,6 @@ test('floating controls keep WhatsApp left and accessibility right', () => {
   assert.match(dock, /fixed bottom-5 left-4[^\n]*[\s\S]*wa\.me/);
   assert.ok(dock.includes('className="fixed right-0 top-1/2'));
   assert.ok(widget.includes('absolute right-[calc(100%+0.75rem)] top-1/2'));
-  assert.ok(widget.includes('flex h-10 w-14 items-center justify-center rounded-l-lg rounded-r-none'));
+  assert.ok(widget.includes('flex h-11 w-12 items-center justify-center rounded-l-lg rounded-r-none'));
   assert.match(widget, /aria-label=\{t\('open'\)\}/);
 });

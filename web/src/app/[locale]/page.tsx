@@ -152,9 +152,6 @@ export default async function HomePage({
                 className="mt-7 max-w-[56ch] text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.7] text-machine dark:text-fog"
               />
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href="/contact" className="home-hero__primary inline-flex min-h-[52px] items-center justify-center rounded bg-blueprint px-7 font-bold text-pure">
-                  {t('quote')}
-                </Link>
                 <Link
                   href="/catalog"
                   className="inline-flex min-h-[52px] items-center justify-center rounded border border-line bg-pure/80 px-7 font-bold text-graphite hover:border-blueprint hover:text-blueprint dark:border-white/10 dark:bg-surface/80 dark:text-ink dark:hover:border-skyline dark:hover:text-skyline"

@@ -42,8 +42,11 @@ test('mobile header keeps the logo and language control without horizontal overf
   assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/s);
 });
 
-test('public header has no theme toggle or contact button', () => {
+test('contact action is in the header, not the homepage hero', () => {
+  const heroSection = home.slice(home.indexOf('className="home-hero'), home.indexOf('</section>', home.indexOf('className="home-hero')));
   assert.doesNotMatch(header, /ThemeToggle/);
-  assert.doesNotMatch(header, /href="\/contact"/);
-  assert.doesNotMatch(header, /t\('contact'\)/);
+  assert.match(header, /href="\/contact"/);
+  assert.match(header, /t\('contact'\)/);
+  assert.doesNotMatch(heroSection, /href="\/contact"/);
+  assert.match(heroSection, /href="\/catalog"/);
 });
