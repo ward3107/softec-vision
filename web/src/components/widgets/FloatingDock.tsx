@@ -56,7 +56,7 @@ export default function FloatingDock({ waNumber }: { waNumber: string }) {
         </a>
       </div>
 
-      <div className="fixed right-4 top-1/2 z-[60] -translate-y-1/2 print:hidden">
+      <div className="fixed right-0 top-1/2 z-[60] -translate-y-1/2 print:hidden">
         <AccessibilityWidget />
       </div>
     </>
