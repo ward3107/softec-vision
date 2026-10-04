@@ -9,6 +9,8 @@ const productCard = fs.readFileSync(path.join(root, 'web', 'src', 'components', 
 const productScroller = fs.readFileSync(path.join(root, 'web', 'src', 'components', 'catalog', 'ProductScroller.tsx'), 'utf8');
 const categoryExplorer = fs.readFileSync(path.join(root, 'web', 'src', 'components', 'catalog', 'CategoryExplorer.tsx'), 'utf8');
 const publicLayout = fs.readFileSync(path.join(root, 'web', 'src', 'app', '[locale]', 'layout.tsx'), 'utf8');
+const categoryPage = fs.readFileSync(path.join(root, 'web', 'src', 'app', '[locale]', 'catalog', '[category]', 'page.tsx'), 'utf8');
+const accessibilityWidget = fs.readFileSync(path.join(root, 'web', 'src', 'components', 'a11y', 'AccessibilityWidget.tsx'), 'utf8');
 
 const expectedCodes = [
   'ACCESSIBLE-TLV',
@@ -85,4 +87,19 @@ test('product listings stay horizontal while category families stay in a grid', 
 test('the public shell is light-only and has no comparison tray', () => {
   assert.match(publicLayout, /classList\.remove\('dark'\)/);
   assert.doesNotMatch(publicLayout, /CompareProvider|CompareTray/);
+});
+
+
+test('mobile category pages bring the selected product higher into view', () => {
+  assert.ok(categoryPage.includes('pt-4 pb-24 sm:py-[clamp(36px,5vw,72px)]'));
+  assert.ok(categoryPage.includes('className="mt-3 -mx-1 flex snap-x'));
+  assert.ok(productScroller.includes('mt-4 sm:mt-8'));
+  assert.ok(productScroller.includes('pb-4 pt-1 sm:pb-6'));
+  assert.ok(productCard.includes('min-h-[96px] px-4 pb-3 pt-3 sm:min-h-[148px]'));
+});
+
+test('accessibility tab keeps its full height while using half its former width', () => {
+  assert.ok(accessibilityWidget.includes('group flex h-11 w-11 items-center justify-end'));
+  assert.ok(accessibilityWidget.includes('grid h-11 w-6 place-items-center'));
+  assert.match(accessibilityWidget, /width="20" height="20" viewBox="0 0 24 24"/);
 });

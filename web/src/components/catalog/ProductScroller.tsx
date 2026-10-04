@@ -114,7 +114,7 @@ function ProductRow({
   }
 
   return (
-    <div className="mt-8">
+    <div className="mt-4 sm:mt-8">
       <div className="flex items-center justify-between gap-4">
         <p className="text-base font-extrabold text-blueprint">{caption}</p>
         <div className={`flex flex-none gap-2 ${edges.start && edges.end ? 'invisible' : ''}`}>
@@ -143,7 +143,7 @@ function ProductRow({
           }
         }}
         onDragStart={(event) => event.preventDefault()}
-        className="mt-4 -mx-[clamp(20px,4.5vw,72px)] flex select-none snap-x snap-mandatory gap-4 overflow-x-auto px-[clamp(20px,4.5vw,72px)] pb-6 pt-1 scroll-px-[clamp(20px,4.5vw,72px)] [-webkit-overflow-scrolling:touch] [scrollbar-color:#1683C7_#E6F2F9] [scrollbar-width:thin] [&>*]:w-[82%] [&>*]:shrink-0 [&>*]:snap-start sm:mx-0 sm:scroll-px-0 sm:gap-6 sm:px-0 sm:[&>*]:w-[46%] lg:[&>*]:w-[31%] xl:[&>*]:w-[23.5%]"
+        className="mt-2 -mx-[clamp(20px,4.5vw,72px)] flex select-none snap-x snap-mandatory gap-4 overflow-x-auto px-[clamp(20px,4.5vw,72px)] pb-4 pt-1 sm:pb-6 sm:mt-4 scroll-px-[clamp(20px,4.5vw,72px)] [-webkit-overflow-scrolling:touch] [scrollbar-color:#1683C7_#E6F2F9] [scrollbar-width:thin] [&>*]:w-[82%] [&>*]:shrink-0 [&>*]:snap-start sm:mx-0 sm:scroll-px-0 sm:gap-6 sm:px-0 sm:[&>*]:w-[46%] lg:[&>*]:w-[31%] xl:[&>*]:w-[23.5%]"
       >
         {children}
       </div>

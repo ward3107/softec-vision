@@ -18,11 +18,11 @@ export default async function ProductCard({ product }: { product: Product }) {
         href={`/product/${product.code}`}
         className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-line bg-pure shadow-[0_10px_35px_rgba(12,32,48,0.07)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-softec hover:shadow-[0_18px_45px_rgba(12,94,145,0.14)]"
       >
-        <div className="min-h-[148px] px-5 pb-4 pt-5 sm:px-6 sm:pt-6">
+        <div className="min-h-[96px] px-4 pb-3 pt-3 sm:min-h-[148px] sm:px-6 sm:pb-4 sm:pt-6">
           <span className="text-xs font-bold tracking-[0.08em] text-blueprint" dir="ltr">
             {product.code}
           </span>
-          <h3 className="mt-1 text-xl font-extrabold leading-snug text-graphite group-hover:text-blueprint">{name}</h3>
+          <h3 className="mt-1 text-lg font-extrabold leading-snug sm:text-xl text-graphite group-hover:text-blueprint">{name}</h3>
         </div>
         <div className="mt-auto aspect-[4/3] overflow-hidden border-t border-line bg-[#F8FBFD]">
           <Image
