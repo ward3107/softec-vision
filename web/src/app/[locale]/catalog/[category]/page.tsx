@@ -57,7 +57,7 @@ export default async function CategoryPage({
 
   const subs = cat.subs ?? [];
   const subLinkClass = (active: boolean) =>
-    `inline-flex min-h-[44px] items-center gap-2 rounded border px-2.5 text-sm font-semibold hover:bg-paper dark:hover:bg-canvas ${
+    `inline-flex min-h-[44px] whitespace-nowrap items-center gap-2 rounded border px-2.5 text-sm font-semibold hover:bg-paper dark:hover:bg-canvas ${
       active ? 'border-blueprint bg-paper dark:border-skyline dark:bg-canvas' : 'border-line dark:border-white/10'
     }`;
   const subThumb = 'h-9 w-11 flex-none rounded-sm border border-line bg-pure object-contain dark:border-white/10 dark:bg-surface';
@@ -82,8 +82,8 @@ export default async function CategoryPage({
       <p className="mt-2 max-w-2xl text-machine dark:text-fog">{localized(cat.description, l)}</p>
 
       {subs.length > 0 && (
-        <ul className="mt-6 flex flex-wrap gap-2">
-          <li>
+        <ul className="mt-5 -mx-1 flex snap-x snap-mandatory flex-nowrap gap-2 overflow-x-auto overscroll-x-contain px-1 pb-2 [scrollbar-width:thin] [-webkit-overflow-scrolling:touch]">
+          <li className="flex-none snap-start">
             <Link
               href={`/catalog/${cat.key}`}
               aria-current={state.sub === 'all' ? 'page' : undefined}
@@ -95,7 +95,7 @@ export default async function CategoryPage({
           {subs.map((s) => {
             const thumb = subImage(s.key);
             return (
-              <li key={s.key}>
+              <li key={s.key} className="flex-none snap-start">
                 <Link
                   href={`/catalog/${cat.key}?sub=${s.key}`}
                   aria-current={state.sub === s.key ? 'page' : undefined}

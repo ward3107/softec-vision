@@ -6,9 +6,8 @@ import AccessibilityWidget from '@/components/a11y/AccessibilityWidget';
 import { useConsent } from '@/components/consent/ConsentProvider';
 
 /**
- * Fixed controls split across the physical screen edges: WhatsApp and the
- * back-to-top control stay on the left, while accessibility stays on the
- * right in both RTL and LTR. Sits above the compare tray when it is showing.
+ * Fixed controls stay at the physical screen edges: WhatsApp and back-to-top
+ * remain at lower left, while accessibility is centered at the right edge.
  */
 export default function FloatingDock({ waNumber }: { waNumber: string }) {
   const t = useTranslations('dock');
@@ -57,7 +56,7 @@ export default function FloatingDock({ waNumber }: { waNumber: string }) {
         </a>
       </div>
 
-      <div className="fixed bottom-5 right-4 z-[60] print:hidden">
+      <div className="fixed right-4 top-1/2 z-[60] -translate-y-1/2 print:hidden">
         <AccessibilityWidget />
       </div>
     </>

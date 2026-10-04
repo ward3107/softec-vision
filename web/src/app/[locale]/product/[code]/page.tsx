@@ -8,7 +8,8 @@ import {
   getAllProducts,
   getProduct,
   getRelatedProducts,
-  localized
+  localized,
+  publicSpecs
 } from '@/lib/catalog';
 import { CATEGORIES } from '@/lib/catalog/seed';
 import { pageMetadata, SITE_URL, BRAND } from '@/lib/seo';
@@ -87,6 +88,7 @@ export default async function ProductPage({
     ? localized(product.imageAlt, l)
     : `${name} (${product.code}) — ${tc('productImage')}`;
   const gallery = product.gallery ?? [];
+  const specs = publicSpecs(product);
 
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] py-[clamp(28px,4vw,56px)] pb-28">
@@ -135,6 +137,25 @@ export default async function ProductPage({
             {product.code}
           </span>
           <h1 className="text-[clamp(1.8rem,3.2vw,2.6rem)] font-extrabold tracking-tight">{name}</h1>
+          <p className="mt-3 text-machine dark:text-fog">{localized(product.desc, l)}</p>
+
+          {specs.length > 0 && (
+            <section aria-labelledby="specs-title" className="mt-6">
+              <h2 id="specs-title" className="text-base font-bold">{t('specifications')}</h2>
+              <table className="mt-2 w-full border-collapse text-sm">
+                <tbody>
+                  {specs.map((spec) => (
+                    <tr key={spec.key} className="border-b border-line dark:border-white/10">
+                      <th scope="row" className="py-2 pe-4 text-start font-medium text-machine dark:text-fog">
+                        {localized(spec.label, l)}
+                      </th>
+                      <td className="py-2 text-graphite dark:text-ink">{localized(spec.value, l)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
 
           <div className="mt-6 flex flex-wrap gap-3">
             <ShareButton title={`${name} (${product.code}) — Softec Vision`} text={localized(product.desc, l)} />

@@ -231,7 +231,7 @@ export default function AccessibilityWidget() {
           role="dialog"
           aria-modal="true"
           aria-label={t('title')}
-          className="absolute bottom-14 right-0 max-h-[min(74vh,600px)] w-[min(20rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain rounded-lg border border-line bg-pure p-5 text-graphite shadow-[0_24px_60px_-18px_rgba(0,0,0,0.42)] dark:border-white/10 dark:bg-surface dark:text-ink"
+          className="absolute right-[calc(100%+0.75rem)] top-1/2 max-h-[min(74vh,600px)] w-[min(20rem,calc(100vw-5rem))] -translate-y-1/2 overflow-y-auto overscroll-contain rounded-lg border border-line bg-pure p-5 text-graphite shadow-[0_24px_60px_-18px_rgba(0,0,0,0.42)] dark:border-white/10 dark:bg-surface dark:text-ink"
         >
           <h2 className="text-base font-bold">{t('heading')}</h2>
           <p className="mb-4 mt-0.5 text-xs text-machine dark:text-fog">{t('body')}</p>
