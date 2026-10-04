@@ -78,7 +78,7 @@ export default function EmailLinkLoginForm({ initialError }: { initialError?: st
           className={input}
         />
       </div>
-      <button type="submit" aria-disabled={pending} className={submitClass}>
+      <button type="submit" disabled={pending} className={submitClass}>
         {pending ? S.emailLink.sending : sentTo ? S.emailLink.resend : S.emailLink.send}
       </button>
     </form>

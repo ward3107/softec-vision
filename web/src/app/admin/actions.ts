@@ -38,7 +38,7 @@ export async function signIn(_previous: SignInState, fd: FormData): Promise<Sign
   redirect('/admin');
 }
 
-export type LoginLinkSendState = { ok?: boolean; email?: string; error?: 'missing' | 'notConfigured' | 'emailLinkFailed' };
+export type LoginLinkSendState = { ok?: boolean; email?: string; error?: 'missing' | 'notConfigured' | 'emailLinkFailed' | 'rateLimited' };
 
 /** Send a passwordless sign-in link to an existing staff account. */
 export async function sendLoginLink(_previous: LoginLinkSendState, fd: FormData): Promise<LoginLinkSendState> {
@@ -55,7 +55,10 @@ export async function sendLoginLink(_previous: LoginLinkSendState, fd: FormData)
       emailRedirectTo: `${siteUrl}/auth/callback`
     }
   });
-  if (error) return { error: 'emailLinkFailed', email };
+  if (error) {
+    const rateLimited = error.status === 429 || error.code === 'over_email_send_rate_limit';
+    return { error: rateLimited ? 'rateLimited' : 'emailLinkFailed', email };
+  }
   return { ok: true, email };
 }
 
