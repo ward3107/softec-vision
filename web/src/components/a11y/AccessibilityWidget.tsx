@@ -282,7 +282,7 @@ export default function AccessibilityWidget() {
         aria-haspopup="dialog"
         aria-label={t('open')}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-10 w-14 items-center justify-center rounded-l-lg rounded-r-none bg-graphite text-pure shadow-lg ring-1 ring-black/5 hover:bg-blueprint focus-visible:outline-offset-2"
+        className="flex h-11 w-12 items-center justify-center rounded-l-lg rounded-r-none bg-graphite text-pure shadow-lg ring-1 ring-black/5 hover:bg-blueprint focus-visible:outline-offset-2"
       >
         {/* Universal access glyph */}
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
