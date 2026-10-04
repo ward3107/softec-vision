@@ -51,7 +51,7 @@ test('footer renders the supplied Vasia dev. creator mark with verified contact 
   assert.match(signature, /https:\/\/www\.linkedin\.com\/in\/waseem-abu-akel-334486374\//);
   assert.match(footer, /<CreatorSignature/);
   assert.match(footer, /pb-24 pt-6/);
-  assert.doesNotMatch(signature, /bg-\\[#020716\\]/);
+  assert.ok(!signature.includes('bg-[#020716]'));
 });
 
 test('floating controls keep WhatsApp left and accessibility right', () => {
