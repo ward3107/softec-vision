@@ -42,8 +42,8 @@ test('mobile header keeps the logo and language control without horizontal overf
   assert.match(css, /body\s*\{[^}]*overflow-x:\s*clip/s);
 });
 
-test('public header uses a contact action instead of a dark-theme toggle', () => {
+test('public header has no theme toggle or contact button', () => {
   assert.doesNotMatch(header, /ThemeToggle/);
-  assert.match(header, /href="\/contact"/);
-  assert.match(header, /t\('contact'\)/);
+  assert.doesNotMatch(header, /href="\/contact"/);
+  assert.doesNotMatch(header, /t\('contact'\)/);
 });
