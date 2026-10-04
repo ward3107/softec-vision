@@ -38,15 +38,15 @@ export async function signIn(_previous: SignInState, fd: FormData): Promise<Sign
   redirect('/admin');
 }
 
-export type OtpSendState = { ok?: boolean; email?: string; error?: 'missing' | 'notConfigured' | 'otpFailed' };
+export type LoginLinkSendState = { ok?: boolean; email?: string; error?: 'missing' | 'notConfigured' | 'emailLinkFailed' };
 
-/** Step 1 of passwordless sign-in: email a one-time code to an existing staff account. */
-export async function sendOtp(_previous: OtpSendState, fd: FormData): Promise<OtpSendState> {
+/** Send a passwordless sign-in link to an existing staff account. */
+export async function sendLoginLink(_previous: LoginLinkSendState, fd: FormData): Promise<LoginLinkSendState> {
   if (!isSupabaseConfigured()) return { error: 'notConfigured' };
   const email = String(fd.get('email') ?? '').trim();
   if (!email) return { error: 'missing' };
   const client = await createUserClient();
-  // shouldCreateUser:false — only existing accounts get a code; the site never self-registers admins.
+  // shouldCreateUser:false — only existing accounts get a link; the site never self-registers admins.
   const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://softecvision.vercel.app').replace(/\/+$/, '');
   const { error } = await client.auth.signInWithOtp({
     email,
@@ -55,22 +55,8 @@ export async function sendOtp(_previous: OtpSendState, fd: FormData): Promise<Ot
       emailRedirectTo: `${siteUrl}/auth/callback`
     }
   });
-  if (error) return { error: 'otpFailed', email };
+  if (error) return { error: 'emailLinkFailed', email };
   return { ok: true, email };
-}
-
-export type OtpVerifyState = { error?: 'missing' | 'notConfigured' | 'invalidOtp' };
-
-/** Step 2: verify the emailed code, which establishes the session (RLS still gates access). */
-export async function verifyOtp(_previous: OtpVerifyState, fd: FormData): Promise<OtpVerifyState> {
-  if (!isSupabaseConfigured()) return { error: 'notConfigured' };
-  const email = String(fd.get('email') ?? '').trim();
-  const token = String(fd.get('token') ?? '').replace(/\s/g, '');
-  if (!email || !token) return { error: 'missing' };
-  const client = await createUserClient();
-  const { error } = await client.auth.verifyOtp({ email, token, type: 'email' });
-  if (error) return { error: 'invalidOtp' };
-  redirect('/admin');
 }
 
 export async function signOut() {
