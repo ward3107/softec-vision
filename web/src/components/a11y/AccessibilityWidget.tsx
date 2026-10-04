@@ -231,7 +231,7 @@ export default function AccessibilityWidget() {
           role="dialog"
           aria-modal="true"
           aria-label={t('title')}
-          className="absolute right-[calc(100%+0.75rem)] top-1/2 max-h-[min(74vh,600px)] w-[min(20rem,calc(100vw-5rem))] -translate-y-1/2 overflow-y-auto overscroll-contain rounded-lg border border-line bg-pure p-5 text-graphite shadow-[0_24px_60px_-18px_rgba(0,0,0,0.42)] dark:border-white/10 dark:bg-surface dark:text-ink"
+          className="absolute right-[calc(100%+0.75rem)] top-1/2 max-h-[min(74vh,600px)] w-[min(20rem,calc(100vw-9rem))] -translate-y-1/2 overflow-y-auto overscroll-contain rounded-lg border border-line bg-pure p-5 text-graphite shadow-[0_24px_60px_-18px_rgba(0,0,0,0.42)] dark:border-white/10 dark:bg-surface dark:text-ink"
         >
           <h2 className="text-base font-bold">{t('heading')}</h2>
           <p className="mb-4 mt-0.5 text-xs text-machine dark:text-fog">{t('body')}</p>
@@ -282,7 +282,8 @@ export default function AccessibilityWidget() {
         aria-haspopup="dialog"
         aria-label={t('open')}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-graphite text-pure shadow-lg ring-1 ring-black/5 hover:bg-blueprint focus-visible:outline-offset-2"
+        dir="rtl"
+        className="inline-flex h-14 w-max min-w-[7.5rem] max-w-[calc(100vw-1rem)] items-center justify-center gap-2 rounded-l-xl rounded-r-none bg-graphite px-3 text-pure shadow-lg ring-1 ring-black/5 hover:bg-blueprint focus-visible:outline-offset-2"
       >
         {/* Universal access glyph */}
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -295,6 +296,7 @@ export default function AccessibilityWidget() {
             strokeLinejoin="round"
           />
         </svg>
+        <span className="whitespace-nowrap text-sm font-bold">{t('heading')}</span>
       </button>
     </div>
   );
