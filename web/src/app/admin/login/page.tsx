@@ -20,7 +20,7 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
       <h1 className="mt-1 text-2xl font-extrabold">{S.signInTitle}</h1>
       <div className="mt-6 rounded border border-line bg-pure p-6 dark:border-white/10 dark:bg-surface">
         {configured ? (
-          <AdminAuth initialError={error === 'no-access' ? 'no-access' : undefined} />
+          <AdminAuth initialError={error === 'no-access' ? 'no-access' : error === 'auth-callback' ? 'auth-callback' : undefined} />
         ) : (
           <p role="status" className="text-sm">
             {S.errors.notConfigured}
