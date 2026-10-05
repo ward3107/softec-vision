@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 /**
  * Supabase redirects passwordless admin sign-ins here with a PKCE code.
  * Exchange it server-side so the session is stored in HTTP-only cookies,
- * then send the signed-in user straight to the admin dashboard.
+ * then send the signed-in user to set or reset their admin password.
  */
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/admin/login?error=auth-callback', request.url));
   }
 
-  const response = NextResponse.redirect(new URL('/admin', request.url));
+  const response = NextResponse.redirect(new URL('/admin/password', request.url));
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll: () => request.cookies.getAll(),
