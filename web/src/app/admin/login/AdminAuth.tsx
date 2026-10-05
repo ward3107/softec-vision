@@ -1,24 +1,15 @@
 'use client';
 
 import EmailLinkLoginForm from './EmailLinkLoginForm';
-import PasswordLoginForm from './PasswordLoginForm';
 
-/** The owner can use a password day to day; a link remains for first-time setup. */
+/** Passwordless admin entry; the signed-in session is kept in this browser. */
 export default function AdminAuth({ initialError }: { initialError?: string }) {
   return (
-    <div className="grid gap-6">
-      <PasswordLoginForm initialError={initialError} />
-      <details className="border-t border-line pt-4 text-sm dark:border-white/10">
-        <summary className="cursor-pointer font-semibold text-blueprint dark:text-skyline">
-          אין לי סיסמה או ששכחתי אותה
-        </summary>
-        <p className="mt-2 text-machine dark:text-fog">
-          אפשר להיכנס פעם אחת עם קישור למייל, ואז לקבוע סיסמה באזור הניהול.
-        </p>
-        <div className="mt-4">
-          <EmailLinkLoginForm />
-        </div>
-      </details>
+    <div className="grid gap-4">
+      <p className="text-sm leading-6 text-machine dark:text-fog">
+        הכניסה מתבצעת באמצעות קישור חד-פעמי למייל. לאחר הכניסה תישאר מחובר בדפדפן הזה, ללא סיסמה.
+      </p>
+      <EmailLinkLoginForm initialError={initialError} />
     </div>
   );
 }
