@@ -39,11 +39,11 @@ export default async function PasswordPage({
     <section className="mx-auto max-w-md">
       <h1 className="text-2xl font-extrabold">עדכון סיסמה</h1>
       <p className="mt-2 text-machine dark:text-fog">
-        אחרי קביעת הסיסמה תוכלו להיכנס לאזור הניהול עם המייל והסיסמה, ללא המתנה לקישור.
+        קביעת סיסמה היא אפשרות גיבוי בלבד. אפשר להיכנס באמצעות קישור למייל ללא סיסמה.
       </p>
       {saved && (
         <p role="status" className="mt-5 rounded border border-green-700 p-3 font-semibold text-green-800">
-          הסיסמה נשמרה. בכניסה הבאה השתמשו במייל ובסיסמה החדשה.
+          הסיסמה נשמרה. אפשר להשתמש בה כדרך כניסה חלופית.
         </p>
       )}
       {message && (

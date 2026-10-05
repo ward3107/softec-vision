@@ -59,9 +59,9 @@ export default function AdminShell({ email, children }: { email?: string | null;
             )}
             <Link
               href="/admin/password"
-              className="min-h-[44px] content-center font-semibold text-blueprint hover:underline dark:text-skyline"
+              className="min-h-[44px] content-center font-semibold text-machine hover:underline dark:text-fog"
             >
-              עדכון סיסמה
+              אפשרות גיבוי: סיסמה
             </Link>
             <ThemeToggle toLightLabel={S.theme.toLight} toDarkLabel={S.theme.toDark} />
             <Link
