@@ -6,14 +6,13 @@ import { routing } from './i18n/routing';
 const intl = createMiddleware(routing);
 
 /**
- * The owner admin (/admin) and Supabase auth callback (/auth/callback) sit
- * outside locale routing. The callback must receive Supabase's PKCE code at
- * its exact redirect URI; adding a locale prefix makes the callback miss its
- * route and drops the sign-in flow on the public 404 page.
+ * The owner admin (/admin) and Supabase auth endpoints sit outside locale
+ * routing. Auth callbacks and the explicit magic-link confirmation page must
+ * receive their tokens at the exact paths generated in Supabase emails.
  */
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (pathname === '/auth/callback') return NextResponse.next();
+  if (pathname === '/auth/callback' || pathname === '/auth/confirm') return NextResponse.next();
   if (pathname === '/admin' || pathname.startsWith('/admin/')) return adminSession(request);
   return intl(request);
 }
