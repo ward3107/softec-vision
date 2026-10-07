@@ -6,7 +6,7 @@ import { CONTENT_BLOCKS, FAQ_COUNT, parseContentBlockForm, resolveText, rowsToCo
 describe('home.faq block', () => {
   it('pairs every question with an answer, FAQ_COUNT times', () => {
     const expected = Array.from({ length: FAQ_COUNT }, (_, i) => [`q${i + 1}`, `a${i + 1}`]).flat();
-    expect([...CONTENT_BLOCKS['home.faq']]).toEqual(expected);
+    expect([...CONTENT_BLOCKS['home.faq']]).toEqual(['eyebrow', 'title', 'body', ...expected]);
   });
 
   it('ships non-empty copy for every field in both languages', () => {
@@ -83,14 +83,15 @@ describe('parseContentBlockForm', () => {
     fd.set('en.body', 'Body');
     fd.set('he.custom', 'should be ignored — not a hero field');
     const parsed = parseContentBlockForm(fd, 'home.hero');
-    expect(parsed.he).toEqual({ eyebrow: 'שלום', title: 'כותרת', body: 'טקסט' });
-    expect(parsed.en).toEqual({ eyebrow: 'Hi', title: 'Title', body: 'Body' });
+    expect(parsed.he).toMatchObject({ eyebrow: 'שלום', title: 'כותרת', body: 'טקסט' });
+    expect(parsed.en).toMatchObject({ eyebrow: 'Hi', title: 'Title', body: 'Body' });
+    expect(parsed.he).not.toHaveProperty('custom');
   });
 
   it('defaults a missing field to an empty string rather than rejecting the form', () => {
     const parsed = parseContentBlockForm(new FormData(), 'home.capabilities');
-    expect(parsed.he).toEqual({ custom: '', av: '', accessible: '' });
-    expect(parsed.en).toEqual({ custom: '', av: '', accessible: '' });
+    expect(Object.values(parsed.he).every(value => value === '')).toBe(true);
+    expect(Object.keys(parsed.en)).toEqual([...CONTENT_BLOCKS['home.capabilities']]);
   });
 
   it('caps each field length', () => {

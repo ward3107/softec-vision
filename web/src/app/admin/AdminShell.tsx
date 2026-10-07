@@ -20,7 +20,9 @@ function activeFromPath(pathname: string): AdminIconKey {
  * skeleton) while this nav stays put — no re-render, no flash.
  */
 export default function AdminShell({ email, children }: { email?: string | null; children: React.ReactNode }) {
-  const active = activeFromPath(usePathname());
+  const pathname = usePathname();
+  const active = activeFromPath(pathname);
+  if (pathname === '/admin/content/preview') return <>{children}</>;
   const tab = (key: AdminIconKey, href: string) => (
     <Link
       href={href}
@@ -61,7 +63,7 @@ export default function AdminShell({ email, children }: { email?: string | null;
               href="/admin/password"
               className="min-h-[44px] content-center font-semibold text-machine hover:underline dark:text-fog"
             >
-              אפשרות גיבוי: סיסמה
+              שינוי סיסמה
             </Link>
             <ThemeToggle toLightLabel={S.theme.toLight} toDarkLabel={S.theme.toDark} />
             <Link
@@ -81,7 +83,7 @@ export default function AdminShell({ email, children }: { email?: string | null;
           </div>
         </div>
       </header>
-      <main id="main" className="mx-auto max-w-6xl px-5 py-8">
+      <main id="main" className={pathname === '/admin/content' ? 'w-full' : 'mx-auto max-w-6xl px-5 py-8'}>
         {children}
       </main>
     </>

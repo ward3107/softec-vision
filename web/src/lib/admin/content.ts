@@ -1,26 +1,9 @@
 import 'server-only';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import enMessages from '../../../messages/en.json';
-import heMessages from '../../../messages/he.json';
 import { CONTENT_BLOCKS, type ContentBlockData, type ContentBlockKey } from '@/lib/content/blocks';
+import { SHIPPED_TEXT } from '@/lib/content/defaults';
 
 /** The shipped copy for a block's fields, keyed the same way the block's own data is — the admin form's placeholder/default when the owner hasn't overridden a field. */
-const SHIPPED_TEXT: Record<ContentBlockKey, { he: ContentBlockData; en: ContentBlockData }> = {
-  'home.hero': {
-    he: { eyebrow: heMessages.hero.eyebrow, title: heMessages.hero.title, body: heMessages.hero.body },
-    en: { eyebrow: enMessages.hero.eyebrow, title: enMessages.hero.title, body: enMessages.hero.body }
-  },
-  'home.capabilities': {
-    he: { custom: heMessages.capabilities.custom, av: heMessages.capabilities.av, accessible: heMessages.capabilities.accessible },
-    en: { custom: enMessages.capabilities.custom, av: enMessages.capabilities.av, accessible: enMessages.capabilities.accessible }
-  },
-  'home.faq': { he: pick(heMessages.faq, CONTENT_BLOCKS['home.faq']), en: pick(enMessages.faq, CONTENT_BLOCKS['home.faq']) }
-};
-
-function pick(messages: Record<string, string>, fields: readonly string[]): ContentBlockData {
-  return Object.fromEntries(fields.map((field) => [field, messages[field] ?? '']));
-}
-
 export interface AdminContentBlock {
   key: ContentBlockKey;
   fields: readonly string[];
@@ -42,7 +25,7 @@ export async function listAdminContentBlocks(client: SupabaseClient): Promise<Ad
     const row = byKey.get(key);
     const dataFor = (locale: 'he' | 'en') => {
       const saved = row?.content_block_translations.find((t) => t.locale === locale)?.data ?? {};
-      return Object.fromEntries(fields.map((field) => [field, saved[field] ?? ''])) as ContentBlockData;
+      return { ...saved, ...Object.fromEntries(fields.map((field) => [field, saved[field] ?? ''])) } as ContentBlockData;
     };
     return { key, fields, values: { he: dataFor('he'), en: dataFor('en') }, shipped: SHIPPED_TEXT[key] };
   });
