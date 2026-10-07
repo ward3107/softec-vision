@@ -3,6 +3,7 @@
 import { useActionState } from 'react';
 import { signIn } from '../actions';
 import { S } from '@/lib/admin/strings';
+import PasswordInput from '../PasswordInput';
 
 export default function PasswordLoginForm({ initialError }: { initialError?: string }) {
   const [state, action, pending] = useActionState(signIn, {});
@@ -33,14 +34,10 @@ export default function PasswordLoginForm({ initialError }: { initialError?: str
       </div>
       <div>
         <label htmlFor="admin-password" className="block text-sm font-semibold">{S.password}</label>
-        <input
+        <PasswordInput
           id="admin-password"
           name="password"
-          type="password"
-          dir="ltr"
           autoComplete="current-password"
-          required
-          className="mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 focus-visible:border-blueprint dark:border-white/10 dark:bg-surface"
         />
       </div>
       <button

@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { requireStaff } from '@/lib/admin/session';
+import PasswordInput from '../PasswordInput';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,26 +55,22 @@ export default async function PasswordPage({
       <form action={changePassword} className="mt-6 grid gap-4 rounded border border-line bg-pure p-5 dark:border-white/10 dark:bg-surface">
         <div>
           <label htmlFor="new-password" className="block text-sm font-semibold">סיסמה חדשה</label>
-          <input
+          <PasswordInput
             id="new-password"
             name="password"
-            type="password"
             autoComplete="new-password"
             minLength={12}
-            required
-            className="mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 dark:border-white/10 dark:bg-canvas"
+            label="הסיסמה החדשה"
           />
         </div>
         <div>
           <label htmlFor="confirm-password" className="block text-sm font-semibold">אימות סיסמה</label>
-          <input
+          <PasswordInput
             id="confirm-password"
             name="confirmation"
-            type="password"
             autoComplete="new-password"
             minLength={12}
-            required
-            className="mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 dark:border-white/10 dark:bg-canvas"
+            label="אימות הסיסמה"
           />
         </div>
         <button type="submit" className="min-h-[48px] rounded bg-blueprint px-6 font-bold text-pure hover:bg-graphite">
