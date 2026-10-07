@@ -1,29 +1,17 @@
 import { listAdminContentBlocks } from '@/lib/admin/content';
 import { requireStaff } from '@/lib/admin/session';
-import { S } from '@/lib/admin/strings';
-import ContentBlockForm from './ContentBlockForm';
+import { getAllProducts } from '@/lib/catalog';
+import { isAllowedImage, parseEditorDocument } from '@/lib/content/editor';
+import VisualEditor from './VisualEditor';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminContentPage({ searchParams }: { searchParams: Promise<{ saved?: string }> }) {
-  const { saved } = await searchParams;
+export default async function AdminContentPage() {
   const { client } = await requireStaff();
   const blocks = await listAdminContentBlocks(client);
 
-  return (
-    <>
-      <h1 className="text-2xl font-extrabold">{S.content.title}</h1>
-      <p className="mt-1 text-machine dark:text-fog">{S.content.help}</p>
-      <div className="mt-6 grid max-w-3xl gap-8">
-        {saved && (
-          <p role="status" className="rounded border border-line bg-[#e6f4ea] p-3 text-sm font-semibold text-[#14532d] dark:border-white/10">
-            ✓ {S.content.saved}
-          </p>
-        )}
-        {blocks.map((block) => (
-          <ContentBlockForm key={block.key} block={block} />
-        ))}
-      </div>
-    </>
-  );
+  const initial = parseEditorDocument(Object.fromEntries(blocks.map(block => [block.key, block.values])), process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const products = await getAllProducts();
+  const assets = [...new Map(products.filter(product => isAllowedImage(product.image, process.env.NEXT_PUBLIC_SUPABASE_URL)).map(product => [product.image, { src: product.image, label: product.code }])).values()];
+  return <VisualEditor initial={initial} assets={assets} />;
 }

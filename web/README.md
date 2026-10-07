@@ -71,9 +71,11 @@ check. Edit the scenes in `docs/reel/reel.html` (`?lang=he&preview` plays it in 
   - **3D model** — upload a glTF Binary (`.glb`, up to 20MB) per product (Supabase Storage,
     bucket `product-models`). When present, the product page shows a Photos/3D tab; the model is
     only fetched (and the viewer library only loaded) if a visitor opens the 3D tab.
-  - **Site content** (`/admin/content`) — edit the homepage hero and capability labels,
-    bilingually, without a code change. A field left blank falls back to the shipped copy — not a
-    blank section on the live site.
+  - **Site content** (`/admin/content`) — visual editor for eight homepage sections in Hebrew
+    and English, using the real site as a clickable preview. Edit text, replace the hero photo,
+    remove/restore fields or sections, undo/redo, and inspect mobile/desktop before explicitly
+    publishing. Removing content preserves its source; resetting restores shipped content.
+    Product media remains in Products. See [`docs/visual-editor.md`](docs/visual-editor.md).
 - **Light/dark theme**, a toggle in the header and admin, defaulting to light and persisting the
   visitor's choice.
 - **Accessibility** — a floating widget (text size, contrast, motion, reading aids, and more) as
@@ -141,6 +143,9 @@ Set the project **Root Directory** to `web`, add the env vars, and connect the r
 deployments are created per branch/PR.
 
 ### Admin password recovery
+
+The login screen shows email/password first. The passwordless email link remains available
+in the collapsed secondary option underneath.
 
 In Supabase Authentication > Users, open the existing staff user and select **Send
 password recovery**. The default recovery email can return to the public Site URL.

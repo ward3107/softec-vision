@@ -54,6 +54,7 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   turbopack: { root: projectRoot },
+  experimental: { serverActions: { bodySizeLimit: '4mb' } },
   // Product/media images are served from Supabase Storage in later phases.
   images: {
     remotePatterns: [
@@ -62,7 +63,14 @@ const nextConfig = {
     ]
   },
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }];
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      // Only the authenticated CMS preview can be framed, and only by this origin.
+      { source: '/admin/content/preview', headers: [
+        { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+        ...(!isDev ? [{ key: 'Content-Security-Policy', value: csp.replace("frame-ancestors 'none'", "frame-ancestors 'self'") }] : [])
+      ] }
+    ];
   },
   // The process page now lives on the home page as the "How it works" section.
   async redirects() {

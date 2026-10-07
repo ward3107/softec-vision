@@ -2,7 +2,6 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { saveContentBlock } from '@/lib/admin/content';
 import { parseStatusUpdate } from '@/lib/admin/inquiries';
 import {
   addGalleryImage,
@@ -22,8 +21,6 @@ import {
 } from '@/lib/admin/products';
 import { createUserClient, isSupabaseConfigured, requireStaff } from '@/lib/admin/session';
 import { CATALOG_TAG } from '@/lib/catalog/source';
-import { parseContentBlockForm, type ContentBlockKey } from '@/lib/content/blocks';
-import { CONTENT_TAG } from '@/lib/content/source';
 
 export type SignInState = { error?: 'missingPassword' | 'invalid' | 'notConfigured' };
 
@@ -185,14 +182,4 @@ export async function removeProductModelAction(code: string) {
   await removeProductModel(client, code);
   revalidateProductMedia(code);
   redirect(`/admin/products/${code}?media=modelRemoved`);
-}
-
-/** Saves one piece of marketing copy (e.g. the homepage hero) — any staff member. A field left blank reverts to the shipped copy. */
-export async function saveContentBlockAction(key: ContentBlockKey, fd: FormData) {
-  const { client } = await requireStaff();
-  const values = parseContentBlockForm(fd, key);
-  await saveContentBlock(client, key, values);
-  revalidateTag(CONTENT_TAG, 'max');
-  revalidatePath('/admin/content');
-  redirect('/admin/content?saved=1');
 }

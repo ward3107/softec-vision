@@ -15,7 +15,7 @@ test('home opens with the engineered product hero', () => {
   assert.match(home, /home-hero__blueprint/);
   // The showpiece is the real product photo (static), so its colours match the
   // catalog picture — not a grey 3D scan.
-  assert.match(home, /src="\/products\/RAV-500-transparent\.webp"/);
+  assert.match(home, /src=\{text\('home.hero', 'image', '\/products\/RAV-500-transparent\.webp'\)/);
   assert.match(home, /home-hero__product/);
   assert.match(css, /\.home-hero__blueprint/);
   assert.match(css, /@keyframes heroProductSettle/);
