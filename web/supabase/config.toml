@@ -242,6 +242,11 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# Redeem the token only after the user submits the app's confirmation form.
+[auth.email.template.magic_link]
+subject = "Sign in to Softec Vision"
+content_path = "./supabase/templates/magic-link.html"
+
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"

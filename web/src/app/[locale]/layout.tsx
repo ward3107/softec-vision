@@ -6,6 +6,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { Assistant } from 'next/font/google';
 import { routing, localeDir, type AppLocale } from '@/i18n/routing';
 import Header from '@/components/Header';
+import PasswordRecoveryBridge from '@/components/PasswordRecoveryBridge';
 import Footer from '@/components/Footer';
 import RevealController from '@/components/motion/RevealController';
 import FloatingDock from '@/components/widgets/FloatingDock';
@@ -100,6 +101,7 @@ export default async function LocaleLayout({
         suppressHydrationWarning
       >
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
+        <PasswordRecoveryBridge />
         <JsonLd data={organizationSchema(locale as AppLocale)} />
         <BrandSplash />
         <NextIntlClientProvider locale={locale} messages={messages}>

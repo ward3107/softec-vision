@@ -139,3 +139,37 @@ idempotent (`create ... if not exists`, `on conflict do nothing/update`).
 
 Set the project **Root Directory** to `web`, add the env vars, and connect the repo. Preview
 deployments are created per branch/PR.
+
+### Admin password recovery
+
+In Supabase Authentication > Users, open the existing staff user and select **Send
+password recovery**. The default recovery email can return to the public Site URL.
+The public and admin layouts accept its `type=recovery` URL fragment, remove it from
+the address bar, establish a cookie-backed session, and open `/admin/password`.
+The existing server-side staff check still protects the password form and dashboard.
+No custom SMTP or email template is required for this recovery path. Never share recovery
+URLs or passwords in logs, screenshots, or support messages.
+
+### Optional admin sign-in email template
+
+The deployed `/auth/confirm` page waits for an explicit confirmation before redeeming a
+one-time email token. The email must link to that page for this flow to take effect.
+
+For the hosted Softec Supabase project:
+
+1. In Authentication > URL Configuration, set Site URL to
+   `https://softecvision.vercel.app` (without a trailing slash).
+2. If custom SMTP is configured and template editing is available, in Authentication >
+   Emails > Magic Link, use the HTML in
+   [`supabase/templates/magic-link.html`](supabase/templates/magic-link.html).
+3. Request a fresh email from `/admin/login`. Its button should open `/auth/confirm`;
+   press **Confirm and sign in** (the deployed page labels it in Hebrew) to enter `/admin`.
+
+Saving this template locally or deploying Vercel does not update the hosted Supabase email
+template. Apply the template in the correct Supabase project. Existing emails retain their
+old links. The local Supabase configuration uses the same template.
+
+The existing `/auth/callback` endpoint remains available for PKCE links. That flow requires
+the matching verifier cookie; its generic error message does not by itself prove that an
+email link expired. The confirmation flow uses Supabase's `verifyOtp` token-hash verification
+and still requires an existing account and an admin/editor profile to access the dashboard.
