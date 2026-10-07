@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Assistant } from 'next/font/google';
 import { getAdminContext, isSupabaseConfigured } from '@/lib/admin/session';
 import AdminShell from './AdminShell';
+import PasswordRecoveryBridge from '@/components/PasswordRecoveryBridge';
 import '../globals.css';
 
 const assistant = Assistant({
@@ -47,6 +48,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         suppressHydrationWarning
       >
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
+        <PasswordRecoveryBridge />
         {authed ? <AdminShell email={email}>{children}</AdminShell> : children}
       </body>
     </html>
