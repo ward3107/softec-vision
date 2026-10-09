@@ -8,8 +8,7 @@ import {
   removeGalleryImage,
   removePrimaryImage,
   removeProductModel,
-  replacePrimaryImage,
-  replaceProductModel
+  replacePrimaryImage
 } from '@/lib/admin/media';
 import {
   CANONICAL_SPEC_KEYS,
@@ -136,7 +135,10 @@ function revalidateProductMedia(code: string) {
 export async function uploadProductImageAction(code: string, fd: FormData) {
   const { client } = await requireStaff();
   const file = fd.get('file');
-  const result = await replacePrimaryImage(client, code, file instanceof File ? file : new File([], ''));
+  const result = await replacePrimaryImage(client, code, file instanceof File ? file : new File([], '')).catch(() => {
+    console.error('product_image_upload_failed');
+    return { ok: false as const, error: 'uploadFailed' as const };
+  });
   revalidateProductMedia(code);
   redirect(`/admin/products/${code}?media=${result.ok ? 'updated' : `error-${result.error}`}`);
 }
@@ -153,7 +155,10 @@ export async function removeProductImageAction(code: string) {
 export async function addGalleryImageAction(code: string, fd: FormData) {
   const { client } = await requireStaff();
   const file = fd.get('file');
-  const result = await addGalleryImage(client, code, file instanceof File ? file : new File([], ''));
+  const result = await addGalleryImage(client, code, file instanceof File ? file : new File([], '')).catch(() => {
+    console.error('product_gallery_upload_failed');
+    return { ok: false as const, error: 'uploadFailed' as const };
+  });
   revalidateProductMedia(code);
   redirect(`/admin/products/${code}?media=${result.ok ? 'added' : `error-${result.error}`}`);
 }
@@ -165,15 +170,6 @@ export async function removeGalleryImageAction(code: string, fd: FormData) {
   if (/^[0-9a-f-]{36}$/i.test(mediaId)) await removeGalleryImage(client, mediaId);
   revalidateProductMedia(code);
   redirect(`/admin/products/${code}?media=removed`);
-}
-
-/** Replaces a product's 3D model — any staff member. */
-export async function uploadProductModelAction(code: string, fd: FormData) {
-  const { client } = await requireStaff();
-  const file = fd.get('file');
-  const result = await replaceProductModel(client, code, file instanceof File ? file : new File([], ''));
-  revalidateProductMedia(code);
-  redirect(`/admin/products/${code}?media=${result.ok ? 'modelUpdated' : `error-${result.error}`}`);
 }
 
 /** Removes a product's 3D model — any staff member. */

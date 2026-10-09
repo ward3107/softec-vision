@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import { CANONICAL_SPEC_KEYS, getAdminProduct } from '@/lib/admin/products';
-import { getProductMedia, getProductModel } from '@/lib/admin/media';
+import { findProductId, getProductMedia, getProductModel } from '@/lib/admin/media';
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
 import { publicMediaUrl } from '@/lib/catalog/media';
@@ -25,6 +24,7 @@ const MEDIA_BANNER: Record<string, string> = {
   'error-noFile': M.errors.noFile,
   'error-tooLarge': M.errors.tooLarge,
   'error-badType': M.errors.badType,
+  'error-uploadFailed': M.errors.uploadFailed,
   'error-unknownProduct': M.errors.unknownProduct
 };
 
@@ -49,6 +49,16 @@ export default async function AdminProductEditPage({
         </Link>
       </>
     );
+  }
+
+  if (!(await findProductId(client, code))) {
+    return <div className="grid max-w-2xl gap-4">
+      <h1 className="text-2xl font-extrabold" dir="ltr">{code}</h1>
+      <p>{S.products.import.help}</p>
+      <Link href="/admin/products" className="font-bold text-blueprint underline dark:text-skyline">
+        מעבר לייבוא הקטלוג
+      </Link>
+    </div>;
   }
 
   const action = saveProductAction.bind(null, code);

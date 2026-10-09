@@ -5,7 +5,7 @@ import { requireStaff } from '@/lib/admin/session';
 import { listAdminContentBlocks } from '@/lib/admin/content';
 import { CONTENT_TAG } from '@/lib/content/source';
 import { BLOCK_KEYS, LOCALES, MAX_IMAGE_BYTES, changedBlocks, parseEditorDocument, type EditorDocument } from '@/lib/content/editor';
-import { sniffType } from '@/lib/inquiry/attachment';
+import { optimizeImage } from '@/lib/media/optimize-image';
 
 export type PublishResult = { ok: true; document: EditorDocument } | { ok: false; error: string };
 
@@ -25,6 +25,11 @@ export async function publishContent(fd: FormData): Promise<PublishResult> {
     if (changedBlocks(before, current).length) {
       return { ok: false, error: 'התוכן השתנה בחלון אחר. השינויים שלך נשארו כאן; יש לרענן ולטעון את הגרסה העדכנית לפני פרסום.' };
     }
+    const { data: locales, error: localeError } = await client.from('locales').select('code').in('code', [...LOCALES]);
+    if (localeError) throw localeError;
+    if (!LOCALES.every(locale => locales?.some(row => row.code === locale))) {
+      return { ok: false, error: 'הגדרת השפות באתר חסרה. יש להשלים את התקנת מסד הנתונים (עברית ואנגלית). השינויים נשארו בעורך.' };
+    }
     // Validate every file before uploading any, so a rejected second file leaves no orphan.
     const images: Array<{ locale: 'he' | 'en'; bytes: Uint8Array; mime: string; ext: string }> = [];
     let imageBytes = 0;
@@ -34,11 +39,9 @@ export async function publishContent(fd: FormData): Promise<PublishResult> {
       if (!(file instanceof File) || !file.size) return { ok: false, error: 'בחרו תמונה תקינה שאינה ריקה.' };
       imageBytes += file.size;
       if (imageBytes > MAX_IMAGE_BYTES) return { ok: false, error: 'סך התמונות בפרסום אחד מוגבל ל־3MB.' };
-      const bytes = new Uint8Array(await file.arrayBuffer());
-      const mime = sniffType(bytes);
-      const ext = ({ 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' } as Record<string, string>)[mime ?? ''];
-      if (!ext) return { ok: false, error: 'בחרו תמונת JPG, PNG או WebP תקינה.' };
-      images.push({ locale, bytes, mime: mime!, ext });
+      const optimized = await optimizeImage(file);
+      if (!optimized.ok) return { ok: false, error: 'לא ניתן לעבד את התמונה. בחרו תמונת JPG, PNG או WebP תקינה דרך כפתור ההעלאה.' };
+      images.push({ locale, bytes: optimized.bytes, mime: optimized.mime, ext: optimized.ext });
     }
     // Files are uploaded only on publication. Removing a photo never deletes its original.
     for (const { locale, bytes, mime, ext } of images) {
@@ -61,7 +64,12 @@ export async function publishContent(fd: FormData): Promise<PublishResult> {
     updateTag(CONTENT_TAG);
     revalidatePath('/admin/content');
     return { ok: true, document };
-  } catch {
+  } catch (cause) {
+    // Log diagnostic identifiers, never the submitted document or image data.
+    console.error('content_publish_failed', {
+      code: cause && typeof cause === 'object' && 'code' in cause ? String(cause.code) : 'unknown',
+      committed
+    });
     if (!committed && uploadedPaths.length) await client.storage.from('product-media').remove(uploadedPaths);
     return { ok: false, error: 'הפרסום לא הושלם. השינויים נשמרו בעורך. בדקו חיבור והרשאות ונסו שוב.' };
   }
