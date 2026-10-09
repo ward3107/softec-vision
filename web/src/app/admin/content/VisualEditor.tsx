@@ -4,7 +4,8 @@ import { useEffect, useRef, useState, useTransition, type ReactNode } from 'reac
 import { ArrowUpRight, Check, ChevronLeft, Eye, EyeOff, ImagePlus, Layers, Loader2, Monitor, Redo2, RotateCcw, Send, Smartphone, Trash2, Undo2, Upload, X } from 'lucide-react';
 import { CONTENT_BLOCKS, CONTENT_LIMIT, type ContentBlockKey } from '@/lib/content/blocks';
 import { BLOCK_TITLES, SHIPPED_TEXT, fieldLabel } from '@/lib/content/defaults';
-import { BLOCK_KEYS, MAX_IMAGE_BYTES, changedBlocks, type EditorDocument } from '@/lib/content/editor';
+import { BLOCK_KEYS, changedBlocks, type EditorDocument } from '@/lib/content/editor';
+import { prepareImage } from '@/lib/media/prepare-image';
 import { publishContent } from './editor-actions';
 import styles from './editor.module.css';
 
@@ -38,6 +39,10 @@ export default function VisualEditor({ initial, assets, previewPath = '/admin/co
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [pending, startTransition] = useTransition();
+  const [preparing, setPreparing] = useState(false);
+  const preparation = useRef(false);
+  const mounted = useRef(true);
+  const busy = pending || preparing;
   const frame = useRef<HTMLIFrameElement>(null);
   const canvas = useRef<HTMLDivElement>(null);
   const inspector = useRef<HTMLElement>(null);
@@ -88,7 +93,11 @@ export default function VisualEditor({ initial, assets, previewPath = '/admin/co
     document.addEventListener('click', guard, true);
     return () => { window.removeEventListener('beforeunload', warn); document.removeEventListener('click', guard, true); };
   }, [dirty]);
-  useEffect(() => () => objectUrls.current.forEach(url => URL.revokeObjectURL(url)), []);
+  useEffect(() => {
+    mounted.current = true;
+    const urls = objectUrls.current;
+    return () => { mounted.current = false; urls.forEach(url => URL.revokeObjectURL(url)); };
+  }, []);
   useEffect(() => {
     const hydrated = (event: MessageEvent) => {
       if (event.origin === window.location.origin && event.source === frame.current?.contentWindow && event.data?.type === 'softec-preview-ready') {
@@ -178,19 +187,25 @@ export default function VisualEditor({ initial, assets, previewPath = '/admin/co
     if (!doc?.querySelector('[data-cms-block]')) { setFrameError(true); return; }
     setFrameError(false); setReady(doc.documentElement.dataset.cmsReady === 'true');
   }
-  function chooseFile(file?: File) {
-    if (!file) return;
-    if (!file.size || !['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > MAX_IMAGE_BYTES) {
-      setError('בחרו תמונת JPG, PNG או WebP עד 3MB.'); return;
+  async function chooseFile(file?: File) {
+    if (!file || preparation.current || pending) return;
+    preparation.current = true;
+    setPreparing(true); setError(''); setMessage('');
+    try {
+      const prepared = await prepareImage(file);
+      if (!mounted.current) return;
+      const url = URL.createObjectURL(prepared); objectUrls.current.push(url);
+      edit(next => { next.files[locale] = prepared; next.document['home.hero'][locale].image = url; delete next.document['home.hero'][locale]['_hide.image']; });
+      setMessage('התמונה הוכנה להעלאה. השינוי יישמר באתר לאחר פרסום.');
+    } catch (cause) {
+      if (mounted.current) setError(cause instanceof Error ? cause.message : 'לא ניתן להכין את התמונה.');
+    } finally {
+      preparation.current = false;
+      if (mounted.current) setPreparing(false);
     }
-    const other = draft.files[locale === 'he' ? 'en' : 'he'];
-    if (file.size + (other?.size ?? 0) > MAX_IMAGE_BYTES) {
-      setError('סך התמונות בפרסום אחד מוגבל ל־3MB. פרסמו את התמונה הראשונה לפני העלאת השנייה.'); return;
-    }
-    const url = URL.createObjectURL(file); objectUrls.current.push(url);
-    edit(next => { next.files[locale] = file; next.document['home.hero'][locale].image = url; delete next.document['home.hero'][locale]['_hide.image']; });
   }
   function publish() {
+    if (preparation.current || pending) return;
     setConfirmation(null); setError('');
     startTransition(async () => {
       const fd = new FormData();
@@ -222,28 +237,28 @@ export default function VisualEditor({ initial, assets, previewPath = '/admin/co
     <div className={styles.toolbar}>
       <div className={styles.heading}><Layers size={20} /><div><h1>עורך האתר</h1><span>עמוד הבית</span></div></div>
       <div className={styles.segment} aria-label="שפת התוכן">
-        {(['he', 'en'] as const).map(l => <button key={l} aria-pressed={locale === l} disabled={pending} onClick={() => { if (locale !== l) { setLocale(l); setReady(false); setFrameError(false); } }}>{l === 'he' ? 'עברית' : 'English'}</button>)}
+        {(['he', 'en'] as const).map(l => <button key={l} aria-pressed={locale === l} disabled={busy} onClick={() => { if (locale !== l) { setLocale(l); setReady(false); setFrameError(false); } }}>{l === 'he' ? 'עברית' : 'English'}</button>)}
       </div>
       <div className={styles.segment} aria-label="גודל תצוגה">
         <Tool label="מחשב" active={device === 'desktop'} onClick={() => setDevice('desktop')}><Monitor size={18} /></Tool>
         <Tool label="נייד" active={device === 'mobile'} onClick={() => setDevice('mobile')}><Smartphone size={18} /></Tool>
       </div>
       <div className={styles.history}>
-        <Tool label="ביטול הפעולה האחרונה" disabled={!cursor || pending} onClick={() => setCursor(cursor - 1)}><Undo2 size={18} /></Tool>
-        <Tool label="ביצוע מחדש" disabled={cursor >= history.length - 1 || pending} onClick={() => setCursor(cursor + 1)}><Redo2 size={18} /></Tool>
+        <Tool label="ביטול הפעולה האחרונה" disabled={!cursor || busy} onClick={() => setCursor(cursor - 1)}><Undo2 size={18} /></Tool>
+        <Tool label="ביצוע מחדש" disabled={cursor >= history.length - 1 || busy} onClick={() => setCursor(cursor + 1)}><Redo2 size={18} /></Tool>
       </div>
-      <span className={styles.saveState} data-dirty={dirty}>{pending ? 'מפרסם...' : dirty ? 'שינויים שלא פורסמו' : 'הגרסה המפורסמת'}</span>
+      <span className={styles.saveState} data-dirty={dirty} role="status">{preparing ? 'מכין תמונה…' : pending ? 'מפרסם...' : dirty ? 'שינויים שלא פורסמו' : 'הגרסה המפורסמת'}</span>
       <Tool label={preview ? 'חזרה לעריכה' : 'תצוגה לפני פרסום'} active={preview} onClick={() => setPreview(!preview)}><Eye size={18} /></Tool>
       <a className={styles.tool} href={`/${locale}`} target="_blank" rel="noopener noreferrer" aria-label="פתיחת האתר" title="פתיחת האתר"><ArrowUpRight size={18} /></a>
-      <button className={styles.publish} onClick={() => setConfirmation({ kind: 'publish' })} disabled={!dirty || pending}>{pending ? <Loader2 className={styles.spin} size={17} /> : <Send size={17} />}פרסום שינויים</button>
+      <button className={styles.publish} onClick={() => setConfirmation({ kind: 'publish' })} disabled={!dirty || busy}>{pending ? <Loader2 className={styles.spin} size={17} /> : <Send size={17} />}פרסום שינויים</button>
     </div>
     {(error || message) && <div className={styles.notice} data-error={Boolean(error)} role={error ? 'alert' : 'status'}>{error || message}<button aria-label="סגירה" onClick={() => { setError(''); setMessage(''); }}><X size={16} /></button></div>}
     <div className={styles.workspace}>
       <aside className={styles.inspector} ref={inspector} aria-label="עריכת תוכן" hidden={preview}>
         <div className={styles.sectionPicker}><label htmlFor="section">מקטע בעמוד</label><select id="section" value={selected.key} onChange={e => select(e.target.value as ContentBlockKey)}>{BLOCK_KEYS.map(key => <option key={key} value={key}>{BLOCK_TITLES[key]}{draft.document[key][locale]._hidden === 'true' ? ' (הוסר)' : ''}</option>)}</select></div>
-        <div className={styles.sectionHeading}><h2>{BLOCK_TITLES[selected.key]}</h2><Tool label={hidden ? 'שחזור המקטע' : 'הסרת המקטע'} disabled={pending} onClick={() => hidden ? setField('_hidden', '') : setConfirmation({ kind: 'remove', key: selected.key })}>{hidden ? <EyeOff size={18} /> : <Eye size={18} />}</Tool></div>
+        <div className={styles.sectionHeading}><h2>{BLOCK_TITLES[selected.key]}</h2><Tool label={hidden ? 'שחזור המקטע' : 'הסרת המקטע'} disabled={busy} onClick={() => hidden ? setField('_hidden', '') : setConfirmation({ kind: 'remove', key: selected.key })}>{hidden ? <EyeOff size={18} /> : <Eye size={18} />}</Tool></div>
         {hidden && <p className={styles.removed}>המקטע הוסר מהתצוגה בשפה זו</p>}
-        <fieldset disabled={pending} className={styles.fields}>
+        <fieldset disabled={busy} className={styles.fields}>
           {CONTENT_BLOCKS[selected.key].map(field => {
             const removed = values[`_hide.${field}`] === 'true';
             const value = removed && values[field] === '' && field !== 'image' ? '' : values[field] || SHIPPED_TEXT[selected.key][locale][field];
@@ -255,6 +270,7 @@ export default function VisualEditor({ initial, assets, previewPath = '/admin/co
               {field === 'image' ? <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={value} alt={values.imageAlt || SHIPPED_TEXT[selected.key][locale].imageAlt} className={styles.image} />
+                <p>JPG, PNG או WebP עד 6MB. הקטנה ודחיסה אוטומטיות תוך שמירה על היחס והשקיפות.</p>
                 <div className={styles.imageActions}><label className={styles.secondary}><Upload size={15} />העלאה<input id="edit-image" aria-label="העלאת תמונה" type="file" accept="image/jpeg,image/png,image/webp" onChange={e => { chooseFile(e.target.files?.[0]); e.target.value = ''; }} /></label><button type="button" className={styles.secondary} onClick={() => setLibrary(!library)}><ImagePlus size={15} />ספריית תמונות</button></div>
                 {library && <div className={styles.library}><input aria-label="חיפוש תמונה" placeholder="חיפוש לפי דגם" value={search} onChange={e => setSearch(e.target.value)} /><div className={styles.assets}>{assets.filter(asset => asset.label.toLowerCase().includes(search.toLowerCase())).map(asset => <button key={asset.src} title={asset.label} type="button" onClick={() => { edit(next => { next.document['home.hero'][locale].image = asset.src; delete next.document['home.hero'][locale]['_hide.image']; delete next.files[locale]; }); setLibrary(false); }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -265,7 +281,7 @@ export default function VisualEditor({ initial, assets, previewPath = '/admin/co
             </div>;
           })}
         </fieldset>
-        <div className={styles.inspectorFooter}><a href="/admin/products" target="_blank" rel="noopener noreferrer">תמונות ופרטי מוצרים<ChevronLeft size={16} /></a><button disabled={!dirty || pending} onClick={() => setConfirmation({ kind: 'discard' })}><RotateCcw size={15} />ביטול כל השינויים</button></div>
+        <div className={styles.inspectorFooter}><a href="/admin/products" target="_blank" rel="noopener noreferrer">תמונות ופרטי מוצרים<ChevronLeft size={16} /></a><button disabled={!dirty || busy} onClick={() => setConfirmation({ kind: 'discard' })}><RotateCcw size={15} />ביטול כל השינויים</button></div>
       </aside>
       <div className={styles.previewArea}>
         <div className={styles.previewBar}><span><span className={styles.liveDot} />{preview ? 'תצוגה לפני פרסום' : 'תצוגת עריכה'}</span><span dir="ltr">{device === 'mobile' ? '390' : '1280'}px · {Math.round(scale * 100)}%</span></div>
