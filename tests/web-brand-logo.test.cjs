@@ -40,13 +40,15 @@ test('first-visit splash persists its completed state and respects reduced motio
 });
 
 test('footer renders the supplied Vasia dev. creator mark with verified contact links', () => {
-  const signature = read('web', 'src', 'components', 'CreatorSignature.tsx');
+  const signature = read('web', 'src', 'components', 'VasiaSignature.tsx');
   const footer = read('web', 'src', 'components', 'Footer.tsx');
 
   assert.match(signature, /\/brand\/vasia-dev-signature\.png/);
   assert.match(signature, /https:\/\/www\.vasia\.dev\//);
-  assert.match(signature, /mailto:vasyaward@gmail\.com/);
-  assert.match(signature, /https:\/\/wa\.me\/972544742520/);
+  assert.match(signature, /mailto:wasya92@gmail\.com/);
+  assert.match(signature, /https:\/\/wa\.me\/972534260632/);
+  assert.match(signature, /https:\/\/www\.facebook\.com\/profile\.php\?id=61594997720112/);
+  assert.match(signature, /https:\/\/www\.instagram\.com\/vasia\.dev\//);
   assert.match(signature, /https:\/\/github\.com\/ward3107/);
   assert.match(signature, /https:\/\/www\.linkedin\.com\/in\/waseem-abu-akel-334486374\//);
   assert.match(footer, /<CreatorSignature/);
