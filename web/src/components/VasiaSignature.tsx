@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import styles from './VasiaSignature.module.css';
 
 /** Canonical owner signature: keep the supplied artwork transparent and all seven links active. */
@@ -6,7 +7,7 @@ export default function VasiaSignature({ tone = 'dark' }: { tone?: 'auto' | 'lig
   return (
     <React.Fragment>
       <nav className={styles.signature} data-vasia-signature data-tone={tone} dir="ltr" aria-label="vasia dev. — website and contact links">
-        <img className={styles.artwork} src="/brand/vasia-dev-signature.png" width={373} height={259} alt="vasia dev. — digital solutions, branding and website design" loading="lazy" decoding="async" />
+        <Image className={styles.artwork} src="/brand/vasia-dev-signature.png" width={373} height={259} sizes="(max-width: 420px) calc(100vw - 48px), 373px" alt="vasia dev. — digital solutions, branding and website design" />
         <a className={`${styles.link} ${styles.website}`} href="https://www.vasia.dev/" target="_blank" rel="noopener noreferrer" aria-label="vasia dev. — Website" title="vasia dev. — Website" />
         <a className={`${styles.link} ${styles.email} ${styles.social}`} href="mailto:wasya92@gmail.com" aria-label="vasia dev. — Email" title="vasia dev. — Email" />
         <a className={`${styles.link} ${styles.whatsapp} ${styles.social}`} href="https://wa.me/972534260632" target="_blank" rel="noopener noreferrer" aria-label="vasia dev. — WhatsApp" title="vasia dev. — WhatsApp" />
