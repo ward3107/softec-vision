@@ -16,7 +16,7 @@ import JsonLd, { organizationSchema } from '@/components/JsonLd';
 import ConsentBanner from '@/components/consent/ConsentBanner';
 import { ConsentProvider } from '@/components/consent/ConsentProvider';
 import { WA_NUMBER } from '@/lib/catalog/seed';
-import { SITE_URL, BRAND, OG_LOCALE, localeUrl, metaAlternates } from '@/lib/seo';
+import { SITE_URL, BRAND, BRAND_HE, OG_LOCALE, localeUrl, metaAlternates } from '@/lib/seo';
 import '../globals.css';
 
 /**
@@ -56,7 +56,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: 'meta' });
   return {
     metadataBase: new URL(SITE_URL),
-    title: { default: t('title'), template: `%s | ${BRAND}` },
+    title: { default: t('title'), template: `%s | ${l === 'he' ? BRAND_HE : BRAND}` },
     description: t('description'),
     applicationName: BRAND,
     authors: [{ name: 'Softec Vision Engineering Team', url: localeUrl(l, '/about') }],

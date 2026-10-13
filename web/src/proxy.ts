@@ -2,6 +2,7 @@ import createMiddleware from 'next-intl/middleware';
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { routing } from './i18n/routing';
+import { SITE_URL } from './lib/seo';
 
 const intl = createMiddleware(routing);
 
@@ -14,6 +15,15 @@ export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (pathname === '/auth/callback' || pathname === '/auth/confirm') return NextResponse.next();
   if (pathname === '/admin' || pathname.startsWith('/admin/')) return adminSession(request);
+  // Consolidate public pages from the former hosting address onto the domain.
+  // Auth/admin sessions stay on their original host; preview deployments are
+  // also unaffected because only this exact production alias is redirected.
+  if (request.nextUrl.hostname === 'softecvision.vercel.app') {
+    const destination = new URL(SITE_URL);
+    destination.pathname = pathname;
+    destination.search = request.nextUrl.search;
+    return NextResponse.redirect(destination, 308);
+  }
   return intl(request);
 }
 

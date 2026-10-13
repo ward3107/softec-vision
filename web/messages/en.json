@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Softec Vision | Lecturer, Control and Display Stations",
-    "description": "Design and manufacture of custom lecturer stations, control desks and display solutions."
+    "description": "Softec Vision designs and manufactures custom lecturer stations, control desks and display solutions in Israel, with delivery for international projects."
   },
   "nav": {
     "brand": "Softec Vision",
@@ -119,7 +119,7 @@
   "about": {
     "eyebrow": "About",
     "title": "Softec Vision Ltd",
-    "body": "We design and manufacture technology furniture as a complete system, with precise finishing and concealed cable management.",
+    "body": "Softec Vision designs and manufactures technology furniture as a complete system, with precise finishes and concealed cable management.",
     "detail": "Dimensions, displays, connections and finishes are specified around your space and equipment.",
     "spaces": "Designed for your environment",
     "education": "Lecture halls and classrooms",
@@ -316,7 +316,8 @@
     "privacy": "Privacy Policy",
     "accessibility": "Accessibility Statement",
     "terms": "Terms of Use",
-    "cookiePreferences": "Cookie settings"
+    "cookiePreferences": "Cookie settings",
+    "brandName": "Softec Vision"
   },
   "consentBanner": {
     "title": "Cookie and analytics preferences",

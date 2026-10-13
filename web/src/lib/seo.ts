@@ -2,17 +2,16 @@ import type { Metadata } from 'next';
 import { routing, type AppLocale } from '@/i18n/routing';
 
 /**
- * Absolute base URL for canonical / hreflang / Open Graph. On Vercel this
- * resolves to the production domain automatically; override with
- * NEXT_PUBLIC_SITE_URL once the final domain is connected.
+ * The verified public domain is the single source of truth for search URLs.
+ * Deployment aliases and old environment values must not replace it: doing so
+ * makes the custom domain canonicalize to a different site in search engines.
  */
-export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : '') ||
-  'https://www.softec.co.il'
-).replace(/\/$/, '');
+export const SITE_URL = 'https://www.softec.co.il';
 
 export const BRAND = 'Softec Vision';
+export const BRAND_HE = 'סופטק ויזן';
+/** Hebrew spellings supplied by the owner; these describe one organization. */
+export const BRAND_ALIASES = [BRAND_HE, 'סופטיק ויזן', 'סופטק'];
 
 /** OG locale codes for each app locale. */
 export const OG_LOCALE: Record<AppLocale, string> = { he: 'he_IL', en: 'en_US' };

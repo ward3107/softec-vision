@@ -1,4 +1,4 @@
-import { BRAND, SITE_URL, localeUrl } from '@/lib/seo';
+import { BRAND, BRAND_ALIASES, SITE_URL, localeUrl } from '@/lib/seo';
 import type { AppLocale } from '@/i18n/routing';
 
 const PHONE = '+972-3-696-8777';
@@ -20,10 +20,14 @@ export function organizationSchema(locale: AppLocale) {
     {
       '@context': 'https://schema.org',
       '@type': 'Organization',
+      '@id': `${SITE_URL}/#organization`,
       name: 'Softec Vision Ltd',
-      alternateName: BRAND,
+      alternateName: [BRAND, ...BRAND_ALIASES],
+      description: locale === 'he'
+        ? 'סופטק ויזן מתכננת ומייצרת עמדות מרצה, בקרה ותצוגה בהתאמה אישית.'
+        : 'Softec Vision designs and manufactures custom lecturer, control and display stations.',
       url: SITE_URL,
-      logo: `${SITE_URL}/icon.svg`,
+      logo: `${SITE_URL}/brand/softec-vision-logo.png`,
       email: EMAIL,
       telephone: PHONE,
       areaServed: 'IL',
@@ -42,9 +46,12 @@ export function organizationSchema(locale: AppLocale) {
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
       name: BRAND,
-      url: localeUrl(locale, ''),
-      inLanguage: locale
+      alternateName: BRAND_ALIASES,
+      url: `${SITE_URL}/`,
+      inLanguage: ['he', 'en'],
+      publisher: { '@id': `${SITE_URL}/#organization` }
     }
   ];
 }
