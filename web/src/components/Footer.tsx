@@ -23,7 +23,10 @@ export default async function Footer() {
             <span className="block w-[140px] sm:w-[160px]">
               <BrandLogo dark />
             </span>
-            <span className="font-semibold">{t('rights')}</span>
+            <div>
+              <p className="font-semibold">{t('brandName')}</p>
+              <p className="mt-1">{t('rights')}</p>
+            </div>
           </div>
           <nav className="flex flex-wrap items-center gap-x-4 gap-y-0 sm:gap-x-6 sm:gap-y-2" aria-label="Legal">
             {links.map((link) => (
