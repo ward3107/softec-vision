@@ -50,7 +50,6 @@ export const inquirySchema = z.object({
     .string({ required_error: 'required' })
     .trim()
     .min(1, 'required')
-    .min(10, 'tooShort')
     .max(MAX_REQUIREMENTS, 'tooLong'),
   consent: z.literal(true, { errorMap: () => ({ message: 'consentRequired' }) }),
   locale: z.enum(['he', 'en'])

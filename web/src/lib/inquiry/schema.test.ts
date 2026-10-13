@@ -75,10 +75,16 @@ describe('validateInquiry', () => {
     }
   });
 
-  it('asks for a meaningful description of the requirement', () => {
-    const result = validateInquiry({ ...valid, requirements: 'hi' });
+  it('accepts a short custom message without a ten-character minimum', () => {
+    const result = validateInquiry({ ...valid, requirements: '  מחיר?  ' });
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.data.requirements).toBe('מחיר?');
+  });
+
+  it('still requires a non-blank message', () => {
+    const result = validateInquiry({ ...valid, requirements: '  \n  ' });
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.errors.requirements).toBe('tooShort');
+    if (!result.ok) expect(result.errors.requirements).toBe('required');
   });
 
   it('offers the sectors the business serves as project types', () => {

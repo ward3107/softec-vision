@@ -11,6 +11,9 @@ type ProductOption = { code: string; name: string };
 type Status = 'idle' | 'submitting' | 'success' | 'whatsapp' | 'error';
 type ServerError = 'failed' | 'rateLimited' | 'network';
 
+const INQUIRY_REASONS = ['quote', 'advice', 'custom-design', 'specifications', 'availability', 'other'] as const;
+type InquiryReason = (typeof INQUIRY_REASONS)[number];
+
 const EMPTY = {
   name: '',
   company: '',
@@ -63,6 +66,7 @@ export default function QuoteForm({
   const known = (code?: string | null) => Boolean(code && products.some((p) => p.code === code));
 
   const [values, setValues] = useState<Values>({ ...EMPTY, product: known(defaultProduct) ? defaultProduct! : '' });
+  const [reason, setReason] = useState<InquiryReason | ''>('');
   const [consent, setConsent] = useState(false);
   const [errors, setErrors] = useState<InquiryErrors>({});
   const [status, setStatus] = useState<Status>('idle');
@@ -117,6 +121,9 @@ export default function QuoteForm({
     setValues((v) => ({ ...v, [key]: e.target.value }));
 
   const productName = products.find((p) => p.code === values.product)?.name;
+  // Keep the existing message contract for WhatsApp, email and the admin inbox.
+  // A hidden custom-message draft must never replace the selected preset.
+  const requirements = reason === 'other' ? values.requirements.trim() : reason ? t(`inquiryReasons.${reason}`) : '';
 
   const whatsappUrl = () => {
     const pairs: Array<[string, string]> = [
@@ -127,20 +134,21 @@ export default function QuoteForm({
       [t('country'), values.country],
       [t('projectType'), values.projectType ? t(`projectTypes.${values.projectType}`) : ''],
       [t('product'), values.product ? `${productName} (${values.product})` : ''],
-      [t('requirements'), values.requirements]
+      [t('requirements'), requirements]
     ];
     const lines = [t('whatsappIntro'), '', ...pairs.filter(([, v]) => v.trim()).map(([k, v]) => `${k}: ${v.trim()}`)];
     return `https://wa.me/${waNumber}?text=${encodeURIComponent(lines.join('\n'))}`;
   };
 
   function validate(): InquiryErrors {
-    const result = validateInquiry({ ...values, consent, locale });
-    return result.ok ? {} : { ...result.errors };
+    const result = validateInquiry({ ...values, requirements, consent, locale });
+    return result.ok ? {} : { ...result.errors, ...(!reason ? { requirements: 'reasonRequired' } : {}) };
   }
 
   async function post(retry = true): Promise<void> {
     const token = await ensureToken();
     const fd = new FormData(formRef.current!);
+    fd.set('requirements', requirements);
     fd.set('locale', locale);
     fd.set('token', token ?? '');
 
@@ -205,6 +213,7 @@ export default function QuoteForm({
 
   function reset() {
     setValues({ ...EMPTY });
+    setReason('');
     setConsent(false);
     setErrors({});
     setAttempt(0);
@@ -214,7 +223,8 @@ export default function QuoteForm({
     tokenRef.current = null;
   }
 
-  const label = (field: Field) => (field === 'consent' ? t('consentShort') : t(field));
+  const label = (field: Field) =>
+    field === 'consent' ? t('consentShort') : field === 'requirements' && reason !== 'other' ? t('inquiryReason') : t(field);
   const errorId = (field: Field) => `qf-${field}-error`;
   const describedBy = (field: Field, hint?: boolean) =>
     [hint ? `qf-${field}-hint` : '', errors[field] ? errorId(field) : ''].filter(Boolean).join(' ') || undefined;
@@ -376,22 +386,79 @@ export default function QuoteForm({
         )}
       </div>
 
-      {row(
-        'requirements',
-        <textarea
-          id="qf-requirements"
-          name="requirements"
-          rows={5}
-          className={input}
-          value={values.requirements}
-          onChange={set('requirements')}
-          required
-          maxLength={MAX_REQUIREMENTS}
-          aria-invalid={Boolean(errors.requirements)}
-          aria-describedby={describedBy('requirements', true)}
-        />,
-        { required: true, hint: t('requirementsHint') }
-      )}
+      <fieldset
+        id="qf-requirements"
+        tabIndex={-1}
+        className="min-w-0"
+        aria-describedby={describedBy('requirements', true)}
+        aria-invalid={Boolean(errors.requirements)}
+      >
+        <legend className={labelClass}>
+          {t('inquiryReason')}{' '}
+          <span className="text-red-700 dark:text-red-400" aria-hidden="true">*</span>
+        </legend>
+        <p id="qf-requirements-hint" className="mt-1 text-sm text-machine dark:text-fog">
+          {t('inquiryReasonHint')}
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {INQUIRY_REASONS.map((option) => (
+            <label
+              key={option}
+              className={`flex min-h-[52px] cursor-pointer items-center gap-3 rounded border px-3 py-3 text-sm font-medium text-graphite focus-within:ring-2 focus-within:ring-blueprint focus-within:ring-offset-2 dark:text-ink ${
+                reason === option
+                  ? 'border-blueprint bg-blueprint/5 dark:border-skyline dark:bg-skyline/10'
+                  : 'border-line bg-pure hover:border-blueprint dark:border-white/10 dark:bg-surface dark:hover:border-skyline'
+              }`}
+            >
+              <input
+                type="radio"
+                name="inquiryReason"
+                value={option}
+                checked={reason === option}
+                onChange={() => {
+                  setReason(option);
+                  setErrors((current) => {
+                    const next = { ...current };
+                    delete next.requirements;
+                    return next;
+                  });
+                }}
+                required
+                className="h-4 w-4 flex-none accent-blueprint"
+              />
+              <span>{t(`inquiryReasons.${option}`)}</span>
+            </label>
+          ))}
+        </div>
+        {reason === 'other' && (
+          <div className="mt-4">
+            <label className={labelClass} htmlFor="qf-custom-message">
+              {t('requirements')}{' '}
+              <span className="text-red-700 dark:text-red-400" aria-hidden="true">*</span>
+            </label>
+            <p id="qf-custom-message-hint" className="mt-1 text-sm text-machine dark:text-fog">
+              {t('requirementsHint')}
+            </p>
+            <textarea
+              id="qf-custom-message"
+              name="requirements"
+              rows={3}
+              className={input}
+              value={values.requirements}
+              onChange={set('requirements')}
+              required
+              maxLength={MAX_REQUIREMENTS}
+              aria-invalid={Boolean(errors.requirements)}
+              aria-describedby={`qf-custom-message-hint${errors.requirements ? ` ${errorId('requirements')}` : ''}`}
+            />
+          </div>
+        )}
+        {errors.requirements && (
+          <p id={errorId('requirements')} className="mt-2 text-sm font-medium text-red-700 dark:text-red-400">
+            {t(`errors.${errors.requirements}`)}
+          </p>
+        )}
+      </fieldset>
 
       {/* Honeypot: hidden from people and assistive technology; bots fill it. */}
       <div aria-hidden="true" className="absolute h-px w-px overflow-hidden opacity-0" style={{ clip: 'rect(0 0 0 0)' }}>
