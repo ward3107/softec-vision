@@ -80,13 +80,14 @@
     "scrollNext": "Next products",
     "details": "Product Details",
     "productImage": "Product image",
+    "inquiry": "Want this model? Send a WhatsApp",
     "emptyTitle": "No models are currently listed in this category",
     "emptyBody": "We design and manufacture to your requirements.",
     "customAction": "Discuss a Custom Solution"
   },
   "product": {
     "specifications": "Technical Specifications",
-    "inquiry": "Ask About This Product on WhatsApp",
+    "inquiry": "Want this model? Send a WhatsApp",
     "quote": "Contact us",
     "related": "Related products",
     "backToCatalog": "Back to catalog",

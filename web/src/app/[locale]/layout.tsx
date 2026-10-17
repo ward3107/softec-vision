@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
-import { Assistant } from 'next/font/google';
+import { assistant } from '@/lib/font';
 import { routing, localeDir, type AppLocale } from '@/i18n/routing';
 import Header from '@/components/Header';
 import PasswordRecoveryBridge from '@/components/PasswordRecoveryBridge';
@@ -34,13 +34,6 @@ const BOOT_SCRIPT = `(function(){try{
     if(localStorage.getItem('a11y-'+k)==='1'){document.body.classList.add('a11y-'+k);}
   });
 }catch(e){}})();`;
-
-const assistant = Assistant({
-  subsets: ['latin', 'hebrew'],
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
-  variable: '--font-assistant'
-});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

@@ -6,6 +6,7 @@ import { routing } from '@/i18n/routing';
 import type { AppLocale } from '@/i18n/routing';
 import {
   getAllProducts,
+  buildInquiryUrl,
   getProduct,
   getRelatedProducts,
   localized,
@@ -17,6 +18,7 @@ import ProductCard from '@/components/catalog/ProductCard';
 import ProductScroller from '@/components/catalog/ProductScroller';
 import ProductMediaSwitch from '@/components/catalog/ProductMediaSwitch';
 import ProductViewTracker from '@/components/catalog/ProductViewTracker';
+import ProductWhatsAppButton from '@/components/catalog/ProductWhatsAppButton';
 import ShareButton from '@/components/widgets/ShareButton';
 import JsonLd, { breadcrumbSchema } from '@/components/JsonLd';
 
@@ -158,6 +160,7 @@ export default async function ProductPage({
           )}
 
           <div className="mt-6 flex flex-wrap gap-3">
+            <ProductWhatsAppButton href={buildInquiryUrl(product, l)} label={t('inquiry')} code={product.code} />
             <ShareButton title={`${name} (${product.code}) — Softec Vision`} text={localized(product.desc, l)} />
           </div>
         </div>

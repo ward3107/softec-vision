@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Assistant } from 'next/font/google';
+import { assistant } from '@/lib/font';
 import './globals.css';
 
 /**
@@ -14,13 +14,6 @@ import './globals.css';
  * small, self-contained page defaulting to the site's default locale
  * (Hebrew), exactly as next-intl's own docs recommend for this case.
  */
-
-const assistant = Assistant({
-  subsets: ['latin', 'hebrew'],
-  weight: ['400', '700', '800'],
-  display: 'swap',
-  variable: '--font-assistant'
-});
 
 export const metadata: Metadata = {
   title: 'הדף לא נמצא — Softec Vision',
