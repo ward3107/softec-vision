@@ -69,9 +69,11 @@ test('legacy catalog products use lightweight transparent WebP cutouts', () => {
   }
 });
 
-test('product cards are one clickable frame with copy above an enlarged image', () => {
-  assert.match(productCard, /className="group flex h-full flex-col overflow-hidden/);
+test('product cards show the model with a separate WhatsApp inquiry action', () => {
+  assert.match(productCard, /<article className="flex h-full flex-col overflow-hidden/);
   assert.ok(productCard.indexOf('<h3') < productCard.indexOf('<Image'));
+  assert.ok(productCard.indexOf('</Link>') < productCard.indexOf('<ProductWhatsAppButton'));
+  assert.match(productCard, /href=\{buildInquiryUrl\(product, locale\)\}/);
   assert.match(productCard, /scale-\[1\.08\]/);
   assert.doesNotMatch(productCard, /CompareButton|t\('details'\)/);
 });
