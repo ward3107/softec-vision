@@ -1,16 +1,9 @@
 import type { Metadata } from 'next';
-import { Assistant } from 'next/font/google';
+import { assistant } from '@/lib/font';
 import { getAdminContext, isSupabaseConfigured } from '@/lib/admin/session';
 import AdminShell from './AdminShell';
 import PasswordRecoveryBridge from '@/components/PasswordRecoveryBridge';
 import '../globals.css';
-
-const assistant = Assistant({
-  subsets: ['latin', 'hebrew'],
-  weight: ['400', '600', '700', '800'],
-  display: 'swap',
-  variable: '--font-assistant'
-});
 
 export const metadata: Metadata = {
   title: 'ניהול — Softec Vision',
