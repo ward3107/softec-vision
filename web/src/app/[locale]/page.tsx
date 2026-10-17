@@ -10,6 +10,7 @@ import JsonLd, { faqSchema } from '@/components/JsonLd';
 import CategoryExplorer, { type ExplorerCategory, type ExplorerItem } from '@/components/catalog/CategoryExplorer';
 import TypedText from '@/components/TypedText';
 import SectionIndicator from '@/components/SectionIndicator';
+import HeroProductMotion from '@/components/HeroProductMotion';
 
 // Line icons for the capabilities band (inline so no icon dependency is added);
 // each inherits colour and 24px size from its chip.
@@ -173,16 +174,22 @@ export default async function HomePage({
 
           <div className="home-hero__visual relative min-h-[390px] lg:min-h-[620px]">
             <div className="home-hero__orbit" aria-hidden="true" />
-            <Image
+            <HeroProductMotion
               {...attrs('home.hero', 'image')}
-              src={text('home.hero', 'image', '/products/RAV-500-transparent.webp') || '/products/RAV-500-transparent.webp'}
-              alt={text('home.hero', 'imageAlt', `${t('model')} (RAV-500)`)}
-              width={1200}
-              height={924}
-              priority
-              sizes="(max-width: 1023px) 92vw, 55vw"
-              className="home-hero__product absolute inset-0 h-full w-full object-contain object-center"
-            />
+              label={l === 'he' ? 'סיבוב קל של תמונת העמדה. גררו או השתמשו בחצים.' : 'Tilt the product photo. Drag or use arrow keys.'}
+              hint={l === 'he' ? 'גררו כדי לסובב' : 'Drag to turn'}
+            >
+              <Image
+                src={text('home.hero', 'image', '/products/RAV-500-transparent.webp') || '/products/RAV-500-transparent.webp'}
+                alt={text('home.hero', 'imageAlt', `${t('model')} (RAV-500)`)}
+                width={1200}
+                height={924}
+                priority
+                sizes="(max-width: 1023px) 92vw, 55vw"
+                draggable={false}
+                className="home-hero__product absolute inset-0 h-full w-full object-contain object-center"
+              />
+            </HeroProductMotion>
             <p {...attrs('home.hero', 'delivery')} className="home-hero__delivery absolute bottom-2 end-0 max-w-[250px] border-s-2 border-softec bg-pure/90 py-2 ps-4 text-sm font-semibold leading-relaxed text-machine backdrop-blur dark:bg-surface/90 dark:text-fog">
               {text('home.hero', 'delivery', t('delivery'))}
             </p>

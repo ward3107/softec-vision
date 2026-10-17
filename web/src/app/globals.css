@@ -122,9 +122,6 @@ html[dir='rtl'] .home-hero__blueprint {
   border-radius: 50%;
   content: '';
   transform: rotate(-8deg);
-  /* The solid ring orbits too, counter to the dashed one and a touch slower, so
-     the two turn independently. Stopped by the global reduced-motion rule. */
-  animation: heroRing 52s linear infinite;
 }
 .home-hero__orbit {
   position: absolute;
@@ -132,12 +129,47 @@ html[dir='rtl'] .home-hero__blueprint {
   border: 1px dashed rgb(12 94 145 / 30%);
   border-radius: 50%;
   transform: rotate(13deg);
-  /* The dashed ellipse orbits the product forever — its dashes read as travelling
-     dots. Slow and decorative; the global reduced-motion rule stops it. */
-  animation: heroOrbit 40s linear infinite;
+}
+.home-hero__motion {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+.home-hero__motion-image {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  animation: heroProductTurn 9s ease-in-out infinite alternate;
+}
+.home-hero__motion:active {
+  cursor: grabbing;
+}
+.home-hero__motion--manual .home-hero__motion-image {
+  animation: none;
+  transform: perspective(1400px) rotateY(var(--hero-angle));
+}
+.home-hero__motion-hint {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 12px;
+  inset-inline-start: 12px;
+  padding: 5px 11px;
+  border: 1px solid rgb(12 94 145 / 16%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 88%);
+  color: #0C5E91;
+  font-size: 12px;
+  font-weight: 700;
+  pointer-events: none;
+}
+html.dark .home-hero__motion-hint {
+  background: rgb(15 31 44 / 88%);
+  color: #BFE3F8;
 }
 .home-hero__product {
-  z-index: 1;
   filter: drop-shadow(0 30px 28px rgb(12 32 48 / 18%));
   animation: heroProductSettle 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -148,13 +180,9 @@ html[dir='rtl'] .home-hero__blueprint {
   from { opacity: 0; transform: translate3d(0, 28px, 0) scale(0.96); }
   to { opacity: 1; transform: none; }
 }
-@keyframes heroOrbit {
-  from { transform: rotate(13deg); }
-  to { transform: rotate(373deg); }
-}
-@keyframes heroRing {
-  from { transform: rotate(-8deg); }
-  to { transform: rotate(-368deg); }
+@keyframes heroProductTurn {
+  from { transform: perspective(1400px) rotateY(-8deg); }
+  to { transform: perspective(1400px) rotateY(8deg); }
 }
 @media (max-width: 1023px) {
   .home-hero__blueprint,
@@ -172,6 +200,9 @@ html[dir='rtl'] .home-hero__blueprint {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .home-hero__motion:not(.home-hero__motion--manual) .home-hero__motion-image {
+    transform: none;
+  }
   .home-hero__product {
     animation: none;
   }
