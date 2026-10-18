@@ -13,12 +13,14 @@ const en = JSON.parse(fs.readFileSync(path.join(root, 'web', 'messages', 'en.jso
 test('home opens with the engineered product hero', () => {
   assert.match(home, /className="home-hero/);
   assert.match(home, /home-hero__blueprint/);
-  // The showpiece is the real product photo (static), so its colours match the
-  // catalog picture — not a grey 3D scan.
+  // Keep the real product photo, so its colours match the catalog picture.
   assert.match(home, /src=\{text\('home.hero', 'image', '\/products\/RAV-500-transparent\.webp'\)/);
+  assert.doesNotMatch(home, /<HeroProductMotion/);
   assert.match(home, /home-hero__product/);
   assert.match(css, /\.home-hero__blueprint/);
   assert.match(css, /@keyframes heroProductSettle/);
+  assert.doesNotMatch(css, /@keyframes heroProductTurn/);
+  assert.doesNotMatch(css, /@keyframes heroOrbit|@keyframes heroRing/);
 });
 
 test('hero gives international buyers a clear proposition and proof points', () => {
@@ -33,7 +35,7 @@ test('hero gives international buyers a clear proposition and proof points', () 
   assert.match(home, /t\('delivery'\)/);
 });
 
-test('hero motion has a reduced-motion fallback', () => {
+test('hero product entrance has a reduced-motion fallback', () => {
   assert.match(css, /prefers-reduced-motion:\s*reduce[\s\S]*\.home-hero__product/);
 });
 

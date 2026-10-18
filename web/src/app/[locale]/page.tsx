@@ -181,6 +181,7 @@ export default async function HomePage({
               height={924}
               priority
               sizes="(max-width: 1023px) 92vw, 55vw"
+              draggable={false}
               className="home-hero__product absolute inset-0 h-full w-full object-contain object-center"
             />
             <p {...attrs('home.hero', 'delivery')} className="home-hero__delivery absolute bottom-2 end-0 max-w-[250px] border-s-2 border-softec bg-pure/90 py-2 ps-4 text-sm font-semibold leading-relaxed text-machine backdrop-blur dark:bg-surface/90 dark:text-fog">

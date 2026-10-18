@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
-import { localized, type Product } from '@/lib/catalog';
+import { buildInquiryUrl, localized, type Product } from '@/lib/catalog';
 import type { AppLocale } from '@/i18n/routing';
+import ProductWhatsAppButton from './ProductWhatsAppButton';
 
 export default async function ProductCard({ product }: { product: Product }) {
   const locale = (await getLocale()) as AppLocale;
@@ -13,10 +14,10 @@ export default async function ProductCard({ product }: { product: Product }) {
     : `${name} (${product.code}) — ${t('productImage')}`;
 
   return (
-    <article className="h-full">
+    <article className="flex h-full flex-col overflow-hidden rounded-[20px] border border-line bg-pure shadow-[0_10px_35px_rgba(12,32,48,0.07)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-softec hover:shadow-[0_18px_45px_rgba(12,94,145,0.14)]">
       <Link
         href={`/product/${product.code}`}
-        className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-line bg-pure shadow-[0_10px_35px_rgba(12,32,48,0.07)] transition-[border-color,box-shadow,transform] hover:-translate-y-1 hover:border-softec hover:shadow-[0_18px_45px_rgba(12,94,145,0.14)]"
+        className="group flex flex-1 flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blueprint"
       >
         <div className="min-h-[96px] px-4 pb-3 pt-3 sm:min-h-[148px] sm:px-6 sm:pb-4 sm:pt-6">
           <span className="text-xs font-bold tracking-[0.08em] text-blueprint" dir="ltr">
@@ -35,6 +36,14 @@ export default async function ProductCard({ product }: { product: Product }) {
           />
         </div>
       </Link>
+      <div className="border-t border-line p-3 sm:p-4">
+        <ProductWhatsAppButton
+          href={buildInquiryUrl(product, locale)}
+          label={t('inquiry')}
+          code={product.code}
+          className="w-full"
+        />
+      </div>
     </article>
   );
 }

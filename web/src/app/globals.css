@@ -122,9 +122,6 @@ html[dir='rtl'] .home-hero__blueprint {
   border-radius: 50%;
   content: '';
   transform: rotate(-8deg);
-  /* The solid ring orbits too, counter to the dashed one and a touch slower, so
-     the two turn independently. Stopped by the global reduced-motion rule. */
-  animation: heroRing 52s linear infinite;
 }
 .home-hero__orbit {
   position: absolute;
@@ -132,12 +129,8 @@ html[dir='rtl'] .home-hero__blueprint {
   border: 1px dashed rgb(12 94 145 / 30%);
   border-radius: 50%;
   transform: rotate(13deg);
-  /* The dashed ellipse orbits the product forever — its dashes read as travelling
-     dots. Slow and decorative; the global reduced-motion rule stops it. */
-  animation: heroOrbit 40s linear infinite;
 }
 .home-hero__product {
-  z-index: 1;
   filter: drop-shadow(0 30px 28px rgb(12 32 48 / 18%));
   animation: heroProductSettle 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -147,14 +140,6 @@ html[dir='rtl'] .home-hero__blueprint {
 @keyframes heroProductSettle {
   from { opacity: 0; transform: translate3d(0, 28px, 0) scale(0.96); }
   to { opacity: 1; transform: none; }
-}
-@keyframes heroOrbit {
-  from { transform: rotate(13deg); }
-  to { transform: rotate(373deg); }
-}
-@keyframes heroRing {
-  from { transform: rotate(-8deg); }
-  to { transform: rotate(-368deg); }
 }
 @media (max-width: 1023px) {
   .home-hero__blueprint,

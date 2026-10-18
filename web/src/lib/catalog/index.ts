@@ -1,4 +1,5 @@
 import type { AppLocale } from '@/i18n/routing';
+import { localeUrl } from '@/lib/seo';
 import { CATEGORIES, WA_NUMBER } from './seed';
 import { loadProducts } from './source';
 import {
@@ -115,7 +116,7 @@ export function buildInquiryUrl(product: Product | null, locale: AppLocale): str
       ? 'Hello, I would like a quote for a project with Softec Vision.'
       : 'שלום, אשמח לקבל הצעת מחיר לפרויקט עם Softec Vision.'
     : locale === 'en'
-      ? `Hello, I would like details about ${localized(product.name, locale)} (${product.code}).`
-      : `שלום, אשמח לקבל פרטים על ${localized(product.name, locale)} (${product.code}).`;
+      ? `Hello, I am interested in ${localized(product.name, locale)} (model ${product.code}). Please send me more details.\n${localeUrl(locale, `/product/${encodeURIComponent(product.code)}`)}`
+      : `שלום, אני מעוניין/ת בדגם ${localized(product.name, locale)} (${product.code}). אשמח לקבל פרטים נוספים.\n${localeUrl(locale, `/product/${encodeURIComponent(product.code)}`)}`;
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 }
