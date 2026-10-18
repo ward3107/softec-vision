@@ -15,11 +15,11 @@ test('home opens with the engineered product hero', () => {
   assert.match(home, /home-hero__blueprint/);
   // Keep the real product photo, so its colours match the catalog picture.
   assert.match(home, /src=\{text\('home.hero', 'image', '\/products\/RAV-500-transparent\.webp'\)/);
-  assert.match(home, /<HeroProductMotion/);
+  assert.doesNotMatch(home, /<HeroProductMotion/);
   assert.match(home, /home-hero__product/);
   assert.match(css, /\.home-hero__blueprint/);
   assert.match(css, /@keyframes heroProductSettle/);
-  assert.match(css, /@keyframes heroProductTurn/);
+  assert.doesNotMatch(css, /@keyframes heroProductTurn/);
   assert.doesNotMatch(css, /@keyframes heroOrbit|@keyframes heroRing/);
 });
 
@@ -35,9 +35,8 @@ test('hero gives international buyers a clear proposition and proof points', () 
   assert.match(home, /t\('delivery'\)/);
 });
 
-test('hero motion has a reduced-motion fallback', () => {
+test('hero product entrance has a reduced-motion fallback', () => {
   assert.match(css, /prefers-reduced-motion:\s*reduce[\s\S]*\.home-hero__product/);
-  assert.match(css, /prefers-reduced-motion:\s*reduce[\s\S]*\.home-hero__motion:not\(\.home-hero__motion--manual\) \.home-hero__motion-image/);
 });
 
 test('mobile header keeps the logo and language control without horizontal overflow', () => {
