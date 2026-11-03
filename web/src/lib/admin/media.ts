@@ -29,13 +29,13 @@ async function readAndCheck(file: File): Promise<{ ok: true; bytes: Uint8Array; 
 }
 
 async function removeMediaRows(client: SupabaseClient, ids: string[], paths: string[]): Promise<void> {
-  if (paths.length > 0) {
-    const removed = await client.storage.from(BUCKET).remove(paths);
-    if (removed.error) throw new Error(removed.error.message);
-  }
   if (ids.length > 0) {
     const { error } = await client.from('product_media').delete().in('id', ids);
     if (error) throw new Error(error.message);
+  }
+  if (paths.length > 0) {
+    const removed = await client.storage.from(BUCKET).remove(paths);
+    if (removed.error) console.error('[media] file cleanup failed', removed.error.message);
   }
 }
 
@@ -130,8 +130,10 @@ export async function addGalleryImage(
 }
 
 /** Removes one gallery photo by its product_media row id. RLS: any staff member. */
-export async function removeGalleryImage(client: SupabaseClient, mediaId: string): Promise<void> {
-  const { data, error } = await client.from('product_media').select('storage_path').eq('id', mediaId).eq('kind', 'gallery').maybeSingle();
+export async function removeGalleryImage(client: SupabaseClient, code: string, mediaId: string): Promise<void> {
+  const productId = await findProductId(client, code);
+  if (!productId) return;
+  const { data, error } = await client.from('product_media').select('storage_path').eq('id', mediaId).eq('product_id', productId).eq('kind', 'gallery').maybeSingle();
   if (error) throw new Error(error.message);
   const row = data as { storage_path: string } | null;
   if (!row) return;
@@ -210,19 +212,20 @@ export async function getProductModel(client: SupabaseClient, code: string): Pro
 export async function getProductMedia(
   client: SupabaseClient,
   code: string
-): Promise<{ image: { path: string } | null; gallery: Array<{ id: string; path: string }> }> {
+): Promise<{ image: { path: string } | null; gallery: Array<{ id: string; path: string }>; videos: Array<{ id: string; path: string }> }> {
   const productId = await findProductId(client, code);
-  if (!productId) return { image: null, gallery: [] };
+  if (!productId) return { image: null, gallery: [], videos: [] };
   const { data, error } = await client
     .from('product_media')
     .select('id, storage_path, kind, sort')
     .eq('product_id', productId)
     .order('sort');
   if (error) throw new Error(error.message);
-  const rows = (data ?? []) as Array<{ id: string; storage_path: string; kind: 'image' | 'gallery'; sort: number }>;
+  const rows = (data ?? []) as Array<{ id: string; storage_path: string; kind: 'image' | 'gallery' | 'video'; sort: number }>;
   const image = rows.find((r) => r.kind === 'image');
   return {
     image: image ? { path: image.storage_path } : null,
+    videos: rows.filter((r) => r.kind === 'video').map((r) => ({ id: r.id, path: r.storage_path })),
     gallery: rows.filter((r) => r.kind === 'gallery').map((r) => ({ id: r.id, path: r.storage_path }))
   };
 }

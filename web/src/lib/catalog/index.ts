@@ -2,6 +2,7 @@ import type { AppLocale } from '@/i18n/routing';
 import { localeUrl } from '@/lib/seo';
 import { CATEGORIES, WA_NUMBER } from './seed';
 import { loadProducts } from './source';
+import { loadCategories } from './categories';
 import {
   isPlaceholder,
   localized,
@@ -14,23 +15,22 @@ import {
 export * from './types';
 
 /*
- * Catalog data access. Categories are defined in code; products come from
- * Supabase (published only, edited in the owner admin) once the catalog has
+ * Catalog data access. Categories and products come from Supabase (published only, edited in the owner admin) once the catalog has
  * been imported, and from the built-in catalog until then.
  */
 
 export async function getVisibleCategories(locale: AppLocale): Promise<Category[]> {
-  return CATEGORIES.filter((category) => category.visibleIn.includes(locale));
+  return (await loadCategories()).filter((category) => category.visibleIn.includes(locale));
 }
 
 export async function getCategory(key: string): Promise<Category | undefined> {
-  return CATEGORIES.find((category) => category.key === key);
+  return (await loadCategories()).find((category) => category.key === key);
 }
 
 /** Clamp arbitrary input to a valid, locale-appropriate catalog state. */
-export function normalizeCatalogState(input: Partial<CatalogState>): CatalogState {
+export function normalizeCatalogState(input: Partial<CatalogState>, catalog: Category[] = CATEGORIES): CatalogState {
   const lang: AppLocale = input.lang === 'en' ? 'en' : 'he';
-  const categories = CATEGORIES.filter((category) => category.visibleIn.includes(lang));
+  const categories = catalog.filter((category) => category.visibleIn.includes(lang));
   const requested = categories.find((category) => category.key === input.cat);
   const cat = requested?.key ?? 'all';
   const category = categories.find((item) => item.key === cat);
@@ -39,9 +39,10 @@ export function normalizeCatalogState(input: Partial<CatalogState>): CatalogStat
 }
 
 export async function filterProducts(input: Partial<CatalogState>): Promise<Product[]> {
-  const { lang, cat, sub } = normalizeCatalogState(input);
+  const categories = await loadCategories();
+  const { lang, cat, sub } = normalizeCatalogState(input, categories);
   const visibleKeys = new Set(
-    CATEGORIES.filter((category) => category.visibleIn.includes(lang)).map((category) => category.key)
+    categories.filter((category) => category.visibleIn.includes(lang)).map((category) => category.key)
   );
   return (await loadProducts()).filter(
     (product) =>
@@ -94,7 +95,7 @@ export async function getRelatedProducts(
   limit = 3
 ): Promise<Product[]> {
   const visibleKeys = new Set(
-    CATEGORIES.filter((category) => category.visibleIn.includes(locale)).map((category) => category.key)
+    (await loadCategories()).filter((category) => category.visibleIn.includes(locale)).map((category) => category.key)
   );
   const rank = (candidate: Product) => {
     if (product.sub && candidate.cat === product.cat && candidate.sub === product.sub) return 0;

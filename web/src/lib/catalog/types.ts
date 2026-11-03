@@ -37,6 +37,7 @@ export interface Product {
   gallery?: Array<{ src: string; alt: Localized }>;
   specs: SpecEntry[];
   model3d?: string;
+  videos?: string[];
   /** Ordered frames for a drag-to-rotate viewer (front-half only), when one exists. */
   spin?: string[];
 }

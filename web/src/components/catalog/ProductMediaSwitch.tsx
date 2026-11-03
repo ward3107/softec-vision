@@ -6,7 +6,7 @@ import ImageLightbox, { type LightboxLabels } from './ImageLightbox';
 import Product3DViewer from './Product3DViewer';
 import ProductSpin from './ProductSpin';
 
-type Mode = 'photos' | 'spin' | 'model';
+type Mode = 'photos' | 'spin' | 'model' | 'video';
 
 const frame = 'aspect-[4/3] overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface';
 const zoomable = `${frame} group block w-full cursor-zoom-in`;
@@ -25,8 +25,10 @@ export default function ProductMediaSwitch({
   gallery,
   model3d,
   spin,
-  labels
+  labels,
+  videos = []
 }: {
+  videos?: string[];
   image: string;
   alt: string;
   gallery: Array<{ src: string; alt: string }>;
@@ -34,6 +36,7 @@ export default function ProductMediaSwitch({
   spin?: string[];
   labels: {
     photos: string;
+    video: string;
     spin: string;
     spinHint: string;
     model: string;
@@ -48,6 +51,7 @@ export default function ProductMediaSwitch({
   const hasSpin = !!spin && spin.length > 1;
   const tabs: Array<{ id: Mode; label: string }> = [
     { id: 'photos', label: labels.photos },
+    ...(videos.length ? [{ id: 'video' as Mode, label: labels.video }] : []),
     ...(hasSpin ? [{ id: 'spin' as Mode, label: labels.spin }] : []),
     ...(model3d ? [{ id: 'model' as Mode, label: labels.model }] : [])
   ];
@@ -96,6 +100,7 @@ export default function ProductMediaSwitch({
             ))}
           </div>
           {mode === 'photos' && photos}
+          {mode === 'video' && <div className="grid gap-4">{videos.map(src => <video key={src} src={src} controls playsInline preload="metadata" className="w-full rounded border border-line" aria-label={labels.video} />)}</div>}
           {mode === 'spin' && hasSpin && (
             <>
               <div className={frame}>

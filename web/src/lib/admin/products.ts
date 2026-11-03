@@ -20,7 +20,7 @@ export async function listAdminProducts(client: SupabaseClient, locale: 'he' | '
   if (error) throw new Error(error.message);
   const rows = (data ?? []) as unknown as Array<DbProductRow & { status: ProductStatus }>;
 
-  if (rows.length === 0) {
+  if (rows.length === 0 && !(await isCatalogManaged(client))) {
     return PRODUCTS.map((product) => ({
       code: product.code,
       status: 'published',
@@ -58,6 +58,7 @@ export async function getAdminProduct(client: SupabaseClient, code: string): Pro
   if (error) throw new Error(error.message);
 
   if (!data) {
+    if (await isCatalogManaged(client)) return null;
     const product = PRODUCTS.find((p) => p.code === code);
     if (!product) return null;
     const specs = Object.fromEntries(Object.keys(SPEC_LABELS).map((key) => [key, { he: '', en: '' }]));
@@ -99,11 +100,12 @@ export async function getAdminProduct(client: SupabaseClient, code: string): Pro
 
 /** Save one product's editable fields (RLS: any staff member). */
 export async function saveProduct(client: SupabaseClient, code: string, form: ParsedProductForm): Promise<void> {
-  const { error } = await client.rpc('save_product', {
+  const { error } = await client.rpc(form.category ? 'save_product_details' : 'save_product', {
     p_code: code,
     p_status: form.status,
     p_translations: form.translations,
-    p_specs: form.specs
+    p_specs: form.specs,
+    ...(form.category ? { p_category: form.category, p_subcategory: form.subcategory ?? '' } : {})
   });
   if (error) throw new Error(error.message);
 }

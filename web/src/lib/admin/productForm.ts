@@ -13,6 +13,8 @@ export type ProductFormError = 'required' | 'tooLong' | 'placeholder' | 'bothLan
 
 export interface ParsedProductForm {
   status: ProductStatus;
+  category?: string;
+  subcategory?: string;
   translations: {
     he: { name: string; description: string; alt_text: string };
     en: { name: string; description: string; alt_text: string };
@@ -43,7 +45,7 @@ export const normalizeFieldValue = (value: string) => value.replace(/\s*\r?\n\s*
 /**
  * Validate and normalize a product-edit form. Placeholder text ("[to be
  * completed]") is refused outright so an unconfirmed value can never be
- * published by mistake; specs must be filled in both languages or neither.
+ * published by mistake; incomplete spec translations can be saved and completed later.
  */
 export function parseProductForm(
   fd: FormData,
@@ -80,18 +82,15 @@ export function parseProductForm(
     const en = field(`spec.${key}.en`, PRODUCT_LIMITS.spec, false);
     if (errors[`spec.${key}.he`] || errors[`spec.${key}.en`]) continue;
     if (he === '' && en === '') continue;
-    if (he === '' || en === '') {
-      errors[he === '' ? `spec.${key}.he` : `spec.${key}.en`] = 'bothLanguages';
-      continue;
-    }
+    // An untranslated specification stays hidden publicly until completed.
     specs.push({ key, value: { he, en } });
   }
 
   if (Object.keys(errors).length > 0) return { ok: false, errors };
-  return { ok: true, data: { status: status as ProductStatus, translations, specs } };
+  return { ok: true, data: { status: status as ProductStatus, translations, specs, category: String(fd.get('category') ?? '') || undefined, subcategory: String(fd.get('subcategory') ?? '') } };
 }
 
-const TEXT_FIELD_NAMES = ['status', 'name.he', 'name.en', 'description.he', 'description.en', 'alt.he', 'alt.en'] as const;
+const TEXT_FIELD_NAMES = ['status', 'category', 'subcategory', 'name.he', 'name.en', 'description.he', 'description.en', 'alt.he', 'alt.en'] as const;
 
 /**
  * Echo back whatever was submitted (unvalidated), so a rejected submission
@@ -107,6 +106,8 @@ export function valuesFromParsedForm(data: ParsedProductForm, specKeys: string[]
   const bySpec = Object.fromEntries(data.specs.map((s) => [s.key, s.value]));
   const values: Record<string, string> = {
     status: data.status,
+    category: data.category ?? '',
+    subcategory: data.subcategory ?? '',
     'name.he': data.translations.he.name,
     'name.en': data.translations.en.name,
     'description.he': data.translations.he.description,

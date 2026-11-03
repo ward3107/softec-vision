@@ -12,7 +12,7 @@ import {
   localized,
   publicSpecs
 } from '@/lib/catalog';
-import { CATEGORIES } from '@/lib/catalog/seed';
+import { getCategory } from '@/lib/catalog';
 import { pageMetadata, SITE_URL, BRAND } from '@/lib/seo';
 import ProductCard from '@/components/catalog/ProductCard';
 import ProductScroller from '@/components/catalog/ProductScroller';
@@ -38,7 +38,7 @@ export async function generateMetadata({
   const product = await getProduct(code);
   if (!product) return {};
   const l = locale as AppLocale;
-  const cat = CATEGORIES.find((c) => c.key === product.cat);
+  const cat = await getCategory(product.cat);
   return pageMetadata({
     locale: l,
     path: `/product/${product.code}`,
@@ -66,7 +66,8 @@ export default async function ProductPage({
   const tn = await getTranslations('nav');
   const related = await getRelatedProducts(product, l);
   const name = localized(product.name, l);
-  const category = CATEGORIES.find((c) => c.key === product.cat);
+  const category = await getCategory(product.cat);
+  if (!category || !category.visibleIn.includes(l)) notFound();
 
   const productLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -109,6 +110,7 @@ export default async function ProductPage({
       <div className="mt-6 grid gap-8 lg:grid-cols-2">
         <div className="reveal reveal-left">
           <ProductMediaSwitch
+            videos={product.videos}
             image={product.image}
             alt={primaryAlt}
             gallery={gallery.map((item) => ({ src: item.src, alt: localized(item.alt, l) }))}
@@ -116,6 +118,7 @@ export default async function ProductPage({
             spin={product.spin}
             labels={{
               photos: t('viewPhotos'),
+              video: t('viewVideos'),
               spin: t('viewSpin'),
               spinHint: t('spinHint'),
               model: t('view3D'),

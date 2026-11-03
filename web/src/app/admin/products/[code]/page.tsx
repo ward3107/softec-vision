@@ -4,7 +4,9 @@ import { CANONICAL_SPEC_KEYS, getAdminProduct } from '@/lib/admin/products';
 import { getProductMedia, getProductModel } from '@/lib/admin/media';
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
-import { publicMediaUrl } from '@/lib/catalog/media';
+import { listCategories } from '@/lib/catalog/categories';
+import DeleteProductForm from './DeleteProductForm';
+import { publicMediaUrl, publicVideoUrl } from '@/lib/catalog/media';
 import { PRODUCTS, SPEC_LABELS } from '@/lib/catalog/seed';
 import { saveProductAction } from '../../actions';
 import ProductForm from './ProductForm';
@@ -37,7 +39,8 @@ export default async function AdminProductEditPage({
 }) {
   const { code } = await params;
   const { media } = await searchParams;
-  const { client } = await requireStaff();
+  const { client, access } = await requireStaff();
+  const categories = await listCategories(client);
   const product = await getAdminProduct(client, code);
 
   if (!product) {
@@ -88,8 +91,9 @@ export default async function AdminProductEditPage({
             {banner}
           </p>
         )}
-        <ProductMediaForm code={code} image={image} gallery={gallery} model={model} />
-        <ProductForm product={product} specFields={specFields} action={action} />
+        <ProductMediaForm videos={currentMedia.videos.map(item => ({ id: item.id, url: publicVideoUrl(supabaseUrl!, item.path) }))} code={code} image={image} gallery={gallery} model={model} />
+        <ProductForm categories={categories} product={product} specFields={specFields} action={action} />
+        {access === 'admin' && <DeleteProductForm code={code} />}
       </div>
     </>
   );

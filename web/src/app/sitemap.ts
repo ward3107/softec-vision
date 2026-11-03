@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { routing, type AppLocale } from '@/i18n/routing';
 import { localeUrl } from '@/lib/seo';
 import { getAllProducts } from '@/lib/catalog';
-import { CATEGORIES } from '@/lib/catalog/seed';
+import { loadCategories } from '@/lib/catalog/categories';
 import { BLOG_POSTS } from '@/lib/blog/posts';
 
 /** Static routes present in every locale, with change/priority hints. */
@@ -27,6 +27,7 @@ function languagesFor(path: string, locales: readonly AppLocale[]): Record<strin
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const entries: MetadataRoute.Sitemap = [];
+  const categories = await loadCategories();
 
   for (const { path, changeFrequency, priority } of STATIC) {
     const languages = languagesFor(path, routing.locales);
@@ -36,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Categories — only in the locales they are shown in.
-  for (const category of CATEGORIES) {
+  for (const category of categories) {
     const path = `/catalog/${category.key}`;
     const languages = languagesFor(path, category.visibleIn);
     for (const locale of category.visibleIn) {
@@ -47,7 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Products — one entry per locale the product's category is visible in.
   for (const product of await getAllProducts()) {
     const path = `/product/${product.code}`;
-    const productLocales = CATEGORIES.find((c) => c.key === product.cat)?.visibleIn ?? routing.locales;
+    const productLocales = categories.find((c) => c.key === product.cat)?.visibleIn ?? [];
     const languages = languagesFor(path, productLocales);
     for (const locale of productLocales) {
       entries.push({ url: localeUrl(locale, path), lastModified: now, changeFrequency: 'monthly', priority: 0.6, alternates: { languages } });

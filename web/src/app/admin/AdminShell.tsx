@@ -7,7 +7,8 @@ import ThemeToggle from '@/components/ThemeToggle';
 import { signOut } from './actions';
 import { AdminIcons, type AdminIconKey } from './icons';
 
-function activeFromPath(pathname: string): AdminIconKey {
+function activeFromPath(pathname: string): AdminIconKey | 'categories' {
+  if (pathname.startsWith('/admin/categories')) return 'categories';
   if (pathname.startsWith('/admin/inquiries')) return 'inquiries';
   if (pathname.startsWith('/admin/products')) return 'products';
   if (pathname.startsWith('/admin/content')) return 'content';
@@ -48,6 +49,7 @@ export default function AdminShell({ email, children }: { email?: string | null;
             {tab('dashboard', '/admin')}
             {tab('inquiries', '/admin/inquiries')}
             {tab('products', '/admin/products')}
+            <Link href="/admin/categories" aria-current={pathname.startsWith('/admin/categories') ? 'page' : undefined} className="content-center px-3 text-sm font-semibold text-blueprint dark:text-skyline">תתי־קטגוריות</Link>
             {tab('content', '/admin/content')}
           </nav>
           <div className="ms-auto flex flex-wrap items-center gap-3 text-sm">

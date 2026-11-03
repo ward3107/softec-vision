@@ -6,6 +6,7 @@ import type { AdminProductDetail, ProductStatus } from '@/lib/admin/productForm'
 import { PRODUCT_STATUSES } from '@/lib/admin/productForm';
 import { S } from '@/lib/admin/strings';
 import type { Localized } from '@/lib/catalog/types';
+import type { CategoryRow } from '@/lib/catalog/categories';
 import type { SaveProductState } from '../../actions';
 
 const input =
@@ -83,8 +84,10 @@ const fieldId = (name: string) => `f-${name.replace(/\./g, '-')}`;
 export default function ProductForm({
   product,
   specFields,
-  action
+  action,
+  categories
 }: {
+  categories: CategoryRow[];
   product: AdminProductDetail;
   specFields: Array<{ key: string; label: Localized }>;
   action: (state: SaveProductState, fd: FormData) => Promise<SaveProductState>;
@@ -96,6 +99,7 @@ export default function ProductForm({
   // failure never overwrites what the owner typed with this (or with a
   // meanwhile-refreshed server copy) — only a successful save does.
   const [initial] = useState(product);
+  const [category, setCategory] = useState(product.cat);
 
   // Bump whenever a new submission result arrives, so the (uncontrolled)
   // fields below remount and pick up their new value.
@@ -131,6 +135,16 @@ export default function ProductForm({
         </p>
       )}
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label>קטגוריה ראשית<select name="category" value={category} onChange={event => setCategory(event.target.value)} className={input}>
+          {categories.filter(item => !item.parent_id).map(item => <option key={item.id} value={item.slug}>{item.category_translations.find(t => t.locale === 'he')?.name ?? item.slug}</option>)}
+        </select></label>
+        <label>תת־קטגוריה<select key={category} name="subcategory" defaultValue={category === product.cat ? product.sub ?? '' : ''} className={input}>
+          <option value="">ללא תת־קטגוריה</option>
+          {categories.filter(item => item.parent_id === categories.find(parent => parent.slug === category)?.id).map(item => <option key={item.id} value={item.slug}>{item.category_translations.find(t => t.locale === 'he')?.name ?? item.slug}</option>)}
+        </select></label>
+      </div>
+      {state.error && <p role="alert" className="text-red-700 dark:text-red-400">{state.error}</p>}
       <div>
         <label htmlFor="f-status" className="block text-sm font-semibold">
           {S.products.status}

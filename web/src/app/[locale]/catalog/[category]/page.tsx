@@ -49,7 +49,7 @@ export default async function CategoryPage({
   const cat = visible.find((c) => c.key === category);
   if (!cat) notFound();
 
-  const state = normalizeCatalogState({ lang: l, cat: category, sub });
+  const state = normalizeCatalogState({ lang: l, cat: category, sub }, visible);
   const products = await filterProducts(state);
   const categoryProducts = await filterProducts({ lang: l, cat: category, sub: 'all' });
   const subImage = (subKey: string) => categoryProducts.find((p) => p.sub === subKey)?.image;
