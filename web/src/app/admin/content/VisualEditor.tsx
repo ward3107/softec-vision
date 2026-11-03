@@ -149,6 +149,12 @@ export default function VisualEditor({ initial, assets, previewPath = '/admin/co
     const click = (event: MouseEvent) => {
       const target = event.target as Element;
       const anchor = target.closest<HTMLAnchorElement>('a');
+      const switchLocale = anchor?.closest('header') ? anchor.lang : '';
+      if (switchLocale === 'he' || switchLocale === 'en') {
+        event.preventDefault(); event.stopPropagation();
+        setLocale(switchLocale); setReady(false); setFrameError(false);
+        return;
+      }
       if (preview) {
         if (anchor) {
           event.preventDefault(); event.stopPropagation();
