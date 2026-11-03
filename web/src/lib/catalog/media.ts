@@ -19,3 +19,7 @@ export function sanitizeCodeForPath(code: string): string {
   if (!cleaned) throw new Error('invalid product code');
   return cleaned;
 }
+
+export function publicVideoUrl(supabaseUrl: string, storagePath: string): string {
+  return `${supabaseUrl.replace(/\/$/, '')}/storage/v1/object/public/product-videos/${storagePath}`;
+}

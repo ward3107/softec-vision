@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { parseStatusUpdate } from '@/lib/admin/inquiries';
 import {
@@ -96,6 +96,7 @@ export async function eraseInquiry(fd: FormData) {
 }
 
 export type SaveProductState = {
+  error?: string;
   errors?: Record<string, string>;
   /** What was submitted, echoed back so a rejected form never loses the owner's edits. */
   values?: Record<string, string>;
@@ -110,8 +111,9 @@ export async function saveProductAction(
   const { client } = await requireStaff();
   const parsed = parseProductForm(fd, CANONICAL_SPEC_KEYS);
   if (!parsed.ok) return { errors: parsed.errors, values: echoFormValues(fd, CANONICAL_SPEC_KEYS) };
-  await saveProduct(client, code, parsed.data);
-  revalidateTag(CATALOG_TAG, 'max');
+  try { await saveProduct(client, code, parsed.data); }
+  catch { return { error: 'השמירה נכשלה. בדקו את החיבור ואת שיוך הקטגוריות ונסו שוב.', values: echoFormValues(fd, CANONICAL_SPEC_KEYS) }; }
+  updateTag(CATALOG_TAG);
   revalidatePath('/admin/products');
   revalidatePath(`/admin/products/${code}`);
   return { saved: true, values: valuesFromParsedForm(parsed.data, CANONICAL_SPEC_KEYS) };
@@ -121,13 +123,13 @@ export async function saveProductAction(
 export async function importCatalogAction() {
   const { client } = await requireStaff({ admin: true });
   const added = await importBuiltInCatalog(client);
-  revalidateTag(CATALOG_TAG, 'max');
+  updateTag(CATALOG_TAG);
   revalidatePath('/admin/products');
   redirect(`/admin/products?imported=${added}`);
 }
 
 function revalidateProductMedia(code: string) {
-  revalidateTag(CATALOG_TAG, 'max');
+  updateTag(CATALOG_TAG);
   revalidatePath('/admin/products');
   revalidatePath(`/admin/products/${code}`);
 }
@@ -162,7 +164,7 @@ export async function addGalleryImageAction(code: string, fd: FormData) {
 export async function removeGalleryImageAction(code: string, fd: FormData) {
   const { client } = await requireStaff();
   const mediaId = String(fd.get('mediaId') ?? '');
-  if (/^[0-9a-f-]{36}$/i.test(mediaId)) await removeGalleryImage(client, mediaId);
+  if (/^[0-9a-f-]{36}$/i.test(mediaId)) await removeGalleryImage(client, code, mediaId);
   revalidateProductMedia(code);
   redirect(`/admin/products/${code}?media=removed`);
 }
@@ -182,4 +184,29 @@ export async function removeProductModelAction(code: string) {
   await removeProductModel(client, code);
   revalidateProductMedia(code);
   redirect(`/admin/products/${code}?media=modelRemoved`);
+}
+
+export async function deleteProductAction(code: string, _state: { error?: string }, fd: FormData) {
+  const { client } = await requireStaff({ admin: true });
+  if (String(fd.get('confirmCode') ?? '').trim() !== code) return { error: 'להשלמת המחיקה יש להקליד את קוד המוצר.' };
+  const { error } = await client.rpc('delete_catalog_product', { p_code: code });
+  if (error) return { error: 'מחיקת המוצר נכשלה. רעננו את העמוד ונסו שוב.' };
+  updateTag(CATALOG_TAG);
+  revalidatePath('/admin/products');
+  revalidatePath(`/admin/products/${code}`);
+  redirect('/admin/products?deleted=1');
+}
+
+export async function removeProductVideoAction(code: string, fd: FormData) {
+  const { client } = await requireStaff();
+  const { data: product } = await client.from('products').select('id').eq('code', code).maybeSingle();
+  if (!product) return;
+  const { data: media, error } = await client.from('product_media').select('storage_path').eq('id', String(fd.get('mediaId'))).eq('product_id', product.id).eq('kind', 'video').maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!media) return;
+  const removed = await client.from('product_media').delete().eq('id', String(fd.get('mediaId'))).eq('product_id', product.id);
+  if (removed.error) throw new Error(removed.error.message);
+  const cleanup = await client.storage.from('product-videos').remove([media.storage_path]);
+  if (cleanup.error) console.error('[media] video cleanup failed', cleanup.error.message);
+  revalidateProductMedia(code);
 }

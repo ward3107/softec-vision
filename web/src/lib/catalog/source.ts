@@ -60,5 +60,6 @@ function getManagedLoader() {
 
 /** Every product the public site may show (all categories, all locales). */
 export function loadProducts(): Promise<Product[]> {
-  return resolveProducts(getManagedLoader(), PRODUCTS);
+  const loader = getManagedLoader();
+  return resolveProducts(loader, loader ? [] : PRODUCTS);
 }

@@ -28,3 +28,5 @@ done
 echo "applying seed.sql"
 psql_run -f seed.sql
 psql_run -f tests/rls.test.sql
+
+psql_run -f tests/catalog-admin.test.sql

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { isCatalogManaged, listAdminProducts } from '@/lib/admin/products';
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
-import { CATEGORIES } from '@/lib/catalog/seed';
+import { listCategories } from '@/lib/catalog/categories';
 import { importCatalogAction } from '../actions';
 
 export const dynamic = 'force-dynamic';
@@ -16,16 +16,17 @@ const statusBadge: Record<string, string> = {
 export default async function AdminProductsPage({
   searchParams
 }: {
-  searchParams: Promise<{ imported?: string }>;
+  searchParams: Promise<{ imported?: string; deleted?: string }>;
 }) {
-  const { imported } = await searchParams;
+  const { imported, deleted } = await searchParams;
   const { client, access } = await requireStaff();
-  const [managed, rows] = await Promise.all([isCatalogManaged(client), listAdminProducts(client)]);
+  const [managed, rows, categories] = await Promise.all([isCatalogManaged(client), listAdminProducts(client), listCategories(client)]);
 
   return (
     <>
       <h1 className="text-2xl font-extrabold">{S.products.title}</h1>
 
+      {deleted && <p role="status" className="mt-3">המוצר נמחק מהקטלוג.</p>}
       {imported !== undefined && (
         <p role="status" className="mt-3 rounded border border-line bg-pure p-3 text-sm dark:border-white/10 dark:bg-surface">
           ✓ {S.products.import.done(Number(imported) || 0)}
@@ -84,7 +85,7 @@ export default async function AdminProductsPage({
                     </Link>
                   </td>
                   <td className="px-3 py-3">{row.name}</td>
-                  <td className="px-3 py-3">{CATEGORIES.find((c) => c.key === row.category)?.label.he ?? row.category}</td>
+                  <td className="px-3 py-3">{categories.find((c) => c.slug === row.category)?.category_translations.find(t => t.locale === 'he')?.name ?? row.category}</td>
                   <td className="px-3 py-3">
                     <span className={`inline-block rounded px-2 py-0.5 text-xs font-bold ${statusBadge[row.status]}`}>
                       {S.products.statuses[row.status]}

@@ -1,16 +1,13 @@
+import MediaUploader from './MediaUploader';
 import Image from 'next/image';
 import { S } from '@/lib/admin/strings';
 import {
-  addGalleryImageAction,
+  removeProductVideoAction,
   removeGalleryImageAction,
   removeProductImageAction,
-  removeProductModelAction,
-  uploadProductImageAction,
-  uploadProductModelAction
+  removeProductModelAction
 } from '../../actions';
 
-const fileInput =
-  'block w-full text-sm file:me-3 file:min-h-[44px] file:rounded file:border file:border-line file:bg-pure file:px-4 file:font-semibold file:text-graphite dark:file:border-white/10 dark:file:bg-surface dark:file:text-ink';
 const removeButton =
   'inline-flex min-h-[36px] items-center rounded border border-line px-3 text-sm font-semibold hover:border-machine dark:border-white/10 dark:hover:border-white/25';
 
@@ -21,18 +18,17 @@ export default function ProductMediaForm({
   code,
   image,
   gallery,
-  model
+  model,
+  videos
 }: {
+  videos: Array<{ id: string; url: string }>;
   code: string;
   image: { url: string; isBuiltIn: boolean };
   gallery: Array<{ id: string; url: string }>;
   model: { hasModel: boolean };
 }) {
-  const upload = uploadProductImageAction.bind(null, code);
   const remove = removeProductImageAction.bind(null, code);
-  const addGallery = addGalleryImageAction.bind(null, code);
   const removeGallery = removeGalleryImageAction.bind(null, code);
-  const uploadModel = uploadProductModelAction.bind(null, code);
   const removeModel = removeProductModelAction.bind(null, code);
 
   return (
@@ -53,15 +49,7 @@ export default function ProductMediaForm({
             <p className="mt-1 text-xs text-machine dark:text-fog">{image.isBuiltIn ? M.builtIn : M.current}</p>
           </div>
           <div className="grid gap-2">
-            <form action={upload} className="flex flex-wrap items-center gap-2">
-              <input type="file" name="file" accept="image/jpeg,image/png,image/webp" required className={fileInput} />
-              <button
-                type="submit"
-                className="inline-flex min-h-[44px] items-center rounded border border-blueprint bg-blueprint px-4 text-sm font-bold text-pure hover:bg-graphite"
-              >
-                {image.isBuiltIn ? M.upload : M.replace}
-              </button>
-            </form>
+            <MediaUploader code={code} kind="image" label={image.isBuiltIn ? M.upload : M.replace} />
             {!image.isBuiltIn && (
               <form action={remove}>
                 <button type="submit" className={removeButton}>
@@ -73,6 +61,15 @@ export default function ProductMediaForm({
         </div>
       </div>
 
+      <div className="grid gap-3">
+        <h2 className="font-bold">סרטוני מוצר</h2>
+        <p className="text-sm">קבצי MP4 או WebM. אפשר להוסיף כמה סרטונים לאותו מוצר.</p>
+        {videos.map(video => <div key={video.id}>
+          <video src={video.url} controls preload="metadata" className="max-h-64 w-full rounded" aria-label="סרטון מוצר" />
+          <form action={removeProductVideoAction.bind(null, code)}><input type="hidden" name="mediaId" value={video.id} /><button className={removeButton}>הסרת הסרטון</button></form>
+        </div>)}
+        <MediaUploader code={code} kind="video" label="הוספת סרטון" />
+      </div>
       <div>
         <p className="text-sm font-semibold">{M.gallerySection}</p>
         <p className="text-sm text-machine dark:text-fog">{M.galleryHelp}</p>
@@ -95,15 +92,7 @@ export default function ProductMediaForm({
             ))}
           </ul>
         )}
-        <form action={addGallery} className="mt-3 flex flex-wrap items-center gap-2">
-          <input type="file" name="file" accept="image/jpeg,image/png,image/webp" required className={fileInput} />
-          <button
-            type="submit"
-            className="inline-flex min-h-[44px] items-center rounded border border-line px-4 text-sm font-bold hover:border-machine dark:border-white/10 dark:hover:border-white/25"
-          >
-            {M.addToGallery}
-          </button>
-        </form>
+        <MediaUploader code={code} kind="gallery" label={M.addToGallery} />
       </div>
 
       <div>
@@ -111,15 +100,7 @@ export default function ProductMediaForm({
         <p className="text-sm text-machine dark:text-fog">{M3.help}</p>
         <p className="mt-2 text-sm">{model.hasModel ? M3.current : M3.none}</p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <form action={uploadModel} className="flex flex-wrap items-center gap-2">
-            <input type="file" name="file" accept=".glb,model/gltf-binary" required className={fileInput} />
-            <button
-              type="submit"
-              className="inline-flex min-h-[44px] items-center rounded border border-line px-4 text-sm font-bold hover:border-machine dark:border-white/10 dark:hover:border-white/25"
-            >
-              {model.hasModel ? M3.replace : M3.upload}
-            </button>
-          </form>
+          <MediaUploader code={code} kind="model" label={M3.upload} />
           {model.hasModel && (
             <form action={removeModel}>
               <button type="submit" className={removeButton}>

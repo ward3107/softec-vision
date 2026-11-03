@@ -1,4 +1,4 @@
-import { publicMediaUrl, publicModelUrl } from './media';
+import { publicMediaUrl, publicModelUrl, publicVideoUrl } from './media';
 import { SPEC_LABELS } from './seed';
 import { isPlaceholder, type Category, type Localized, type Product, type SpecEntry } from './types';
 
@@ -25,7 +25,7 @@ export const PRODUCT_SELECT = [
 
 export interface DbProductMediaRow {
   storage_path: string;
-  kind: 'image' | 'gallery';
+  kind: 'image' | 'gallery' | 'video';
   sort: number;
   alt_translations: Partial<Localized> | null;
 }
@@ -106,6 +106,7 @@ export function rowsToProducts(
       image,
       imageAlt: alt.he || alt.en ? alt : undefined,
       gallery,
+      videos: supabaseUrl ? media.filter(m => m.kind === 'video').sort((a, b) => a.sort - b.sort).map(m => publicVideoUrl(supabaseUrl, m.storage_path)) : [],
       specs,
       // An owner-uploaded model (via /admin/products/[code]) replaces the built-in one, same as the photos above.
       model3d: supabaseUrl && row.model_3d_url ? publicModelUrl(supabaseUrl, row.model_3d_url) : base.model3d,

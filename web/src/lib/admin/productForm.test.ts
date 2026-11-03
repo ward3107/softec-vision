@@ -57,11 +57,9 @@ describe('parseProductForm', () => {
     expect(result.errors).toEqual({ 'name.he': 'required', 'description.en': 'required' });
   });
 
-  it('requires a spec value in both languages or neither', () => {
+  it('saves an incomplete translation without blocking edits in the other language', () => {
     const result = parseProductForm(form({ 'spec.dimensions.he': '100×60 ס"מ' }), SPEC_KEYS);
-    expect(result.ok).toBe(false);
-    if (result.ok) return;
-    expect(result.errors).toEqual({ 'spec.dimensions.en': 'bothLanguages' });
+    expect(result.ok && result.data.specs).toEqual([{ key: 'dimensions', value: { he: '100×60 ס\"מ', en: '' } }]);
   });
 
   it('refuses placeholder text so unconfirmed values are never published', () => {
