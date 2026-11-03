@@ -101,6 +101,16 @@ describe('rowsToProducts', () => {
     expect(product.gallery).toEqual(base.gallery);
   });
 
+  it('renders a database-only product after its primary image is uploaded', () => {
+    const products = rowsToProducts([row({
+      code: 'NEW-PRODUCT',
+      product_media: [{ storage_path: 'NEW-PRODUCT/photo.jpg', kind: 'image', sort: 0, alt_translations: null }]
+    })], [], undefined, 'https://proj.supabase.co');
+    expect(products).toHaveLength(1);
+    expect(products[0].code).toBe('NEW-PRODUCT');
+    expect(products[0].image).toContain('/NEW-PRODUCT/photo.jpg');
+  });
+
   it('prefers an owner-uploaded primary image over the built-in one', () => {
     const [product] = rowsToProducts(
       [
