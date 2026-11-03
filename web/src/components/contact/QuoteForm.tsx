@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { useConsent } from '@/components/consent/ConsentProvider';
-import { countryOptions } from '@/lib/inquiry/countries';
+import type { CountryOption } from '@/lib/inquiry/countries';
 import { MAX_REQUIREMENTS, PROJECT_TYPES, validateInquiry, type InquiryErrors } from '@/lib/inquiry/schema';
 
 type ProductOption = { code: string; name: string };
@@ -52,8 +52,10 @@ export default function QuoteForm({
   products,
   defaultProduct,
   onlineEnabled,
-  waNumber
+  waNumber,
+  countries
 }: {
+  countries: CountryOption[];
   products: ProductOption[];
   defaultProduct?: string;
   onlineEnabled: boolean;
@@ -62,7 +64,6 @@ export default function QuoteForm({
   const t = useTranslations('form');
   const locale = useLocale() as 'he' | 'en';
   const { track } = useConsent();
-  const countries = useMemo(() => countryOptions(locale), [locale]);
   const known = (code?: string | null) => Boolean(code && products.some((p) => p.code === code));
 
   const [values, setValues] = useState<Values>({ ...EMPTY, product: known(defaultProduct) ? defaultProduct! : '' });

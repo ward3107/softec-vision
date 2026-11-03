@@ -148,8 +148,19 @@ export default function VisualEditor({ initial, assets, previewPath = '/admin/co
     });
     const click = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (target.closest('a,form')) { event.preventDefault(); event.stopPropagation(); }
-      if (preview) return;
+      const anchor = target.closest<HTMLAnchorElement>('a');
+      if (preview) {
+        if (anchor) {
+          event.preventDefault(); event.stopPropagation();
+          const destination = new URL(anchor.href);
+          if (destination.origin === window.location.origin && destination.pathname === doc.location.pathname && destination.hash) {
+            doc.getElementById(decodeURIComponent(destination.hash.slice(1)))?.scrollIntoView({ behavior: 'smooth' });
+          } else if (['https:', 'http:', 'mailto:', 'tel:'].includes(destination.protocol)) {
+            window.open(destination.href, '_blank', 'noopener,noreferrer');
+          }
+        }
+        return;
+      }
       event.preventDefault(); event.stopPropagation();
       const block = target.closest<HTMLElement>('[data-cms-block]');
       const field = target.closest<HTMLElement>('[data-cms-field]');
@@ -270,7 +281,7 @@ export default function VisualEditor({ initial, assets, previewPath = '/admin/co
       <div className={styles.previewArea}>
         <div className={styles.previewBar}><span><span className={styles.liveDot} />{preview ? 'תצוגה לפני פרסום' : 'תצוגת עריכה'}</span><span dir="ltr">{device === 'mobile' ? '390' : '1280'}px · {Math.round(scale * 100)}%</span></div>
         <div className={styles.canvas} ref={canvas}>
-          {!ready && <div className={styles.loading} role="status">{frameError ? <><p>התצוגה לא נטענה. ייתכן שהחיבור לחשבון פג.</p><button className={styles.secondary} onClick={() => { setFrameVersion(v => v + 1); setFrameError(false); }}>ניסיון נוסף</button><a href="/admin/login" target="_blank" rel="noopener noreferrer">כניסה לחשבון</a></> : <><Loader2 className={styles.spin} size={24} />טוען את האתר...</>}</div>}
+          {!ready && <div className={styles.loading} role="status">{frameError ? <><p>התצוגה לא נטענה. ייתכן שהחיבור לחשבון פג.</p><button className={styles.secondary} onClick={() => { setReady(false); setFrameVersion(v => v + 1); setFrameError(false); }}>ניסיון נוסף</button><a href="/admin/login" target="_blank" rel="noopener noreferrer">כניסה לחשבון</a></> : <><Loader2 className={styles.spin} size={24} />טוען את האתר...</>}</div>}
           <div className={styles.frameSize} style={{ width: frameWidth * scale, height: frameHeight * scale, visibility: ready ? 'visible' : 'hidden' }}>
             <iframe key={`${locale}-${frameVersion}`} ref={frame} title={`תצוגת עמוד הבית - ${locale}`} src={`${previewPath}?locale=${locale}`} onLoad={loadFrame} style={{ width: frameWidth, height: frameHeight, transform: `scale(${scale})` }} />
           </div>
