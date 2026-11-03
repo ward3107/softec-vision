@@ -6,6 +6,7 @@ import { WA_NUMBER } from '@/lib/catalog/seed';
 import { pageMetadata } from '@/lib/seo';
 import { getInquiryConfig } from '@/lib/inquiry/config';
 import ContactWhatsAppLink from '@/components/contact/ContactWhatsAppLink';
+import { countryOptions } from '@/lib/inquiry/countries';
 import QuoteForm from '@/components/contact/QuoteForm';
 
 const PHONE = '03-6968777';
@@ -78,7 +79,7 @@ export default async function ContactPage({
         <div>
           <h2 className="text-lg font-bold">{tf('title')}</h2>
           <p className="mb-5 mt-1 text-sm text-machine dark:text-fog">{tf(onlineEnabled ? 'intro' : 'introOffline')}</p>
-          <QuoteForm waNumber={WA_NUMBER} products={products} onlineEnabled={onlineEnabled} />
+          <QuoteForm countries={countryOptions(l)} waNumber={WA_NUMBER} products={products} onlineEnabled={onlineEnabled} />
         </div>
 
         {/* Contact details */}

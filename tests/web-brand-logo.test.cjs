@@ -46,7 +46,7 @@ test('footer renders the supplied Vasia dev. creator mark with verified contact 
   assert.match(signature, /\/brand\/vasia-dev-signature\.png/);
   assert.match(signature, /https:\/\/www\.vasia\.dev\//);
   assert.match(signature, /mailto:wasya92@gmail\.com/);
-  assert.match(signature, /https:\/\/wa\.me\/972534260632/);
+  assert.match(signature, /https:\/\/wa\.me\/972544513141/);
   assert.match(signature, /https:\/\/www\.facebook\.com\/profile\.php\?id=61594997720112/);
   assert.match(signature, /https:\/\/www\.instagram\.com\/vasia\.dev\//);
   assert.match(signature, /https:\/\/github\.com\/ward3107/);
