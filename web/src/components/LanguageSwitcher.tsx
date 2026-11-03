@@ -17,7 +17,7 @@ export default function LanguageSwitcher() {
 
   return (
     <Link
-      href={pathname}
+      href={pathname.startsWith('/admin/') ? '/' : pathname}
       locale={other}
       lang={other}
       aria-label={t('switchTo')}
