@@ -44,7 +44,11 @@ export default function ProductMediaForm({
         <div className="mt-3 flex flex-wrap items-end gap-4">
           <div>
             <span className="block overflow-hidden rounded border border-line bg-pure dark:border-white/10 dark:bg-surface">
-              <Image src={image.url} alt="" width={160} height={120} className="h-[120px] w-[160px] object-contain" />
+              {image.url ? (
+                <Image src={image.url} alt="" width={160} height={120} className="h-[120px] w-[160px] object-contain" />
+              ) : (
+                <span className="flex h-[120px] w-[160px] items-center justify-center text-sm">טרם הועלתה תמונה</span>
+              )}
             </span>
             <p className="mt-1 text-xs text-machine dark:text-fog">{image.isBuiltIn ? M.builtIn : M.current}</p>
           </div>

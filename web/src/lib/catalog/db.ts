@@ -57,8 +57,14 @@ export function rowsToProducts(
   const products: Product[] = [];
 
   for (const row of rows) {
-    const base = byCode.get(row.code);
-    if (!base) continue; // no image for it yet — cannot be shown
+    const base: Product = byCode.get(row.code) ?? {
+      code: row.code,
+      cat: row.category?.slug ?? '',
+      name: { he: '', en: '' },
+      desc: { he: '', en: '' },
+      image: '',
+      specs: []
+    };
 
     const he = row.product_translations.find((t) => t.locale === 'he');
     const en = row.product_translations.find((t) => t.locale === 'en');
@@ -76,6 +82,7 @@ export function rowsToProducts(
     const primaryMedia = media.filter((m) => m.kind === 'image').sort((a, b) => a.sort - b.sort)[0];
     const galleryMedia = media.filter((m) => m.kind === 'gallery').sort((a, b) => a.sort - b.sort);
     const image = supabaseUrl && primaryMedia ? publicMediaUrl(supabaseUrl, primaryMedia.storage_path) : base.image;
+    if (!image) continue;
     const gallery =
       supabaseUrl && galleryMedia.length > 0
         ? galleryMedia.map((m) => ({
