@@ -4,7 +4,7 @@ import { countInquiries } from '@/lib/admin/inquiries';
 import { isCatalogManaged, listAdminProducts } from '@/lib/admin/products';
 import { listAdminContentBlocks } from '@/lib/admin/content';
 import { requireStaff } from '@/lib/admin/session';
-import { S } from '@/lib/admin/strings';
+import { getAdminStrings } from '@/lib/admin/locale';
 import { AdminIcons } from './icons';
 
 export const dynamic = 'force-dynamic';
@@ -33,7 +33,7 @@ const ACCENTS: Record<Accent, { bar: string; chip: string; link: string; hover: 
   }
 };
 
-function Card({
+async function Card({
   href,
   title,
   icon,
@@ -46,6 +46,7 @@ function Card({
   accent: Accent;
   children: React.ReactNode;
 }) {
+  const S = await getAdminStrings();
   const a = ACCENTS[accent];
   return (
     <Link
@@ -70,6 +71,7 @@ export default async function AdminDashboardPage({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
+  const S = await getAdminStrings();
   const { error } = await searchParams;
   const { client } = await requireStaff();
 

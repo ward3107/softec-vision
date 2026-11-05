@@ -30,11 +30,11 @@ const csp = [
   "form-action 'self'",
   "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://*.supabase.co https://*.supabase.in https://www.googletagmanager.com https://www.google-analytics.com",
+  "img-src 'self' data: blob: https:",
   "font-src 'self'",
   "connect-src 'self' https://*.supabase.co https://*.supabase.in wss://*.supabase.co https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com",
   "worker-src 'self' blob:",
-  "media-src 'self' https://*.supabase.co https://*.supabase.in",
+  "media-src 'self' https:",
   "manifest-src 'self'",
   'upgrade-insecure-requests'
 ].join('; ');

@@ -20,6 +20,8 @@ import {
   valuesFromParsedForm
 } from '@/lib/admin/products';
 import { createUserClient, isSupabaseConfigured, requireStaff } from '@/lib/admin/session';
+import { getAdminStrings } from '@/lib/admin/locale';
+import { validProductCode } from '@/lib/admin/productForm';
 import { CATALOG_TAG } from '@/lib/catalog/source';
 
 export type SignInState = { error?: 'missingPassword' | 'invalid' | 'notConfigured' };
@@ -109,10 +111,11 @@ export async function saveProductAction(
   fd: FormData
 ): Promise<SaveProductState> {
   const { client } = await requireStaff();
+  if (!String(fd.get('category') ?? '').trim()) return { errors: { category: 'required' }, values: echoFormValues(fd, CANONICAL_SPEC_KEYS) };
   const parsed = parseProductForm(fd, CANONICAL_SPEC_KEYS);
   if (!parsed.ok) return { errors: parsed.errors, values: echoFormValues(fd, CANONICAL_SPEC_KEYS) };
   try { await saveProduct(client, code, parsed.data); }
-  catch { return { error: 'השמירה נכשלה. בדקו את החיבור ואת שיוך הקטגוריות ונסו שוב.', values: echoFormValues(fd, CANONICAL_SPEC_KEYS) }; }
+  catch (error) { const S = await getAdminStrings(); return { error: error instanceof Error && error.message.includes('product_not_ready') ? S.workflow.notReady : S.workflow.saveFailed, values: echoFormValues(fd, CANONICAL_SPEC_KEYS) }; }
   updateTag(CATALOG_TAG);
   revalidatePath('/admin/products');
   revalidatePath(`/admin/products/${code}`);
@@ -146,7 +149,8 @@ export async function uploadProductImageAction(code: string, fd: FormData) {
 /** Reverts a product's photo back to the built-in catalog image — any staff member. */
 export async function removeProductImageAction(code: string) {
   const { client } = await requireStaff();
-  await removePrimaryImage(client, code);
+  try { await removePrimaryImage(client, code); }
+  catch { redirect(`/admin/products/${code}?media=error-notReady`); }
   revalidateProductMedia(code);
   redirect(`/admin/products/${code}?media=removed`);
 }
@@ -188,9 +192,10 @@ export async function removeProductModelAction(code: string) {
 
 export async function deleteProductAction(code: string, _state: { error?: string }, fd: FormData) {
   const { client } = await requireStaff({ admin: true });
-  if (String(fd.get('confirmCode') ?? '').trim() !== code) return { error: 'להשלמת המחיקה יש להקליד את קוד המוצר.' };
+  const S = await getAdminStrings();
+  if (String(fd.get('confirmCode') ?? '').trim() !== code) return { error: S.workflow.deleteConfirm };
   const { error } = await client.rpc('delete_catalog_product', { p_code: code });
-  if (error) return { error: 'מחיקת המוצר נכשלה. רעננו את העמוד ונסו שוב.' };
+  if (error) return { error: S.workflow.deleteFailed };
   updateTag(CATALOG_TAG);
   revalidatePath('/admin/products');
   revalidatePath(`/admin/products/${code}`);
@@ -206,7 +211,27 @@ export async function removeProductVideoAction(code: string, fd: FormData) {
   if (!media) return;
   const removed = await client.from('product_media').delete().eq('id', String(fd.get('mediaId'))).eq('product_id', product.id);
   if (removed.error) throw new Error(removed.error.message);
-  const cleanup = await client.storage.from('product-videos').remove([media.storage_path]);
-  if (cleanup.error) console.error('[media] video cleanup failed', cleanup.error.message);
+  // Retained storage is recorded by database triggers; no automatic file deletion.
   revalidateProductMedia(code);
+}
+
+
+export async function createProductAction(_state: SaveProductState, fd: FormData): Promise<SaveProductState> {
+  const { client } = await requireStaff();
+  const S = await getAdminStrings();
+  const code = String(fd.get('code') ?? '').trim();
+  fd.set('status', 'draft'); // Creation never publishes, including forged submissions.
+  const values = echoFormValues(fd, CANONICAL_SPEC_KEYS);
+  if (!validProductCode(code)) return { errors: { code: 'invalid' }, error: S.workflow.invalidCode, values };
+  if (!String(fd.get('category') ?? '').trim()) return { errors: { category: 'required' }, values };
+  const parsed = parseProductForm(fd, CANONICAL_SPEC_KEYS);
+  if (!parsed.ok) return { errors: parsed.errors, values };
+  const { error } = await client.rpc('create_catalog_product', {
+    p_code: code, p_category: parsed.data.category, p_subcategory: parsed.data.subcategory ?? '',
+    p_translations: parsed.data.translations, p_specs: parsed.data.specs
+  });
+  if (error) return { error: error.code === '23505' ? S.workflow.duplicateCode : S.workflow.saveFailed, values };
+  updateTag(CATALOG_TAG);
+  revalidatePath('/admin/products');
+  redirect(`/admin/products/${encodeURIComponent(code)}?created=1`);
 }
