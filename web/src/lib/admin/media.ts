@@ -28,15 +28,12 @@ async function readAndCheck(file: File): Promise<{ ok: true; bytes: Uint8Array; 
   return { ok: true, bytes, ext };
 }
 
-async function removeMediaRows(client: SupabaseClient, ids: string[], paths: string[]): Promise<void> {
+async function removeMediaRows(client: SupabaseClient, ids: string[]): Promise<void> {
   if (ids.length > 0) {
     const { error } = await client.from('product_media').delete().in('id', ids);
     if (error) throw new Error(error.message);
   }
-  if (paths.length > 0) {
-    const removed = await client.storage.from(BUCKET).remove(paths);
-    if (removed.error) console.error('[media] file cleanup failed', removed.error.message);
-  }
+  // Storage objects are retained; database triggers record detached paths.
 }
 
 /** Replaces the product's primary photo (there is at most one). RLS: any staff member. */
@@ -73,8 +70,7 @@ export async function replacePrimaryImage(
 
   await removeMediaRows(
     client,
-    old.map((o) => o.id),
-    old.map((o) => o.storage_path)
+    old.map((o) => o.id)
   );
   return { ok: true };
 }
@@ -88,8 +84,7 @@ export async function removePrimaryImage(client: SupabaseClient, code: string): 
   const rows = (data ?? []) as Array<{ id: string; storage_path: string }>;
   await removeMediaRows(
     client,
-    rows.map((r) => r.id),
-    rows.map((r) => r.storage_path)
+    rows.map((r) => r.id)
   );
 }
 
@@ -137,7 +132,7 @@ export async function removeGalleryImage(client: SupabaseClient, code: string, m
   if (error) throw new Error(error.message);
   const row = data as { storage_path: string } | null;
   if (!row) return;
-  await removeMediaRows(client, [mediaId], [row.storage_path]);
+  await removeMediaRows(client, [mediaId]);
 }
 
 async function readAndCheckModel(file: File): Promise<{ ok: true; bytes: Uint8Array } | { ok: false; error: MediaUploadError }> {
@@ -160,14 +155,6 @@ export async function replaceProductModel(
   const productId = await findProductId(client, code);
   if (!productId) return { ok: false, error: 'unknownProduct' };
 
-  const { data: existing, error: existingError } = await client
-    .from('products')
-    .select('model_3d_url')
-    .eq('id', productId)
-    .maybeSingle();
-  if (existingError) throw new Error(existingError.message);
-  const oldPath = (existing as { model_3d_url: string | null } | null)?.model_3d_url ?? null;
-
   const path = `${sanitizeCodeForPath(code)}/model-${Date.now()}.glb`;
   const uploaded = await client.storage.from(MODEL_BUCKET).upload(path, checked.bytes, {
     contentType: 'model/gltf-binary',
@@ -178,10 +165,6 @@ export async function replaceProductModel(
   const { error: updateError } = await client.from('products').update({ model_3d_url: path }).eq('id', productId);
   if (updateError) throw new Error(updateError.message);
 
-  if (oldPath) {
-    const removed = await client.storage.from(MODEL_BUCKET).remove([oldPath]);
-    if (removed.error) throw new Error(removed.error.message);
-  }
   return { ok: true };
 }
 
@@ -195,8 +178,7 @@ export async function removeProductModel(client: SupabaseClient, code: string): 
   if (!path) return;
   const { error: updateError } = await client.from('products').update({ model_3d_url: null }).eq('id', productId);
   if (updateError) throw new Error(updateError.message);
-  const removed = await client.storage.from(MODEL_BUCKET).remove([path]);
-  if (removed.error) throw new Error(removed.error.message);
+  // Detached storage paths are retained for an explicit cleanup review.
 }
 
 /** A product's current 3D model path, for the admin edit page. */

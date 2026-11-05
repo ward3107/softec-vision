@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from '@/components/catalog/CatalogImage';
 import { useId, useRef } from 'react';
 import { Link } from '@/i18n/navigation';
 

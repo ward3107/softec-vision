@@ -6,9 +6,17 @@
 insert into locales (code, name, dir, is_default) values ('he', 'עברית', 'rtl', true), ('en', 'English', 'ltr', false)
   on conflict (code) do nothing;
 insert into categories (id, slug, status) values ('00000000-0000-4000-8000-00000000c001', 'rls-test-cat', 'published');
+begin;
 insert into products (id, code, category_id, status) values
   ('00000000-0000-4000-8000-00000000f001', 'RLS-PUBLISHED', '00000000-0000-4000-8000-00000000c001', 'published'),
   ('00000000-0000-4000-8000-00000000f002', 'RLS-DRAFT', '00000000-0000-4000-8000-00000000c001', 'draft');
+insert into product_translations (product_id, locale, name, description) values
+  ('00000000-0000-4000-8000-00000000f001', 'he', 'מוצר מפורסם', 'תיאור'),
+  ('00000000-0000-4000-8000-00000000f001', 'en', 'Published product', 'Description'),
+  ('00000000-0000-4000-8000-00000000f002', 'he', 'טיוטה', 'טרם פורסם'),
+  ('00000000-0000-4000-8000-00000000f002', 'en', 'Draft', 'Not yet public');
+insert into product_media (product_id,storage_path,kind) values ('00000000-0000-4000-8000-00000000f001','RLS-PUBLISHED/image.jpg','image'),('00000000-0000-4000-8000-00000000f002','RLS-DRAFT/image.jpg','image');
+commit;
 insert into auth.users (id, email) values
   ('00000000-0000-4000-8000-0000000000a1', 'staff@example.com'),
   ('00000000-0000-4000-8000-0000000000b2', 'visitor@example.com'),
@@ -137,11 +145,6 @@ end $$;
 rollback;
 
 -- ── Catalog management (Stage 3b) ───────────────────────────────────────────
-insert into product_translations (product_id, locale, name, description) values
-  ('00000000-0000-4000-8000-00000000f001', 'he', 'מוצר מפורסם', 'תיאור'),
-  ('00000000-0000-4000-8000-00000000f001', 'en', 'Published product', 'Description'),
-  ('00000000-0000-4000-8000-00000000f002', 'he', 'טיוטה', 'טרם פורסם'),
-  ('00000000-0000-4000-8000-00000000f002', 'en', 'Draft', 'Not yet public');
 insert into product_specs (product_id, spec_field_id, value_translations)
 select '00000000-0000-4000-8000-00000000f002', id, '{"he":"סודי","en":"secret"}' from spec_fields where key = 'finish';
 

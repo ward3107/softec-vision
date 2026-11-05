@@ -39,10 +39,32 @@ const GLB_MAGIC = ascii('glTF');
 
 /** True for a glTF Binary (.glb) file: magic bytes, then a version-2 header. Used for product 3D-model uploads, the same content-sniffing approach as sniffType(). */
 export function isGlb(bytes: Uint8Array): boolean {
-  if (!startsWith(bytes, GLB_MAGIC)) return false;
-  if (bytes.length < 8) return false;
-  const version = bytes[4] | (bytes[5] << 8) | (bytes[6] << 16) | (bytes[7] << 24);
-  return version === 2;
+  if (!startsWith(bytes, GLB_MAGIC) || bytes.length < 24) return false;
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  if (view.getUint32(4, true) !== 2 || view.getUint32(8, true) !== bytes.length) return false;
+  let offset = 12;
+  let chunks = 0;
+  let document: { asset?: { version?: string }; buffers?: Array<{ uri?: string; byteLength?: number }> } | undefined;
+  let binaryLength = 0;
+  while (offset < bytes.length) {
+    if (offset + 8 > bytes.length) return false;
+    const length = view.getUint32(offset, true);
+    const type = view.getUint32(offset + 4, true);
+    if (length % 4 !== 0 || offset + 8 + length > bytes.length) return false;
+    if (chunks === 0) {
+      if (type !== 0x4e4f534a || length === 0) return false;
+      try { document = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes.slice(offset + 8, offset + 8 + length))); }
+      catch { return false; }
+      if (document?.asset?.version !== '2.0') return false;
+      const full = document as { buffers?: Array<{ uri?: string }>; images?: Array<{ uri?: string }> };
+      if (!Array.isArray(full.buffers ?? []) || !Array.isArray(full.images ?? [])) return false;
+      if ([...(full.buffers ?? []), ...(full.images ?? [])].some(item => !item || (item.uri && (typeof item.uri !== 'string' || !item.uri.startsWith('data:'))))) return false;
+    } else if (chunks === 1 && type === 0x004e4942) binaryLength = length;
+    else return false;
+    offset += 8 + length;
+    chunks++;
+  }
+  return Boolean(document) && (document?.buffers ?? []).every(buffer => buffer.uri || (typeof buffer.byteLength === 'number' && buffer.byteLength >= 0 && buffer.byteLength <= binaryLength));
 }
 
 export type AttachmentCheck = { ok: true; mime: string; ext: string } | { ok: false; error: 'tooLarge' | 'badType' };

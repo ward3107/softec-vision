@@ -4,7 +4,7 @@ import { useActionState, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import type { AdminProductDetail, ProductStatus } from '@/lib/admin/productForm';
 import { PRODUCT_STATUSES } from '@/lib/admin/productForm';
-import { S } from '@/lib/admin/strings';
+import { useAdminStrings, useAdminLocale } from '../../AdminLanguage';
 import type { Localized } from '@/lib/catalog/types';
 import type { CategoryRow } from '@/lib/catalog/categories';
 import type { SaveProductState } from '../../actions';
@@ -13,7 +13,8 @@ const input =
   'mt-1 block w-full rounded border border-line bg-pure px-3 py-2.5 focus-visible:border-blueprint dark:border-white/10 dark:bg-surface dark:focus-visible:border-skyline';
 const textarea = `${input} min-h-[7rem]`;
 
-function fieldError(errors: Record<string, string> | undefined, key: string) {
+function useFieldError(errors: Record<string, string> | undefined, key: string) {
+  const S = useAdminStrings();
   const code = errors?.[key];
   return code ? (S.products.fieldErrors[code as keyof typeof S.products.fieldErrors] ?? code) : null;
 }
@@ -37,7 +38,7 @@ function Field({
   dir: 'rtl' | 'ltr';
   version: number;
 }) {
-  const message = fieldError(errors, name);
+  const message = useFieldError(errors, name);
   const Tag = multiline ? 'textarea' : 'input';
   return (
     <div>
@@ -65,15 +66,16 @@ function Field({
   );
 }
 
-function Submit() {
+function Submit({ creating }: { creating: boolean }) {
+  const S = useAdminStrings();
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
-      aria-disabled={pending}
+      disabled={pending}
       className="inline-flex min-h-[44px] items-center rounded border border-blueprint bg-blueprint px-6 font-bold text-pure hover:bg-graphite"
     >
-      {pending ? S.products.saving : S.products.save}
+      {pending ? S.products.saving : creating ? S.workflow.createButton : S.products.save}
     </button>
   );
 }
@@ -85,13 +87,17 @@ export default function ProductForm({
   product,
   specFields,
   action,
-  categories
+  categories,
+  creating = false
 }: {
+  creating?: boolean;
   categories: CategoryRow[];
   product: AdminProductDetail;
   specFields: Array<{ key: string; label: Localized }>;
   action: (state: SaveProductState, fd: FormData) => Promise<SaveProductState>;
 }) {
+  const S = useAdminStrings();
+  const locale = useAdminLocale();
   const [state, formAction] = useActionState<SaveProductState, FormData>(action, {});
   const savedRef = useRef<HTMLParagraphElement>(null);
 
@@ -100,6 +106,7 @@ export default function ProductForm({
   // meanwhile-refreshed server copy) — only a successful save does.
   const [initial] = useState(product);
   const [category, setCategory] = useState(product.cat);
+  const [subcategory, setSubcategory] = useState(product.sub ?? '');
 
   // Bump whenever a new submission result arrives, so the (uncontrolled)
   // fields below remount and pick up their new value.
@@ -107,6 +114,10 @@ export default function ProductForm({
   const [version, setVersion] = useState(0);
   if (state !== prevState) {
     setPrevState(state);
+    if (state.values) {
+      setCategory(state.values.category ?? product.cat);
+      setSubcategory(state.values.subcategory ?? '');
+    }
     setVersion((v) => v + 1);
   }
 
@@ -135,17 +146,20 @@ export default function ProductForm({
         </p>
       )}
 
+      {creating && <div><Field id="f-code" name="code" label={S.products.code} value={value('code', '')} errors={state.errors} dir="ltr" version={version} /><p className="text-sm">{S.workflow.codeHelp}</p></div>}
       <div className="grid gap-4 sm:grid-cols-2">
-        <label>קטגוריה ראשית<select name="category" value={category} onChange={event => setCategory(event.target.value)} className={input}>
-          {categories.filter(item => !item.parent_id).map(item => <option key={item.id} value={item.slug}>{item.category_translations.find(t => t.locale === 'he')?.name ?? item.slug}</option>)}
+        <label>{S.workflow.parent}<select key={`category-${version}`} name="category" defaultValue={category} id="f-category" onChange={event => { setCategory(event.target.value); setSubcategory(''); }} className={input}>
+          <option value="">{S.workflow.chooseCategory}</option>
+          {categories.filter(item => !item.parent_id).map(item => <option key={item.id} value={item.slug}>{item.category_translations.find(t => t.locale === locale)?.name ?? item.slug}</option>)}
         </select></label>
-        <label>תת־קטגוריה<select key={category} name="subcategory" defaultValue={category === product.cat ? product.sub ?? '' : ''} className={input}>
-          <option value="">ללא תת־קטגוריה</option>
-          {categories.filter(item => item.parent_id === categories.find(parent => parent.slug === category)?.id).map(item => <option key={item.id} value={item.slug}>{item.category_translations.find(t => t.locale === 'he')?.name ?? item.slug}</option>)}
+        <label>{S.workflow.subcategory}<select key={`subcategory-${version}-${category}`} id="f-subcategory" name="subcategory" defaultValue={subcategory} onChange={event => setSubcategory(event.target.value)} className={input}>
+          <option value="">{S.workflow.noSubcategory}</option>
+          {categories.filter(item => item.parent_id === categories.find(parent => parent.slug === category)?.id).map(item => <option key={item.id} value={item.slug}>{item.category_translations.find(t => t.locale === locale)?.name ?? item.slug}</option>)}
         </select></label>
       </div>
+      {state.errors?.category && <p role="alert">{S.products.fieldErrors.required}</p>}
       {state.error && <p role="alert" className="text-red-700 dark:text-red-400">{state.error}</p>}
-      <div>
+      {creating ? <input type="hidden" name="status" value="draft" /> : <div>
         <label htmlFor="f-status" className="block text-sm font-semibold">
           {S.products.status}
         </label>
@@ -162,8 +176,8 @@ export default function ProductForm({
             </option>
           ))}
         </select>
-        <p className="mt-1 text-sm text-machine dark:text-fog">{S.products.statusHelp}</p>
-      </div>
+        <p className="mt-1 text-sm text-machine dark:text-fog">{S.workflow.readiness}</p>
+      </div>}
 
       <fieldset className="grid gap-4 rounded border border-line p-4 dark:border-white/10">
         <legend className="px-1 text-sm font-bold">{S.products.nameSection}</legend>
@@ -190,7 +204,7 @@ export default function ProductForm({
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
             id="f-description-he"
-            label={S.products.hebrew}
+            label={`${S.products.hebrew} — ${S.workflow.description}`}
             name="description.he"
             value={value('description.he', initial.translations.he.description)}
             errors={state.errors}
@@ -200,7 +214,7 @@ export default function ProductForm({
           />
           <Field
             id="f-description-en"
-            label={S.products.english}
+            label={`${S.products.english} — ${S.workflow.description}`}
             name="description.en"
             value={value('description.en', initial.translations.en.description)}
             errors={state.errors}
@@ -262,7 +276,7 @@ export default function ProductForm({
         ))}
       </fieldset>
 
-      <Submit />
+      <Submit creating={creating} />
     </form>
   );
 }
