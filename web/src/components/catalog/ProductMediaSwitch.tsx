@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import Image from '@/components/catalog/CatalogImage';
 import ImageLightbox, { type LightboxLabels } from './ImageLightbox';
 import Product3DViewer from './Product3DViewer';
 import ProductSpin from './ProductSpin';
