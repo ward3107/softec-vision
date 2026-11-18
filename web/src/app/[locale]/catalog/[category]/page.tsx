@@ -38,10 +38,10 @@ export default async function CategoryPage({
   searchParams
 }: {
   params: Promise<{ locale: string; category: string }>;
-  searchParams: Promise<{ sub?: string }>;
+  searchParams: Promise<{ sub?: string; leaf?: string }>;
 }) {
   const { locale, category } = await params;
-  const { sub } = await searchParams;
+  const { sub, leaf } = await searchParams;
   setRequestLocale(locale);
   const l = locale as AppLocale;
 
@@ -49,13 +49,18 @@ export default async function CategoryPage({
   const cat = visible.find((c) => c.key === category);
   if (!cat) notFound();
 
-  const state = normalizeCatalogState({ lang: l, cat: category, sub }, visible);
+  const state = normalizeCatalogState({ lang: l, cat: category, sub, leaf }, visible);
   const products = await filterProducts(state);
   const categoryProducts = await filterProducts({ lang: l, cat: category, sub: 'all' });
   const subImage = (subKey: string) => categoryProducts.find((p) => p.sub === subKey)?.image;
   const t = await getTranslations('catalog');
 
   const subs = cat.subs ?? [];
+  const activeSub = subs.find(item => item.key === state.sub);
+  const activeLeaf = activeSub?.children?.find(item => item.key === state.leaf);
+  const rootHref = `/catalog/${cat.key}`;
+  const parentHref = activeSub ? `${rootHref}?sub=${activeSub.key}` : rootHref;
+  const title = localized((activeLeaf ?? activeSub ?? cat).label, l);
   const subLinkClass = (active: boolean) =>
     `inline-flex min-h-[44px] whitespace-nowrap items-center gap-2 rounded border px-2.5 text-sm font-semibold hover:bg-paper dark:hover:bg-canvas ${
       active ? 'border-blueprint bg-paper dark:border-skyline dark:bg-canvas' : 'border-line dark:border-white/10'
@@ -65,7 +70,7 @@ export default async function CategoryPage({
   return (
     <div className="mx-auto max-w-shell px-[clamp(20px,4.5vw,72px)] pt-4 pb-24 sm:py-[clamp(36px,5vw,72px)] sm:pb-28">
       <BackButton
-        fallbackHref={state.sub === 'all' ? '/catalog' : `/catalog/${cat.key}`}
+        fallbackHref={activeLeaf ? parentHref : activeSub ? rootHref : '/catalog'}
         label={t('back')}
       />
       <nav className="mt-3 text-sm text-machine sm:mt-5 dark:text-fog">
@@ -73,11 +78,13 @@ export default async function CategoryPage({
           {t('title')}
         </Link>
         <span className="px-2">/</span>
-        <span className="text-graphite dark:text-ink">{localized(cat.label, l)}</span>
+        {activeSub ? <Link href={rootHref}>{localized(cat.label, l)}</Link> : localized(cat.label, l)}
+        {activeSub && <> / {activeLeaf ? <Link href={parentHref}>{localized(activeSub.label, l)}</Link> : localized(activeSub.label, l)}</>}
+        {activeLeaf && <> / {localized(activeLeaf.label, l)}</>}
       </nav>
 
       <h1 className="mt-2 text-[clamp(1.8rem,3.2vw,2.6rem)] sm:mt-3 font-extrabold tracking-tight">
-        {localized(cat.label, l)}
+        {title}
       </h1>
       <p className="mt-1 max-w-2xl text-machine sm:mt-2 dark:text-fog">{localized(cat.description, l)}</p>
 
@@ -110,6 +117,15 @@ export default async function CategoryPage({
             );
           })}
         </ul>
+      )}
+
+      {activeSub?.children && activeSub.children.length > 0 && (
+        <nav aria-label={localized(activeSub.label, l)} className="mt-3 flex flex-wrap gap-2">
+          <Link href={parentHref} className={subLinkClass(!activeLeaf)} aria-current={!activeLeaf ? 'page' : undefined}>{t('all')}</Link>
+          {activeSub.children.map(child => <Link key={child.key}
+            href={`${parentHref}&leaf=${child.key}`} className={subLinkClass(child.key === state.leaf)}
+            aria-current={child.key === state.leaf ? 'page' : undefined}>{localized(child.label, l)}</Link>)}
+        </nav>
       )}
 
       {products.length > 0 ? (

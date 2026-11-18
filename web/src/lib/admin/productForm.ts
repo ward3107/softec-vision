@@ -15,6 +15,7 @@ export interface ParsedProductForm {
   status: ProductStatus;
   category?: string;
   subcategory?: string;
+  leaf?: string;
   translations: {
     he: { name: string; description: string; alt_text: string };
     en: { name: string; description: string; alt_text: string };
@@ -26,6 +27,8 @@ export interface AdminProductRow {
   code: string;
   status: ProductStatus;
   category: string;
+  sub?: string;
+  leaf?: string;
   name: string;
   missing: string[]; // spec keys still unconfirmed (no owner value yet)
 }
@@ -35,6 +38,7 @@ export interface AdminProductDetail {
   status: ProductStatus;
   cat: string;
   sub: string | null;
+  leaf?: string;
   translations: ParsedProductForm['translations'];
   specs: Record<string, { he: string; en: string }>;
 }
@@ -87,10 +91,10 @@ export function parseProductForm(
   }
 
   if (Object.keys(errors).length > 0) return { ok: false, errors };
-  return { ok: true, data: { status: status as ProductStatus, translations, specs, category: String(fd.get('category') ?? '') || undefined, subcategory: String(fd.get('subcategory') ?? '') } };
+  return { ok: true, data: { status: status as ProductStatus, translations, specs, category: String(fd.get('category') ?? '') || undefined, subcategory: String(fd.get('subcategory') ?? ''), leaf: String(fd.get('leaf') ?? '') } };
 }
 
-const TEXT_FIELD_NAMES = ['status', 'category', 'subcategory', 'name.he', 'name.en', 'description.he', 'description.en', 'alt.he', 'alt.en'] as const;
+const TEXT_FIELD_NAMES = ['status', 'category', 'subcategory', 'leaf', 'name.he', 'name.en', 'description.he', 'description.en', 'alt.he', 'alt.en'] as const;
 
 /**
  * Echo back whatever was submitted (unvalidated), so a rejected submission
@@ -108,6 +112,7 @@ export function valuesFromParsedForm(data: ParsedProductForm, specKeys: string[]
     status: data.status,
     category: data.category ?? '',
     subcategory: data.subcategory ?? '',
+    leaf: data.leaf ?? '',
     'name.he': data.translations.he.name,
     'name.en': data.translations.en.name,
     'description.he': data.translations.he.description,

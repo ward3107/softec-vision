@@ -3,6 +3,7 @@ import type { AppLocale } from '@/i18n/routing';
 export type Localized = { he: string; en: string };
 
 export interface Subcategory {
+  children?: Array<{ key: string; label: Localized }>;
   key: string;
   label: Localized;
 }
@@ -27,6 +28,7 @@ export interface Product {
   code: string;
   cat: string;
   sub?: string;
+  leaf?: string;
   name: Localized;
   desc: Localized;
   /** Public path under /public (Supabase Storage in production). */
@@ -46,6 +48,7 @@ export interface CatalogState {
   lang: AppLocale;
   cat: string;
   sub: string;
+  leaf?: string;
 }
 
 /** Resolve a localized value with a safe fallback to Hebrew. */

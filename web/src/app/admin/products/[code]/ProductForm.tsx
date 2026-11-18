@@ -101,6 +101,14 @@ export default function ProductForm({
   const [initial] = useState(product);
   const [category, setCategory] = useState(product.cat);
 
+  const [subcategory, setSubcategory] = useState(product.sub ?? '');
+  const [leaf, setLeaf] = useState(product.leaf ?? '');
+  const options = (parent: string) => {
+    const parentId = categories.find(item => item.slug === parent)?.id;
+    return categories.filter(item => item.parent_id === parentId).map(item =>
+      <option key={item.id} value={item.slug}>{item.category_translations.find(t => t.locale === 'he')?.name ?? item.slug}</option>);
+  };
+
   // Bump whenever a new submission result arrives, so the (uncontrolled)
   // fields below remount and pick up their new value.
   const [prevState, setPrevState] = useState(state);
@@ -136,12 +144,16 @@ export default function ProductForm({
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <label>קטגוריה ראשית<select name="category" value={category} onChange={event => setCategory(event.target.value)} className={input}>
+        <label>קטגוריה ראשית<select name="category" value={category} onChange={event => { setCategory(event.target.value); setSubcategory(''); setLeaf(''); }} className={input}>
           {categories.filter(item => !item.parent_id).map(item => <option key={item.id} value={item.slug}>{item.category_translations.find(t => t.locale === 'he')?.name ?? item.slug}</option>)}
         </select></label>
-        <label>תת־קטגוריה<select key={category} name="subcategory" defaultValue={category === product.cat ? product.sub ?? '' : ''} className={input}>
+        <label>תת־קטגוריה<select name="subcategory" value={subcategory} onChange={event => { setSubcategory(event.target.value); setLeaf(''); }} className={input}>
           <option value="">ללא תת־קטגוריה</option>
-          {categories.filter(item => item.parent_id === categories.find(parent => parent.slug === category)?.id).map(item => <option key={item.id} value={item.slug}>{item.category_translations.find(t => t.locale === 'he')?.name ?? item.slug}</option>)}
+          {options(category)}
+        </select></label>
+        <label>תת־קטגוריה ברמה שלישית<select name="leaf" value={leaf} disabled={!subcategory} onChange={event => setLeaf(event.target.value)} className={input}>
+          <option value="">ללא רמה שלישית</option>
+          {options(subcategory)}
         </select></label>
       </div>
       {state.error && <p role="alert" className="text-red-700 dark:text-red-400">{state.error}</p>}
