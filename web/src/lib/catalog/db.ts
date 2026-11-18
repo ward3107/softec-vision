@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { publicMediaUrl, publicModelUrl, publicVideoUrl } from './media';
 import { SPEC_LABELS } from './seed';
 import { isPlaceholder, type Category, type Localized, type Product, type SpecEntry } from './types';
@@ -16,8 +17,8 @@ export const PRODUCT_SELECT = [
   'code',
   'sort',
   'model_3d_url',
-  'category:categories!products_category_id_fkey(slug)',
-  'sub:categories!products_subcategory_id_fkey(slug)',
+  'category:categories!products_category_id_fkey(id,slug)',
+  'sub:categories!products_subcategory_id_fkey(slug,parent_id)',
   'product_translations(locale, name, description, alt_text)',
   'product_specs(value_translations, spec_field:spec_fields(key, sort))',
   'product_media(storage_path, kind, sort, alt_translations)'
@@ -34,8 +35,8 @@ export interface DbProductRow {
   code: string;
   sort: number;
   model_3d_url: string | null;
-  category: { slug: string } | null;
-  sub: { slug: string } | null;
+  category: { id?: string; slug: string } | null;
+  sub: { slug: string; parent_id?: string } | null;
   product_translations: Array<{ locale: string; name: string; description: string; alt_text: string }>;
   product_specs: Array<{
     value_translations: Partial<Localized> | null;
@@ -47,11 +48,30 @@ export interface DbProductRow {
 const isFilled = (value: string | undefined): value is string =>
   typeof value === 'string' && value.trim() !== '' && !isPlaceholder(value);
 
+/** Direct assignments need no extra query. Resolve third-level parents in one batch. */
+export async function loadAssignmentParents(client: SupabaseClient, rows: DbProductRow[]): Promise<Map<string, string>> {
+  const parentIds = [...new Set(rows.flatMap(row =>
+    row.sub?.parent_id && row.sub.parent_id !== row.category?.id ? [row.sub.parent_id] : []))];
+  if (!parentIds.length) return new Map();
+  const { data, error } = await client.from('categories').select('id,slug').in('id', parentIds);
+  if (error) throw new Error(error.message);
+  return new Map((data ?? []).map(row => [row.id, row.slug]));
+}
+
+export function productCategoryPath(row: DbProductRow, parents: Map<string, string>) {
+  if (row.sub?.parent_id && row.sub.parent_id !== row.category?.id) {
+    const sub = parents.get(row.sub.parent_id);
+    return sub ? { sub, leaf: row.sub.slug } : {};
+  }
+  return { sub: row.sub?.slug };
+}
+
 export function rowsToProducts(
   rows: DbProductRow[],
   builtIn: Product[],
   specLabels: Record<string, Localized> = SPEC_LABELS,
-  supabaseUrl?: string
+  supabaseUrl?: string,
+  parents = new Map<string, string>()
 ): Product[] {
   const byCode = new Map(builtIn.map((product) => [product.code, product]));
   const products: Product[] = [];
@@ -107,7 +127,7 @@ export function rowsToProducts(
     products.push({
       code: row.code,
       cat: row.category?.slug ?? base.cat,
-      sub: row.sub?.slug ?? undefined,
+      ...productCategoryPath(row, parents),
       name: { he: pick(he?.name, base.name.he), en: pick(en?.name, base.name.en) },
       desc: { he: pick(he?.description, base.desc.he), en: pick(en?.description, base.desc.en) },
       image,

@@ -1,7 +1,7 @@
 import 'server-only';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { unstable_cache } from 'next/cache';
-import { PRODUCT_SELECT, rowsToProducts, type DbProductRow } from './db';
+import { PRODUCT_SELECT, loadAssignmentParents, rowsToProducts, type DbProductRow } from './db';
 import { PRODUCTS } from './seed';
 import type { Product } from './types';
 
@@ -25,7 +25,7 @@ export async function fetchManagedProducts(
     if (rpcError) throw new Error(`catalog check failed: ${rpcError.message}`);
     if (!managed) return null;
   }
-  return rowsToProducts(rows, builtIn, undefined, supabaseUrl);
+  return rowsToProducts(rows, builtIn, undefined, supabaseUrl, await loadAssignmentParents(client, rows));
 }
 
 /** Pick the catalog to show; a database outage never takes the site down. */

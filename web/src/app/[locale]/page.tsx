@@ -109,8 +109,7 @@ export default async function HomePage({
   // have products), the rest onto their products.
   const explorer: ExplorerCategory[] = categories.map((category) => {
     const inFamily = allProducts.filter((p) => p.cat === category.key);
-    const items: ExplorerItem[] = category.subs?.length
-      ? category.subs.flatMap((s) => {
+    const subItems: ExplorerItem[] = (category.subs ?? []).flatMap((s) => {
           const inSub = inFamily.filter((p) => p.sub === s.key);
           if (inSub.length === 0) return [];
           return [{
@@ -122,8 +121,9 @@ export default async function HomePage({
             href: `/catalog/${category.key}?sub=${s.key}`,
             kind: 'subcategory' as const
           }];
-        })
-      : inFamily.map((p) => ({ key: p.code, label: localized(p.name, l), meta: p.code, image: p.image, alt: '', href: `/product/${p.code}`, kind: 'product' as const }));
+        });
+    const direct = inFamily.filter(p => !subItems.some(item => item.key === p.sub));
+    const items: ExplorerItem[] = [...subItems, ...direct.map((p) => ({ key: p.code, label: localized(p.name, l), meta: p.code, image: p.image, alt: '', href: `/product/${p.code}`, kind: 'product' as const }))];
     return {
       key: category.key,
       label: localized(category.label, l),

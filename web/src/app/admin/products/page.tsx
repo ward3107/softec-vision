@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import NewProductForm from './NewProductForm';
 import { isCatalogManaged, listAdminProducts } from '@/lib/admin/products';
 import { requireStaff } from '@/lib/admin/session';
 import { S } from '@/lib/admin/strings';
@@ -26,6 +27,9 @@ export default async function AdminProductsPage({
     <>
       <h1 className="text-2xl font-extrabold">{S.products.title}</h1>
 
+      {managed && categories.some(row => !row.parent_id) && <NewProductForm roots={categories.filter(row => !row.parent_id).map(row => ({
+        id: row.id, name: row.category_translations.find(t => t.locale === 'he')?.name ?? row.slug
+      }))} />}
       {deleted && <p role="status" className="mt-3">המוצר נמחק מהקטלוג.</p>}
       {imported !== undefined && (
         <p role="status" className="mt-3 rounded border border-line bg-pure p-3 text-sm dark:border-white/10 dark:bg-surface">
@@ -85,7 +89,7 @@ export default async function AdminProductsPage({
                     </Link>
                   </td>
                   <td className="px-3 py-3">{row.name}</td>
-                  <td className="px-3 py-3">{categories.find((c) => c.slug === row.category)?.category_translations.find(t => t.locale === 'he')?.name ?? row.category}</td>
+                  <td className="px-3 py-3">{[row.category, row.sub, row.leaf].filter(Boolean).map(slug => categories.find(c => c.slug === slug)?.category_translations.find(t => t.locale === 'he')?.name ?? slug).join(' / ')}</td>
                   <td className="px-3 py-3">
                     <span className={`inline-block rounded px-2 py-0.5 text-xs font-bold ${statusBadge[row.status]}`}>
                       {S.products.statuses[row.status]}

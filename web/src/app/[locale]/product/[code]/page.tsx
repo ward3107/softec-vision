@@ -81,10 +81,19 @@ export default async function ProductPage({
     manufacturer: { '@type': 'Organization', name: 'Softec Vision Ltd' },
     ...(category ? { category: localized(category.label, l) } : {})
   };
+  const sub = category.subs?.find(item => item.key === product.sub);
+  const leaf = sub?.children?.find(item => item.key === product.leaf);
+  const rootPath = `/catalog/${category.key}`;
+  const subPath = `${rootPath}?sub=${sub?.key}`;
+  const categoryTrail = [
+    { name: localized(category.label, l), path: rootPath },
+    ...(sub ? [{ name: localized(sub.label, l), path: subPath }] : []),
+    ...(leaf ? [{ name: localized(leaf.label, l), path: `${subPath}&leaf=${leaf.key}` }] : [])
+  ];
   const breadcrumbLd = breadcrumbSchema(l, [
     { name: BRAND, path: '' },
     { name: tn('products'), path: '/catalog' },
-    ...(category ? [{ name: localized(category.label, l), path: `/catalog/${category.key}` }] : []),
+    ...categoryTrail,
     { name, path: `/product/${product.code}` }
   ]);
   const primaryAlt = product.imageAlt
@@ -101,6 +110,7 @@ export default async function ProductPage({
         <Link href="/catalog" className="hover:text-blueprint dark:hover:text-skyline">
           {t('backToCatalog')}
         </Link>
+        {categoryTrail.map(item => <span key={item.path}><span className="px-2">/</span><Link href={item.path}>{item.name}</Link></span>)}
         <span className="px-2">/</span>
         <span className="text-graphite dark:text-ink" dir="ltr">
           {product.code}

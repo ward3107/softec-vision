@@ -49,7 +49,7 @@ export default function AdminShell({ email, children }: { email?: string | null;
             {tab('dashboard', '/admin')}
             {tab('inquiries', '/admin/inquiries')}
             {tab('products', '/admin/products')}
-            <Link href="/admin/categories" aria-current={pathname.startsWith('/admin/categories') ? 'page' : undefined} className="content-center px-3 text-sm font-semibold text-blueprint dark:text-skyline">תתי־קטגוריות</Link>
+            <Link href="/admin/categories" aria-current={pathname.startsWith('/admin/categories') ? 'page' : undefined} className="content-center px-3 text-sm font-semibold text-blueprint dark:text-skyline">קטגוריות</Link>
             {tab('content', '/admin/content')}
           </nav>
           <div className="ms-auto flex flex-wrap items-center gap-3 text-sm">

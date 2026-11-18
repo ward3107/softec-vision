@@ -34,7 +34,10 @@ export function categoryRowsToCatalog(rows: CategoryRow[]): Category[] {
     label: text(row, 'name'),
     description: text(row, 'description'),
     visibleIn: row.visible_in,
-    subs: published.filter(sub => sub.parent_id === row.id).map(sub => ({ key: sub.slug, label: text(sub, 'name') }))
+    subs: published.filter(sub => sub.parent_id === row.id).map(sub => ({
+      key: sub.slug, label: text(sub, 'name'),
+      children: published.filter(leaf => leaf.parent_id === sub.id).map(leaf => ({ key: leaf.slug, label: text(leaf, 'name') }))
+    }))
   }));
 }
 
