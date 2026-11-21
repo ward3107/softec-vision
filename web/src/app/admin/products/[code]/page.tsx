@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import { CANONICAL_SPEC_KEYS, getAdminProduct } from '@/lib/admin/products';
 import { getProductMedia, getProductModel } from '@/lib/admin/media';
 import { requireStaff } from '@/lib/admin/session';
-import { S } from '@/lib/admin/strings';
+import { getAdminStrings } from '@/lib/admin/locale';
 import { listCategories } from '@/lib/catalog/categories';
 import DeleteProductForm from './DeleteProductForm';
 import { publicMediaUrl, publicVideoUrl } from '@/lib/catalog/media';
@@ -16,29 +15,31 @@ export const dynamic = 'force-dynamic';
 
 const specFields = CANONICAL_SPEC_KEYS.map((key) => ({ key, label: SPEC_LABELS[key] }));
 
-const M = S.products.media;
-const M3 = S.products.model3d;
-const MEDIA_BANNER: Record<string, string> = {
-  updated: M.updated,
-  added: M.added,
-  removed: M.removed,
-  modelUpdated: M3.updated,
-  modelRemoved: M3.removed,
-  'error-noFile': M.errors.noFile,
-  'error-tooLarge': M.errors.tooLarge,
-  'error-badType': M.errors.badType,
-  'error-unknownProduct': M.errors.unknownProduct
-};
-
 export default async function AdminProductEditPage({
   params,
   searchParams
 }: {
   params: Promise<{ code: string }>;
-  searchParams: Promise<{ media?: string }>;
+  searchParams: Promise<{ media?: string; created?: string }>;
 }) {
+  const S = await getAdminStrings();
+  const M = S.products.media;
+  const M3 = S.products.model3d;
+  const MEDIA_BANNER: Record<string, string> = {
+    updated: M.updated,
+    added: M.added,
+    removed: M.removed,
+    modelUpdated: M3.updated,
+    modelRemoved: M3.removed,
+    'error-notReady': S.workflow.notReady,
+    'error-noFile': M.errors.noFile,
+    'error-tooLarge': M.errors.tooLarge,
+    'error-badType': M.errors.badType,
+    'error-unknownProduct': M.errors.unknownProduct
+  };
+
   const { code } = await params;
-  const { media } = await searchParams;
+  const { media, created } = await searchParams;
   const { client, access } = await requireStaff();
   const categories = await listCategories(client);
   const product = await getAdminProduct(client, code);
@@ -91,6 +92,7 @@ export default async function AdminProductEditPage({
             {banner}
           </p>
         )}
+        {created && <p role="status">{S.workflow.draftCreated}</p>}
         <ProductMediaForm videos={currentMedia.videos.map(item => ({ id: item.id, url: publicVideoUrl(supabaseUrl!, item.path) }))} code={code} image={image} gallery={gallery} model={model} />
         <ProductForm categories={categories} product={product} specFields={specFields} action={action} />
         {access === 'admin' && <DeleteProductForm code={code} />}

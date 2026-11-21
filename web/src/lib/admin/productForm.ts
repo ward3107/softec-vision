@@ -65,13 +65,13 @@ export function parseProductForm(
 
   const translations = {
     he: {
-      name: field('name.he', PRODUCT_LIMITS.name, true),
-      description: field('description.he', PRODUCT_LIMITS.description, true),
+      name: field('name.he', PRODUCT_LIMITS.name, status === 'published'),
+      description: field('description.he', PRODUCT_LIMITS.description, status === 'published'),
       alt_text: field('alt.he', PRODUCT_LIMITS.alt, false)
     },
     en: {
-      name: field('name.en', PRODUCT_LIMITS.name, true),
-      description: field('description.en', PRODUCT_LIMITS.description, true),
+      name: field('name.en', PRODUCT_LIMITS.name, status === 'published'),
+      description: field('description.en', PRODUCT_LIMITS.description, status === 'published'),
       alt_text: field('alt.en', PRODUCT_LIMITS.alt, false)
     }
   };
@@ -90,7 +90,7 @@ export function parseProductForm(
   return { ok: true, data: { status: status as ProductStatus, translations, specs, category: String(fd.get('category') ?? '') || undefined, subcategory: String(fd.get('subcategory') ?? '') } };
 }
 
-const TEXT_FIELD_NAMES = ['status', 'category', 'subcategory', 'name.he', 'name.en', 'description.he', 'description.en', 'alt.he', 'alt.en'] as const;
+const TEXT_FIELD_NAMES = ['code', 'status', 'category', 'subcategory', 'name.he', 'name.en', 'description.he', 'description.en', 'alt.he', 'alt.en'] as const;
 
 /**
  * Echo back whatever was submitted (unvalidated), so a rejected submission
@@ -120,4 +120,8 @@ export function valuesFromParsedForm(data: ParsedProductForm, specKeys: string[]
     values[`spec.${key}.en`] = bySpec[key]?.en ?? '';
   }
   return values;
+}
+
+export function validProductCode(code: string): boolean {
+  return /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/.test(code) && code.toLowerCase() !== 'new';
 }

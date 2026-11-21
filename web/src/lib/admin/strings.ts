@@ -212,3 +212,65 @@ export const S = {
     }
   }
 } as const;
+
+export type AdminLocale = 'he' | 'en';
+const extraHe = {
+  categories: 'תתי־קטגוריות', changePassword: 'שינוי סיסמה',
+  create: 'מוצר חדש', createTitle: 'יצירת מוצר חדש', createButton: 'יצירת טיוטה והמשך למדיה',
+  createHelp: 'שלב 1: פרטי המוצר. לאחר יצירת הטיוטה ניתן להוסיף תמונות, סרטונים וקישורים, לבדוק את הפרטים ולפרסם.',
+  draftCreated: 'הטיוטה נוצרה. הוסיפו מדיה ובחרו ״פורסם״ רק כשהמוצר מוכן.',
+  codeHelp: 'קוד ייחודי וקבוע: אותיות באנגלית, מספרים, מקף וקו תחתון, עד 64 תווים.',
+  duplicateCode: 'קוד המוצר כבר קיים. בחרו קוד אחר.', invalidCode: 'קוד לא תקין או שמור. השתמשו באותיות באנגלית, מספרים, מקף וקו תחתון.',
+  saveFailed: 'השמירה נכשלה. בדקו את החיבור ואת שיוך הקטגוריות ונסו שוב.',
+  notReady: 'לפני פרסום יש להשלים שם ותיאור בשתי השפות, תמונה ראשית וקטגוריות שפורסמו.',
+  parent: 'קטגוריה ראשית', subcategory: 'תת־קטגוריה', noSubcategory: 'ללא תת־קטגוריה', chooseCategory: 'בחירת קטגוריה',
+  noImage: 'טרם נוספה תמונה', description: 'תיאור',
+  readiness: 'לפרסום: שם ותיאור בעברית ובאנגלית, תמונה ראשית וקטגוריות פעילות. מדיה נשמרת גם בטיוטה ואינה מפרסמת אותה.',
+  videos: 'סרטוני מוצר', videoHelp: 'קבצי MP4 או WebM עד 50MB. ניתן להוסיף כמה סרטונים.', addVideo: 'הוספת סרטון', removeVideo: 'הסרת הסרטון מהמוצר',
+  externalTitle: 'הוספת קישור למדיה', externalHelp: 'קישור HTTPS ישיר לתמונה (JPG, PNG, WebP) או לסרטון (MP4, WebM). קישורי עמודי YouTube אינם קובצי מדיה ישירים.',
+  mediaKind: 'סוג מדיה', mediaUrl: 'קישור ישיר', addLink: 'שמירת קישור', linkSaved: 'הקישור נשמר. בדקו את התצוגה לפני פרסום.',
+  invalidUrl: 'יש להזין קישור HTTPS ציבורי וישיר לקובץ מהסוג שנבחר, ללא פרטי כניסה.',
+  uploadEmpty: 'בחרו קובץ להעלאה.', uploadType: 'בחרו קובץ מהסוג והגודל המתאימים.', uploading: 'מעלה ושומר…', uploadFailed: 'ההעלאה נכשלה. בדקו את החיבור ונסו שוב.',
+  uploadSaved: 'המדיה נשמרה. מצב הפרסום של המוצר לא השתנה.', uploadInvalid: 'תוכן הקובץ אינו תקין או אינו תואם לסוג המדיה.', uploadMissing: 'הקובץ לא התקבל. נסו להעלות אותו שוב.',
+  upTo: 'עד', deleteTitle: 'מחיקת מוצר לצמיתות', deleteHelp: 'המוצר יוסר מהקטלוג ופניות קודמות יישמרו. קובצי האחסון יישמרו ויירשמו לבדיקה; הם לא יימחקו אוטומטית.',
+  confirmCode: 'קוד המוצר לאישור', deleteButton: 'מחיקת המוצר', deleting: 'מוחק…', deleteConfirm: 'להשלמת המחיקה יש להקליד את קוד המוצר.', deleteFailed: 'המחיקה נכשלה. רעננו ונסו שוב.',
+  deleted: 'המוצר נמחק מהקטלוג. קובצי האחסון נשמרו לבדיקה.', retained: 'הסרה או החלפה מנתקות את המדיה מהמוצר. קובצי האחסון נשמרים לבדיקה ולא נמחקים אוטומטית.',
+  categoryTitle: 'ניהול תתי־קטגוריות', categoryHelp: 'שמות, סדר והצגה באתר. שיוך מוצרים נעשה במסך עריכת המוצר.', addCategory: 'הוספת תת־קטגוריה', slug: 'מזהה באנגלית', sort: 'סדר הצגה',
+  categoryDeleteHelp: 'המוצרים יישארו בקטגוריה הראשית לאחר מחיקת תת־הקטגוריה.', confirmDelete: 'אישור מחיקת תת־הקטגוריה', delete: 'מחיקה', categoryFailed: 'בדקו שמות בשתי השפות, מזהה ייחודי וסדר תקין.',
+};
+const extraEn: Record<keyof typeof extraHe, string> = {
+  categories: 'Subcategories', changePassword: 'Change password', create: 'New product', createTitle: 'Create a product', createButton: 'Create draft and add media',
+  createHelp: 'Step 1: product details. After creating the draft, add images, videos and links, review the details, then publish.',
+  draftCreated: 'Draft created. Add media and choose Published only when the product is ready.', codeHelp: 'Unique permanent code: English letters, digits, hyphens and underscores, up to 64 characters.',
+  duplicateCode: 'This product code already exists. Choose another code.', invalidCode: 'Invalid or reserved code. Use English letters, digits, hyphens and underscores.',
+  saveFailed: 'Could not save. Check the connection and category assignment, then retry.', notReady: 'Before publishing, complete names and descriptions in both languages, a primary image and published categories.',
+  parent: 'Main category', subcategory: 'Subcategory', noSubcategory: 'No subcategory', chooseCategory: 'Choose a category', noImage: 'No image added yet', description: 'Description',
+  readiness: 'To publish: Hebrew and English names and descriptions, a primary image and published categories. Saving media does not publish a draft.',
+  videos: 'Product videos', videoHelp: 'MP4 or WebM files up to 50MB. You can add multiple videos.', addVideo: 'Add video', removeVideo: 'Detach video',
+  externalTitle: 'Add a media link', externalHelp: 'Direct HTTPS link to an image (JPG, PNG, WebP) or video (MP4, WebM). YouTube page links are not direct media files.',
+  mediaKind: 'Media type', mediaUrl: 'Direct link', addLink: 'Save link', linkSaved: 'Link saved. Check the preview before publishing.', invalidUrl: 'Enter a direct public HTTPS file URL of the selected type, without login credentials.',
+  uploadEmpty: 'Choose a file to upload.', uploadType: 'Choose a supported file within the size limit.', uploading: 'Uploading and saving…', uploadFailed: 'Upload failed. Check the connection and retry.',
+  uploadSaved: 'Media saved. The product publication status has not changed.', uploadInvalid: 'The file content is invalid or does not match the selected media type.', uploadMissing: 'File not received. Try uploading again.',
+  upTo: 'up to', deleteTitle: 'Permanently delete product', deleteHelp: 'The product will leave the catalog. Previous inquiries remain. Storage files are retained and logged for review; they are not automatically deleted.',
+  confirmCode: 'Product code to confirm', deleteButton: 'Delete product', deleting: 'Deleting…', deleteConfirm: 'Type the product code to confirm deletion.', deleteFailed: 'Deletion failed. Refresh and retry.',
+  deleted: 'Product deleted from the catalog. Storage files were retained for review.', retained: 'Removing or replacing media detaches it from the product. Storage files are retained for review and are not automatically deleted.',
+  categoryTitle: 'Manage subcategories', categoryHelp: 'Names, order and visibility. Assign products in the product editor.', addCategory: 'Add subcategory', slug: 'Identifier in English', sort: 'Display order',
+  categoryDeleteHelp: 'Products remain in their main category after the subcategory is deleted.', confirmDelete: 'Confirm subcategory deletion', delete: 'Delete', categoryFailed: 'Check both language names, a unique identifier and a valid display order.',
+};
+const EN = {
+  ...S,
+  appTitle: 'Site management', signInTitle: 'Admin sign in', email: 'Email', password: 'Password', signIn: 'Sign in', signingIn: 'Signing in…', signOut: 'Sign out', signedInAs: 'Signed in as ', backToSite: 'Back to website',
+  nav: { dashboard: 'Dashboard', inquiries: 'Inquiries', products: 'Products', content: 'Website content', site: 'Website' },
+  theme: { toLight: 'Switch to light mode', toDark: 'Switch to dark mode' },
+  dashboard: { title: 'Dashboard', welcome: 'Website overview.', inquiriesCard: 'Quote inquiries', newInquiries: (n: number) => `${n} new`, totalInquiries: (n: number) => `${n} total`, noInquiries: 'No inquiries yet.', productsCard: 'Product catalog', totalProducts: (n: number) => `${n} products`, missingSpecs: (n: number) => `${n} with incomplete specifications`, completeSpecs: 'All specifications complete', catalogManaged: 'Catalog is managed in the database', catalogNotManaged: 'Catalog has not been imported yet', contentCard: 'Website content', contentEdited: (n: number, total: number) => `${n} of ${total} sections customized`, goTo: 'Open →' },
+  products: {
+    title: 'Products', empty: 'No products to display.', code: 'Code', name: 'Name', category: 'Category', status: 'Status', missing: 'Missing specifications', missingCount: (n: number) => `${n} missing fields`, complete: 'Complete', edit: 'Edit', back: 'Back to products', save: 'Save', saving: 'Saving…', saved: 'Product saved.', notFound: 'Product not found.', nameSection: 'Name and description', specsSection: 'Technical specifications', specsHelp: 'Empty fields are hidden. Save each language separately; specifications appear publicly once both languages are complete.', alt: 'Image alternative text', altHelp: 'Describe the image for screen reader users. Leave blank to use the default.', hebrew: 'Hebrew', english: 'English', statuses: { draft: 'Draft', published: 'Published', archived: 'Archived' }, statusHelp: 'Only ready products explicitly marked Published appear on the website.',
+    import: { title: 'Import initial catalog', help: 'The initial catalog has not been imported. Import adds missing products without overwriting previous edits.', button: 'Import catalog', done: (n: number) => `${n} products imported.` },
+    fieldErrors: { required: 'Required field.', tooLong: 'Text is too long.', placeholder: 'Enter a confirmed value, not placeholder text.', bothLanguages: 'Complete both languages or leave both blank.', invalid: 'Invalid value.' },
+    media: { section: 'Images', help: 'JPG, PNG or WebP, up to 6MB.', primaryTitle: 'Primary image', primaryHelp: 'Shown on the catalog card and at the top of the product page.', current: 'Current image', builtIn: 'Default image', upload: 'Upload', replace: 'Replace image', remove: 'Detach image / restore default', gallerySection: 'Additional images', galleryHelp: 'Optional additional product views.', galleryEmpty: 'No gallery images added.', addToGallery: 'Add gallery image', removeFromGallery: 'Detach', updated: 'Image updated.', added: 'Gallery image added.', removed: 'Image detached.', errors: { noFile: 'Choose a file.', tooLarge: 'File too large (maximum 6MB).', badType: 'Upload JPG, PNG or WebP.', unknownProduct: 'Import the catalog before uploading media.' } },
+    model3d: { section: '3D model', help: 'glTF Binary (.glb), up to 20MB, for the interactive product viewer.', current: '3D model added', none: 'No 3D model added.', upload: 'Upload GLB', replace: 'Replace model', remove: 'Detach model', updated: '3D model updated.', removed: '3D model detached.', errors: { noFile: 'Choose a file.', tooLarge: 'File too large (maximum 20MB).', badType: 'Upload a valid binary glTF (.glb) file.', unknownProduct: 'Import the catalog before uploading media.' } }
+  }
+};
+export function adminStrings(locale: AdminLocale) {
+  return locale === 'en' ? { ...EN, workflow: extraEn } : { ...S, workflow: extraHe };
+}

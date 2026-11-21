@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mocked = vi.hoisted(() => ({ download: vi.fn(), remove: vi.fn(), rpc: vi.fn(), requireStaff: vi.fn(), updateTag: vi.fn(), revalidatePath: vi.fn() }));
 vi.mock('@/lib/admin/session', () => ({ requireStaff: mocked.requireStaff }));
+vi.mock('@/lib/admin/locale', async () => { const { adminStrings } = await import('@/lib/admin/strings'); return { getAdminStrings: async () => adminStrings('en') }; });
 vi.mock('next/cache', () => ({ updateTag: mocked.updateTag, revalidatePath: mocked.revalidatePath }));
 import { finishUpload } from './upload-actions';
 
@@ -25,10 +26,10 @@ describe('direct product uploads', () => {
     expect(mocked.download).not.toHaveBeenCalled();
     expect(mocked.rpc).not.toHaveBeenCalled();
   });
-  it('rejects renamed non-video files and removes only the invalid upload', async () => {
+  it('rejects renamed non-video files without deleting stored objects', async () => {
     mocked.download.mockResolvedValue({ data: new Blob(['not a video']), error: null });
     expect(await finishUpload('RAV-500', 'video', path)).toHaveProperty('error');
-    expect(mocked.remove).toHaveBeenCalledWith([path]);
+    expect(mocked.remove).not.toHaveBeenCalled();
     expect(mocked.rpc).not.toHaveBeenCalled();
   });
   it('preserves an upload when the commit response fails, since the database may have committed', async () => {
@@ -36,12 +37,29 @@ describe('direct product uploads', () => {
     expect(await finishUpload('RAV-500', 'video', path)).toHaveProperty('error');
     expect(mocked.remove).not.toHaveBeenCalled();
   });
-  it('keeps a successful update when old file cleanup fails', async () => {
+  it('retains old files after a successful update', async () => {
     mocked.rpc.mockResolvedValue({ data: ['RAV-500/old.mp4'], error: null });
     mocked.remove.mockResolvedValue({ error: { message: 'storage unavailable' } });
     const log = vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(await finishUpload('RAV-500', 'video', path)).toEqual({ saved: true });
     expect(mocked.updateTag).toHaveBeenCalled();
+    expect(mocked.remove).not.toHaveBeenCalled();
     log.mockRestore();
   });
+});
+
+it('finalizes a complete self-contained GLB and retains the previous model', async () => {
+  const { readFileSync } = await import('node:fs');
+  const bytes = readFileSync('test/fixtures/triangle.glb');
+  mocked.download.mockResolvedValue({ data: new Blob([bytes]), error: null });
+  mocked.rpc.mockResolvedValue({ data: ['RAV-500/previous.glb'], error: null });
+  expect(await finishUpload('RAV-500', 'model', 'RAV-500/model-00000000-0000-4000-8000-000000000001.glb')).toEqual({ saved: true });
+  expect(mocked.rpc).toHaveBeenCalledWith('attach_product_media', expect.objectContaining({p_kind:'model'}));
+  expect(mocked.remove).not.toHaveBeenCalled();
+});
+it('rejects a GLB header without chunks and never attaches it', async () => {
+  mocked.download.mockResolvedValue({ data: new Blob([new Uint8Array([103,108,84,70,2,0,0,0,12,0,0,0])]), error: null });
+  expect(await finishUpload('RAV-500', 'model', 'RAV-500/model-00000000-0000-4000-8000-000000000001.glb')).toHaveProperty('error');
+  expect(mocked.rpc).not.toHaveBeenCalled();
+  expect(mocked.remove).not.toHaveBeenCalled();
 });

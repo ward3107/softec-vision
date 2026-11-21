@@ -52,10 +52,21 @@ describe('checkAttachment', () => {
 });
 
 describe('isGlb', () => {
-  const GLB = bytes(...ascii('glTF'), 2, 0, 0, 0, 0, 0, 0, 0);
+  const json = new TextEncoder().encode('{"asset":{"version":"2.0"}} '.padEnd(28, ' '));
+  const GLB = new Uint8Array(20 + json.length);
+  GLB.set(ascii('glTF'));
+  const header = new DataView(GLB.buffer);
+  header.setUint32(4, 2, true); header.setUint32(8, GLB.length, true);
+  header.setUint32(12, json.length, true); header.setUint32(16, 0x4e4f534a, true); GLB.set(json, 20);
 
-  it('recognises a valid glTF Binary header (magic + version 2)', () => {
+  it('recognises a complete version 2 GLB JSON chunk', () => {
     expect(isGlb(GLB)).toBe(true);
+  });
+
+  it('rejects a truncated header and incorrect declared length', () => {
+    expect(isGlb(GLB.slice(0, 12))).toBe(false);
+    const bad = GLB.slice(); new DataView(bad.buffer).setUint32(8, 1000, true);
+    expect(isGlb(bad)).toBe(false);
   });
 
   it('rejects other version numbers and non-glb content', () => {

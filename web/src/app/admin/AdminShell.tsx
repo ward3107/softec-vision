@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { S } from '@/lib/admin/strings';
+import { useAdminStrings, useAdminLocale, AdminLanguageSwitch } from './AdminLanguage';
 import ThemeToggle from '@/components/ThemeToggle';
 import { signOut } from './actions';
 import { AdminIcons, type AdminIconKey } from './icons';
@@ -21,6 +21,8 @@ function activeFromPath(pathname: string): AdminIconKey | 'categories' {
  * skeleton) while this nav stays put — no re-render, no flash.
  */
 export default function AdminShell({ email, children }: { email?: string | null; children: React.ReactNode }) {
+  const S = useAdminStrings();
+  const locale = useAdminLocale();
   const pathname = usePathname();
   const active = activeFromPath(pathname);
   if (pathname === '/admin/content/preview') return <>{children}</>;
@@ -49,7 +51,7 @@ export default function AdminShell({ email, children }: { email?: string | null;
             {tab('dashboard', '/admin')}
             {tab('inquiries', '/admin/inquiries')}
             {tab('products', '/admin/products')}
-            <Link href="/admin/categories" aria-current={pathname.startsWith('/admin/categories') ? 'page' : undefined} className="content-center px-3 text-sm font-semibold text-blueprint dark:text-skyline">תתי־קטגוריות</Link>
+            <Link href="/admin/categories" aria-current={pathname.startsWith('/admin/categories') ? 'page' : undefined} className="content-center px-3 text-sm font-semibold text-blueprint dark:text-skyline">{S.workflow.categories}</Link>
             {tab('content', '/admin/content')}
           </nav>
           <div className="ms-auto flex flex-wrap items-center gap-3 text-sm">
@@ -65,11 +67,12 @@ export default function AdminShell({ email, children }: { email?: string | null;
               href="/admin/password"
               className="min-h-[44px] content-center font-semibold text-machine hover:underline dark:text-fog"
             >
-              שינוי סיסמה
+              {S.workflow.changePassword}
             </Link>
+            <AdminLanguageSwitch />
             <ThemeToggle toLightLabel={S.theme.toLight} toDarkLabel={S.theme.toDark} />
             <Link
-              href="/he"
+              href={`/${locale}`}
               className="min-h-[44px] content-center font-semibold text-blueprint hover:underline dark:text-skyline"
             >
               {S.nav.site}

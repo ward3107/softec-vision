@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { assistant } from '@/lib/font';
 import { getAdminContext, isSupabaseConfigured } from '@/lib/admin/session';
 import AdminShell from './AdminShell';
+import { getAdminLocale } from '@/lib/admin/locale';
+import { AdminLanguage } from './AdminLanguage';
 import PasswordRecoveryBridge from '@/components/PasswordRecoveryBridge';
 import '../globals.css';
 
@@ -24,6 +26,7 @@ const BOOT_SCRIPT = `(function(){try{
  * and the not-configured state render bare.
  */
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getAdminLocale();
   let authed = false;
   let email: string | null | undefined;
   if (isSupabaseConfigured()) {
@@ -35,14 +38,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <html lang="he" dir="rtl" className={assistant.variable} suppressHydrationWarning>
+    <html lang={locale} dir={locale === 'he' ? 'rtl' : 'ltr'} className={assistant.variable} suppressHydrationWarning>
       <body
         className="min-h-screen bg-paper font-sans text-graphite antialiased dark:bg-canvas dark:text-ink"
         suppressHydrationWarning
       >
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
         <PasswordRecoveryBridge />
-        {authed ? <AdminShell email={email}>{children}</AdminShell> : children}
+        <AdminLanguage locale={locale}>{authed ? <AdminShell email={email}>{children}</AdminShell> : children}</AdminLanguage>
       </body>
     </html>
   );

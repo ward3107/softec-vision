@@ -1,10 +1,13 @@
 /** Pure helpers for the owner-uploaded product photos (Supabase Storage). No 'server-only': imported by db.ts, which the client-safe admin form also reaches types from. */
 
+import { validateExternalMedia } from '@/lib/admin/externalMedia';
+
 const BUCKET = 'product-media';
 const MODEL_BUCKET = 'product-models';
 
 /** Public URL for a file in the product-media bucket. The bucket is public, so this is a stable, deterministic URL — no signing needed. */
 export function publicMediaUrl(supabaseUrl: string, storagePath: string): string {
+  if (/^https?:/i.test(storagePath)) return validateExternalMedia('image', storagePath) ?? '';
   return `${supabaseUrl.replace(/\/$/, '')}/storage/v1/object/public/${BUCKET}/${storagePath}`;
 }
 
@@ -21,5 +24,6 @@ export function sanitizeCodeForPath(code: string): string {
 }
 
 export function publicVideoUrl(supabaseUrl: string, storagePath: string): string {
+  if (/^https?:/i.test(storagePath)) return validateExternalMedia('video', storagePath) ?? '';
   return `${supabaseUrl.replace(/\/$/, '')}/storage/v1/object/public/product-videos/${storagePath}`;
 }
