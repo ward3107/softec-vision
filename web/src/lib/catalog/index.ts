@@ -35,12 +35,13 @@ export function normalizeCatalogState(input: Partial<CatalogState>, catalog: Cat
   const cat = requested?.key ?? 'all';
   const category = categories.find((item) => item.key === cat);
   const sub = category?.subs?.some((item) => item.key === input.sub) ? (input.sub as string) : 'all';
-  return { lang, cat, sub };
+  const leaf = category?.subs?.find(item => item.key === sub)?.children?.find(item => item.key === input.leaf);
+  return leaf ? { lang, cat, sub, leaf: leaf.key } : { lang, cat, sub };
 }
 
 export async function filterProducts(input: Partial<CatalogState>): Promise<Product[]> {
   const categories = await loadCategories();
-  const { lang, cat, sub } = normalizeCatalogState(input, categories);
+  const { lang, cat, sub, leaf } = normalizeCatalogState(input, categories);
   const visibleKeys = new Set(
     categories.filter((category) => category.visibleIn.includes(lang)).map((category) => category.key)
   );
@@ -48,7 +49,7 @@ export async function filterProducts(input: Partial<CatalogState>): Promise<Prod
     (product) =>
       visibleKeys.has(product.cat) &&
       (cat === 'all' || product.cat === cat) &&
-      (sub === 'all' || product.sub === sub)
+      (sub === 'all' || product.sub === sub) && (!leaf || product.leaf === leaf)
   );
 }
 

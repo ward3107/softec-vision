@@ -210,3 +210,16 @@ export async function removeProductVideoAction(code: string, fd: FormData) {
   if (cleanup.error) console.error('[media] video cleanup failed', cleanup.error.message);
   revalidateProductMedia(code);
 }
+
+export async function createProductDraft(_state: { error?: string }, fd: FormData): Promise<{ error?: string }> {
+  const { client } = await requireStaff();
+  const code = String(fd.get('code') ?? '').trim().toUpperCase();
+  const family = String(fd.get('family') ?? '');
+  if (!/^[A-Z0-9][A-Z0-9_-]{0,63}$/.test(code)) return { error: 'הזינו קוד דגם באותיות באנגלית, ספרות, מקף או קו תחתון.' };
+  const { data: root, error: lookupError } = await client.from('categories').select('id').eq('id', family).is('parent_id', null).maybeSingle();
+  if (lookupError || !root) return { error: 'בחרו קטגוריה ראשית קיימת.' };
+  const { error } = await client.from('products').insert({ code, category_id: root.id, status: 'draft' });
+  if (error) return { error: error.code === '23505' ? 'קוד הדגם כבר קיים.' : 'יצירת הטיוטה נכשלה.' };
+  revalidatePath('/admin/products');
+  redirect(`/admin/products/${code}`);
+}

@@ -10,7 +10,7 @@ insert into inquiries (name,message,product_id) select 'Test','Preserve inquiry'
 set local role authenticated;
 select set_config('request.jwt.claim.sub','00000000-0000-4000-8000-0000000000d4',true);
 do $$
-declare sub_id uuid; old_paths text[];
+declare sub_id uuid; leaf_id uuid; old_paths text[];
 begin
   perform save_subcategory(null,'00000000-0000-4000-8000-00000000d001','admin-test-sub','בדיקה','English test','published',2);
   select id into sub_id from categories where slug='admin-test-sub';
@@ -33,6 +33,25 @@ begin
   end;
   perform save_subcategory(sub_id,'00000000-0000-4000-8000-00000000d001','admin-test-sub','שם חדש','Renamed','archived',1);
   if not exists (select 1 from category_translations where category_id=sub_id and locale='en' and name='Renamed') then raise exception 'English category rename failed'; end if;
+  perform save_subcategory(null,null,'another-family','משפחה','Family','published',0);
+  perform save_subcategory(null,sub_id,'admin-test-leaf','סדרה','Series','published',0);
+  select id into strict leaf_id from categories where slug='admin-test-leaf';
+  begin
+    perform save_subcategory(null,leaf_id,'fourth-level','בדיקה','Test','published',0);
+    raise exception 'fourth level accepted';
+  exception when raise_exception then if sqlerrm <> 'invalid parent' then raise; end if; end;
+  begin
+    perform save_product_in_leaf('ADMIN-TEST','draft','{}','[]','another-family','admin-test-sub','admin-test-leaf');
+    raise exception 'unrelated branch accepted';
+  exception when raise_exception then if sqlerrm <> 'invalid category path' then raise; end if; end;
+  perform save_product_in_leaf('ADMIN-TEST','published','{}','[]','admin-test-family','admin-test-sub','admin-test-leaf');
+  if (select subcategory_id from products where code='ADMIN-TEST') is distinct from leaf_id then raise exception 'third level assignment lost'; end if;
+  begin
+    perform delete_subcategory(sub_id);
+    raise exception 'nonempty branch deleted';
+  exception when raise_exception then if sqlerrm <> 'category has children' then raise; end if; end;
+  perform delete_subcategory(leaf_id);
+  if (select subcategory_id from products where code='ADMIN-TEST') is distinct from sub_id then raise exception 'parent assignment lost'; end if;
   perform delete_subcategory(sub_id);
   if (select subcategory_id from products where code='ADMIN-TEST') is not null then raise exception 'subcategory delete lost product assignment consistency'; end if;
   old_paths := attach_product_media('ADMIN-TEST','image','ADMIN-TEST/image-first.jpg');

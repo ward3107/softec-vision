@@ -1,6 +1,6 @@
 import 'server-only';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { buildImportPayload, PRODUCT_SELECT, rowsToProducts, type DbProductRow } from '@/lib/catalog/db';
+import { buildImportPayload, loadAssignmentParents, productCategoryPath, PRODUCT_SELECT, rowsToProducts, type DbProductRow } from '@/lib/catalog/db';
 import { CATEGORIES, PRODUCTS, SPEC_LABELS } from '@/lib/catalog/seed';
 import { isPlaceholder, type Product } from '@/lib/catalog/types';
 import type { AdminProductDetail, AdminProductRow, ParsedProductForm, ProductStatus } from './productForm';
@@ -25,11 +25,13 @@ export async function listAdminProducts(client: SupabaseClient, locale: 'he' | '
       code: product.code,
       status: 'published',
       category: product.cat,
+      sub: product.sub,
       name: product.name[locale],
       missing: product.specs.filter((s) => isPlaceholder(s.value.he) || isPlaceholder(s.value.en)).map((s) => s.key)
     }));
   }
 
+  const parents = await loadAssignmentParents(client, rows);
   const known = new Set(Object.keys(SPEC_LABELS));
   return rows.map((row) => {
     const t = row.product_translations.find((tr) => tr.locale === locale) ?? row.product_translations[0];
@@ -42,6 +44,7 @@ export async function listAdminProducts(client: SupabaseClient, locale: 'he' | '
       code: row.code,
       status: row.status,
       category: row.category?.slug ?? '',
+      ...productCategoryPath(row, parents),
       name: t?.name ?? row.code,
       missing: [...known].filter((key) => !filled.has(key))
     };
@@ -77,6 +80,7 @@ export async function getAdminProduct(client: SupabaseClient, code: string): Pro
   }
 
   const row = data as unknown as DbProductRow & { status: ProductStatus };
+  const path = productCategoryPath(row, await loadAssignmentParents(client, [row]));
   const he = row.product_translations.find((t) => t.locale === 'he');
   const en = row.product_translations.find((t) => t.locale === 'en');
   const specs = Object.fromEntries(Object.keys(SPEC_LABELS).map((key) => [key, { he: '', en: '' }]));
@@ -89,7 +93,8 @@ export async function getAdminProduct(client: SupabaseClient, code: string): Pro
     code: row.code,
     status: row.status,
     cat: row.category?.slug ?? '',
-    sub: row.sub?.slug ?? null,
+    sub: path.sub ?? null,
+    leaf: path.leaf,
     translations: {
       he: { name: he?.name ?? '', description: he?.description ?? '', alt_text: he?.alt_text ?? '' },
       en: { name: en?.name ?? '', description: en?.description ?? '', alt_text: en?.alt_text ?? '' }
@@ -100,7 +105,9 @@ export async function getAdminProduct(client: SupabaseClient, code: string): Pro
 
 /** Save one product's editable fields (RLS: any staff member). */
 export async function saveProduct(client: SupabaseClient, code: string, form: ParsedProductForm): Promise<void> {
-  const { error } = await client.rpc(form.category ? 'save_product_details' : 'save_product', {
+  const action = form.leaf ? 'save_product_in_leaf' : form.category ? 'save_product_details' : 'save_product';
+  const { error } = await client.rpc(action, {
+    ...(form.leaf ? { p_leaf: form.leaf } : {}),
     p_code: code,
     p_status: form.status,
     p_translations: form.translations,
